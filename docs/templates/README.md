@@ -17,7 +17,7 @@ This folder contains copyable documentation templates.
 
 - moving work between terminal Codex, GPT web, or another session;
 - defining editable, read-only, and forbidden files;
-- stating proof requirements for a scoped task.
+- stating proof requirements for a scoped task;
 - writing prompts that must be safe to copy from web AI;
 - restarting work after a long pause or model switch;
 - deciding where external analysis or source data should live in `docs/`.
