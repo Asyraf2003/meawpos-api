@@ -30,6 +30,9 @@ scripts/audit_hexagonal.sh
 ```text
 internal/modules/capability/domain/capability.go
 internal/modules/capability/domain/errors.go
+internal/modules/capability/domain/risk_level.go
+internal/modules/capability/domain/text.go
+internal/modules/capability/domain/validation.go
 internal/modules/capability/domain/capability_test.go
 internal/modules/capability/ports/capability_repository.go
 internal/modules/capability/usecase/check_capability.go
@@ -38,6 +41,8 @@ internal/modules/capability/usecase/enable_capability.go
 internal/modules/capability/usecase/list_capabilities.go
 internal/modules/capability/usecase/show_capability.go
 internal/modules/capability/usecase/capability_test.go
+internal/modules/capability/usecase/capability_test_helpers_test.go
+internal/modules/capability/usecase/list_show_capability_test.go
 docs/blueprints/0010_capability_control_foundation.md
 docs/evidence/0003_laravel_to_go_transition_progress_ledger.md
 docs/handoffs/2026-06-07-capability-contracts.md
@@ -142,6 +147,31 @@ Result:
 [PASS] AI rules audit passed
 ```
 
+```text
+make check
+```
+
+Result:
+
+```text
+[PASS] format audit passed
+[PASS] go vet audit passed
+[PASS] file size audit passed
+[PASS] hexagonal import audit passed
+[PASS] AI rules audit passed
+```
+
+```text
+make verify
+```
+
+Result:
+
+```text
+[PASS] gosec audit passed
+[PASS] aggregate audit passed
+```
+
 ## Tests Or Commands Run
 
 ```text
@@ -153,6 +183,8 @@ bash scripts/audit_hexagonal.sh
 bash scripts/audit_format.sh
 bash scripts/audit_go_vet.sh
 bash scripts/audit_ai_rules.sh
+make check
+make verify
 ```
 
 Initial `go test ./internal/modules/capability/...` without `GOCACHE` failed because `/home/asyraf/.cache/go-build` was read-only in the sandbox. The tests passed after using `GOCACHE=/tmp/go-build`.
@@ -164,7 +196,6 @@ Initial `go test ./internal/modules/capability/...` without `GOCACHE` failed bec
 - No admin capability HTTP surface yet.
 - No route-to-capability audit script yet.
 - No disabled endpoint API proof returning `403` before validation/usecase yet.
-- Security gosec proof remains outside this step.
 
 ## Next Valid Active Step
 
@@ -176,7 +207,7 @@ Capability contracts active step: 100%.
 
 Capability-control foundation: 35%.
 
-Overall Laravel-to-Go transition: 16%.
+Overall Laravel-to-Go transition: 17%.
 
 ## Estimated Context-Window Status
 

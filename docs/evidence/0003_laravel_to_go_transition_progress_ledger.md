@@ -55,12 +55,12 @@ Protected POS endpoints must wait for capability-control proof.
 | Stage | Scope | Status | Estimate | Proof |
 | --- | --- | --- | --- | --- |
 | Stage 0 | Laravel source inventory and parity matrix | Partial | 40% | `0001_laravel_stage0_schema_and_route_inventory.md`, `0002_laravel_productcatalog_servicecatalog_inventory.md` |
-| Stage 1 | Go quality foundation | Partial | 70% | `2026-06-06-manual-auth-login.md` handoff reports passing format, vet, hex, docs, file-size, and auth tests; gosec remains unproven |
+| Stage 1 | Go quality foundation | Partial | 85% | `make verify` passes, including tests, vet, format, AI rules, file-size, hexagonal, and gosec; route-to-capability audit is still pending |
 | Stage 2 | PostgreSQL target baseline for POS domains | Not started | 0% | No accepted POS PostgreSQL migration baseline proof yet |
 | Stage 3 | API foundation and capability control | Partial | 30% | Auth/session foundation exists; capability blueprint exists; capability domain and usecase contracts pass tests; migration, middleware, HTTP surface, and route audit remain missing |
 | Stage 4 | Cross-cutting modules | Not started | 0% | No audit/language/notification/idempotency transition implementation proof yet |
 | Business Phase 1 | Service catalog and product catalog | Not started | 0% | Catalog evidence and blueprint exist; Go business modules not implemented |
-| Overall Laravel-to-Go transition | POS API migration | Early foundation | 16% | Docs, auth debug lane, quality gates, and capability contracts exist; POS domains are not implemented |
+| Overall Laravel-to-Go transition | POS API migration | Early foundation | 17% | Docs, auth debug lane, full verify gate, and capability contracts exist; POS domains are not implemented |
 
 ## Completed Work With Proof
 
@@ -74,6 +74,7 @@ Protected POS endpoints must wait for capability-control proof.
 - Quality and architecture audit scripts are documented as wired.
 - Capability domain, port, and usecase contracts exist under `internal/modules/capability/`.
 - Capability contracts have unit test proof in domain and usecase packages.
+- Full `make verify` proof passes, including gosec.
 
 ## Open Gaps
 
@@ -82,7 +83,6 @@ Protected POS endpoints must wait for capability-control proof.
 - Product duplicate policy still needs an owner decision before final PostgreSQL indexes.
 - Capability-control foundation is partially implemented; PostgreSQL storage, runtime middleware, admin HTTP surface, route audit, and disabled-endpoint API proof are still missing.
 - Runtime DB proof for manual auth login is still incomplete.
-- Security audit script is wired, but gosec passing proof is missing because the local toolchain/gosec run was blocked in the prior session.
 - No POS domain PostgreSQL baseline has been accepted.
 - No `servicecatalog` or `productcatalog` Go business module has implementation proof.
 
