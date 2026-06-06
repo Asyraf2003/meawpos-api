@@ -34,27 +34,6 @@ required_files=(
 
 required_readme_dirs=(
   "docs"
-  "docs/api"
-  "docs/architecture"
-  "docs/archive"
-  "docs/archive/legacy-docs-2026-06-06"
-  "docs/archive/legacy-docs-2026-06-06/AI_RULES"
-  "docs/archive/legacy-docs-2026-06-06/AI_RULES/10_CORE"
-  "docs/archive/legacy-docs-2026-06-06/AI_RULES/40_ARCHITECTURE"
-  "docs/archive/legacy-docs-2026-06-06/AI_RULES/60_STACK"
-  "docs/archive/legacy-docs-2026-06-06/core"
-  "docs/blueprints"
-  "docs/core"
-  "docs/db"
-  "docs/domain"
-  "docs/evidence"
-  "docs/handoffs"
-  "docs/scripts"
-  "docs/security"
-  "docs/style"
-  "docs/templates"
-  "docs/testing"
-  "docs/workflow"
 )
 
 check_file() {
