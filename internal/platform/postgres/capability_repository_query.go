@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgconn"
 )
 
 func (r *CapabilityRepository) query(ctx context.Context, sql string, args ...any) (pgx.Rows, error) {
@@ -22,7 +23,7 @@ func (r *CapabilityRepository) queryRow(ctx context.Context, sql string, args ..
 	return r.pool.QueryRow(ctx, sql, args...)
 }
 
-func (r *CapabilityRepository) exec(ctx context.Context, sql string, args ...any) (pgx.CommandTag, error) {
+func (r *CapabilityRepository) exec(ctx context.Context, sql string, args ...any) (pgconn.CommandTag, error) {
 	if tx, ok := TxFromContext(ctx); ok {
 		return tx.Exec(ctx, sql, args...)
 	}
