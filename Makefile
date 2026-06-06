@@ -3,7 +3,7 @@ SHELL := /usr/bin/env bash
 APP_BIN := .bin/pos-go-api
 HTTP_PORT ?= 8081
 
-.PHONY: help fmt test vet audit-format audit-ai-rules audit-file-size audit-hex security-gosec audit-all screening check verify ci build run auth-start db-migrate db-status db-adopt-existing git-status push
+.PHONY: help fmt test vet audit-format audit-ai-rules audit-file-size audit-hex security-gosec audit-all screening check verify ci build run auth-start db-dev-setup db-migrate db-status db-adopt-existing git-status push
 
 help:
 	@printf '%s\n' \
@@ -24,6 +24,7 @@ help:
 	'  make build             - build app binary' \
 	'  make run               - run app on HTTP_PORT (default 8081)' \
 	'  make auth-start        - start app, request Google auth URL, print it, and open browser' \
+	'  make db-dev-setup      - create/update local PostgreSQL role and database from DATABASE_URL' \
 	'  make db-migrate        - apply pending *.up.sql migrations with tracking' \
 	'  make db-status         - show migration status from schema_migrations' \
 	'  make db-adopt-existing - mark existing *.up.sql as applied in schema_migrations' \
@@ -84,6 +85,9 @@ auth-start: build
 	printf 'API_PID=%s\n' "$$API_PID"; \
 	printf 'AUTH_URL=%s\n' "$$AUTH_URL"; \
 	xdg-open "$$AUTH_URL" || true
+
+db-dev-setup:
+	bash scripts/db_dev_setup.sh
 
 db-migrate:
 	bash scripts/db_migrate.sh
