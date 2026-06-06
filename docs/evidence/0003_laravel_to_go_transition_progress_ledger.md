@@ -34,6 +34,7 @@ docs/handoffs/2026-06-06-manual-auth-login.md
 docs/handoffs/2026-06-06-auth-runtime-local-dev.md
 docs/handoffs/2026-06-07-capability-contracts.md
 docs/handoffs/2026-06-07-capability-postgres-state.md
+docs/handoffs/2026-06-07-capability-runtime-middleware.md
 ```
 
 ## Current Decision
@@ -58,10 +59,10 @@ Protected POS endpoints must wait for capability-control proof.
 | Stage 0 | Laravel source inventory and parity matrix | Partial | 40% | `0001_laravel_stage0_schema_and_route_inventory.md`, `0002_laravel_productcatalog_servicecatalog_inventory.md` |
 | Stage 1 | Go quality foundation | Partial | 85% | `make verify` passes, including tests, vet, format, AI rules, file-size, hexagonal, and gosec; route-to-capability audit is still pending |
 | Stage 2 | PostgreSQL target baseline for POS domains | Not started | 0% | No accepted POS PostgreSQL migration baseline proof yet |
-| Stage 3 | API foundation and capability control | Partial | 45% | Auth/session foundation exists; capability contracts pass tests; PostgreSQL capability migration is applied; PostgreSQL adapter integration tests pass; middleware, HTTP surface, and route audit remain missing |
+| Stage 3 | API foundation and capability control | Partial | 60% | Auth/session foundation exists; capability contracts pass tests; PostgreSQL capability migration is applied; PostgreSQL adapter integration tests pass; runtime capability middleware tests pass; route seeding, HTTP surface, and route audit remain missing |
 | Stage 4 | Cross-cutting modules | Not started | 0% | No audit/language/notification/idempotency transition implementation proof yet |
 | Business Phase 1 | Service catalog and product catalog | Not started | 0% | Catalog evidence and blueprint exist; Go business modules not implemented |
-| Overall Laravel-to-Go transition | POS API migration | Early foundation | 18% | Docs, auth debug lane, full verify gate, capability contracts, and capability PostgreSQL state exist; POS domains are not implemented |
+| Overall Laravel-to-Go transition | POS API migration | Early foundation | 19% | Docs, auth debug lane, full verify gate, capability contracts, capability PostgreSQL state, and runtime capability middleware exist; POS domains are not implemented |
 
 ## Completed Work With Proof
 
@@ -78,13 +79,16 @@ Protected POS endpoints must wait for capability-control proof.
 - Full `make verify` proof passes, including gosec.
 - Capability PostgreSQL migration `0006_capability_control.up.sql` is applied locally.
 - Capability PostgreSQL repository integration tests pass.
+- Runtime capability middleware exists under `internal/transport/http/middleware`.
+- Runtime capability middleware tests prove enabled capability allows handler execution, disabled capability returns `403` before handler execution, checker errors return `500`, and misconfigured guards return `500`.
 
 ## Open Gaps
 
 - Full Laravel source inventory is incomplete for many business domains.
 - Laravel alter, foreign key, index, timestamp, and seed migrations are not fully inventoried.
 - Product duplicate policy still needs an owner decision before final PostgreSQL indexes.
-- Capability-control foundation is partially implemented; runtime middleware, admin HTTP surface, route audit, and disabled-endpoint API proof are still missing.
+- Capability-control foundation is partially implemented; existing protected route capability records, admin HTTP surface, route audit, and disabled route-level API proof are still missing.
+- `capability.manage` permission is not added yet.
 - Runtime DB proof for manual auth login is still incomplete.
 - No POS domain PostgreSQL baseline has been accepted.
 - No `servicecatalog` or `productcatalog` Go business module has implementation proof.
@@ -93,11 +97,10 @@ Protected POS endpoints must wait for capability-control proof.
 
 Continue `docs/blueprints/0010_capability_control_foundation.md` before exposing protected POS endpoints.
 
-Minimum next-step proof:
-
-- runtime capability middleware tests;
-- disabled capability stops before handler/usecase execution;
-- enabled capability allows handler execution;
+- seed records cover existing protected routes only;
+- no future POS business capabilities are seeded before domain contracts exist;
+- seed path is idempotent;
+- repository/integration or migration proof verifies seeded records;
 - `make verify` remains passing;
 - updated handoff and progress ledger.
 
@@ -109,4 +112,4 @@ The same session must create or update a handoff when durable work was done.
 
 ## Context Window Status
 
-Current ledger update context status: enough context for one focused next implementation step after capability PostgreSQL state.
+Current ledger update context status: enough context for one focused next implementation step after capability runtime middleware.
