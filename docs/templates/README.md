@@ -33,4 +33,6 @@ For web AI prompts:
 - avoid nested Markdown code fences;
 - use uppercase placeholders like `REPLACE_WITH_SCOPE`;
 - put long source data below a clear `SOURCE DATA` heading;
-- keep proof commands separate from claims.
+- keep proof commands separate from claims;
+- keep GitHub connector use read-only by default;
+- treat "write docs/...", "update docs/...", "create evidence", "prepare handoff", and "close scope" as draft response content unless exact mutation permission is given.
