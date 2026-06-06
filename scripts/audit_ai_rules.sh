@@ -29,6 +29,13 @@ required_files=(
   "docs/scripts/0090_makefile_and_scripts.md"
   "docs/style/0100_go_style.md"
   "docs/templates/0110_domain_scope_packet.md"
+  "docs/templates/0120_prompt_authoring_rules.md"
+  "docs/templates/0121_codex_session_prompts.md"
+  "docs/templates/0122_web_ai_session_prompts.md"
+  "docs/templates/0123_analysis_and_review_prompts.md"
+  "docs/templates/0124_testing_and_proof_prompts.md"
+  "docs/templates/0125_data_capture_and_evidence_prompts.md"
+  "docs/templates/0126_resume_after_pause_prompts.md"
   "docs/adr/0001-foundation-raw-go-echo-postgres-hexagonal.md"
 )
 
@@ -87,6 +94,8 @@ check_contains "docs/architecture/0024_current_repo_layout.md" "Protected Contra
 check_contains "docs/workflow/0070_docs_go_workflow.md" 'Every folder under `docs/` should have a `README.md`'
 check_contains "docs/scripts/0090_makefile_and_scripts.md" "Required Make Targets"
 check_contains "docs/style/0100_go_style.md" "Forbidden Patterns"
+check_contains "docs/templates/0120_prompt_authoring_rules.md" "Web AI Source Rules"
+check_contains "docs/templates/0122_web_ai_session_prompts.md" "Use the GitHub connector as the source of truth"
 check_contains "docs/adr/0001-foundation-raw-go-echo-postgres-hexagonal.md" "## Decision"
 
 echo
