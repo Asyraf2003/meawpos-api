@@ -54,6 +54,8 @@ If the user names a blueprint, ADR, handoff, error log, branch, commit, command 
 - Web AI must not create, update, or delete files; create branches or commits; update refs; open or merge PRs; create or update issues; comment; label; request reviewers; rerun remote CI; or otherwise mutate GitHub unless the prompt gives exact mutation permission naming the action, target repository, branch, path or issue/PR, and intended content.
 - Web AI prompts that say "write docs/...", "update docs/...", "create evidence", "prepare handoff", or "close scope" mean draft paste-ready response content, not repository mutation.
 - Docs workflow changes must cascade to impacted README/index/AGENTS/template/audit files when feasible.
+- When Laravel source data is missing, ask for the smallest specific source batch by folder, file, route, migration, seeder, test, or command output.
+- When an ADR or owner decision is needed, ask a concise question with 2-3 viable options, include tradeoffs, and put the recommended option first when clear.
 - Non-trivial final reports must include proof, estimated active-scope progress, context-window status, and next valid step.
 - Create or update a handoff before context runs low or when durable work needs continuation.
 - For long-running transition scopes, update the active progress ledger when progress, proof, gaps, or next valid step changes.

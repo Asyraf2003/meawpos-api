@@ -27,6 +27,7 @@ EXPECTED OUTPUT
 - Evidence document content.
 - Follow-up blueprint changes needed.
 - Smallest missing data request.
+- If a decision is blocked, provide 2-3 owner decision options with tradeoffs and a recommended option when clear.
 ```
 
 ## Analyze A Domain For Migration
@@ -52,6 +53,8 @@ REQUIRED OUTPUT
 - API route candidates;
 - tests to preserve;
 - gaps.
+- smallest missing source batch request;
+- ADR or owner decision question with 2-3 options and tradeoffs when needed.
 
 Do not write Go code. Produce a blueprint-ready analysis.
 ```

@@ -57,3 +57,16 @@ If data is insufficient:
 - ask for the smallest missing proof;
 - do not fill the gap with assumptions.
 
+## Decision And Data Request Rule
+
+When missing data blocks work, ask for the smallest specific source batch instead of a broad dump.
+
+For Laravel migration work, name the exact folders, files, routes, migrations, seeders, tests, or command output needed.
+
+When an ADR or owner decision is needed, ask a concise decision question with 2-3 viable options. Each option must include:
+
+- when to choose it;
+- tradeoff or risk;
+- recommended option first when there is a clear recommendation.
+
+Do not continue implementation across an unresolved ADR-level decision.

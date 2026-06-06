@@ -40,6 +40,7 @@ EXPECTED OUTPUT
 - evidence document content;
 - related blueprint update notes;
 - smallest next source batch request.
+- owner decision question with 2-3 options and tradeoffs when the source exposes an unresolved policy decision.
 ```
 
 ## Capture Web AI Analysis Into Docs
@@ -100,5 +101,7 @@ Does it separate FACT and GAP?
 Does it avoid implementation claims?
 Does it preserve names exactly?
 Does it point to the next blueprint or decision?
+Does it ask for the smallest specific missing source batch?
+If a decision is needed, does it give 2-3 viable options with tradeoffs?
 Does it avoid duplicate active docs?
 ```

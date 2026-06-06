@@ -162,6 +162,8 @@ Use local Codex evidence for connector gaps only, such as `.env`, secrets, gener
 
 If GitHub connector facts and local evidence disagree, mark `GAP` and ask for the smallest proof.
 
+When Laravel source data is missing, ask for the smallest specific source batch by folder, file, route, migration, seeder, test, or command output. When an ADR or owner decision is needed, ask a concise question with 2-3 options, include plus/minus tradeoffs, and put the recommended option first when there is a clear recommendation.
+
 ## Documentation Cascade Rule
 
 When a docs change affects how future sessions start, continue, verify, or hand off, update the impacted chain in the same step when feasible:

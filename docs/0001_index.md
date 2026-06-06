@@ -91,6 +91,8 @@ It prevents:
 - For web AI with a GitHub connector, treat the connector as read-only repository source of truth. Allow only fetch, search, list, and get connector actions by default.
 - Web AI must not mutate files, branches, commits, refs, pull requests, issues, labels, reviewers, merges, or remote CI unless the prompt gives exact mutation permission naming the action, target repository, branch, path or issue/PR, and intended content.
 - Web AI prompts that say "write docs/...", "update docs/...", "create evidence", "prepare handoff", or "close scope" mean draft paste-ready response content, not repository mutation.
+- If Laravel source data is missing, ask for the smallest specific source batch by folder, file, route, migration, seeder, test, or command output.
+- If an ADR or owner decision is needed, ask a concise question with 2-3 viable options, tradeoffs, and a recommended option when clear.
 - Do not leave mandatory workflow updates only in chat; cascade impacted docs and audit rules.
 - For long-running transition scopes, do not change progress, proof, gaps, or next valid step without updating the active progress ledger or explicitly stating why it is unchanged.
 - For non-trivial work, final status must include proof, estimated active-scope progress, context-window status, and next valid step.
