@@ -43,13 +43,20 @@ For a tiny question, a shorter prompt is fine.
 
 When a web AI has a GitHub connector available:
 
-- Treat the GitHub connector as the source of truth for repository files, branches, pull requests, issues, and committed code.
-- Do not ask the web AI to manage local git state unless the task is explicitly about git, GitHub, a branch, a commit, a PR, or CI.
+- Treat the GitHub connector as the read-only source of truth for repository files, branches, pull requests, issues, and committed code.
+- GitHub connector access is read-only by default.
+- Allow only read-only fetch, search, list, and get connector actions by default.
+- Forbid connector mutation actions by default, including create_file, update_file, delete_file, create_branch, update_ref, create_commit, create_pull_request, merge_pull_request, create_issue, update_issue, issue comments, PR comments, labels, reviewer requests, and remote CI reruns.
+- Require exact mutation permission before any GitHub mutation action. The permission must name the action, target repository, branch, path or issue/PR, and intended content.
+- Treat "write docs/...", "update docs/...", "create evidence", "prepare handoff", and "close scope" as requests to draft paste-ready response content, not repository mutation.
+- Do not ask the web AI to manage local git state unless the task gives exact permission for a specific git or GitHub action.
 - Do not ask the web AI to run destructive git actions.
 - If local and GitHub are expected to be identical because the owner pushes frequently, say that assumption explicitly.
 - Use local terminal/Codex context only for things the connector cannot see or cannot do.
 - Examples of local-only context: `.env`, secrets, uncommitted sensitive files, generated local output, installed tools, `fd`, `rg`, local test output, local database state, and runtime logs.
 - If GitHub connector data and local evidence disagree, mark it as GAP and ask for the smallest proof instead of choosing silently.
+- Do not claim local commands, tests, database checks, runtime checks, or git-status checks were run unless exact output is provided.
+- Put local proof that Web AI cannot run under `PROOF THE TERMINAL AGENT MUST RUN`.
 
 ## Backtick Guidance For Web AI
 
