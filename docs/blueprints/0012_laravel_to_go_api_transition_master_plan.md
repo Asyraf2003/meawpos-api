@@ -21,11 +21,14 @@
 - User direction: auth has its own modular field; this blueprint must focus on moving production Laravel behavior into the Go API.
 - User direction: Go implementation should be more modular and mature than the Laravel production app, with complete Makefile, testing, language/output control, notification module, and full custom control.
 - Stage 0 batch 1 evidence exists at `docs/evidence/0001_laravel_stage0_schema_and_route_inventory.md`.
+- Stage 0 batch 2 catalog evidence exists at `docs/evidence/0002_laravel_productcatalog_servicecatalog_inventory.md`.
+- First catalog migration blueprint exists at `docs/blueprints/0020_catalog_foundation_migration.md`.
 
 ## GAP
 - The Laravel source tree and initial migration/route batch were provided as command output, but the Go repo does not currently contain the Laravel source files for direct inspection.
 - Exact Laravel route definitions, database columns, constraints, indexes, seed profiles, and production data edge cases must be inspected before implementation.
 - Several Laravel alter/index/FK/timestamp migrations were not captured by the Stage 0 batch 1 `Schema::create` extraction.
+- Product duplicate behavior needs owner decision before PostgreSQL unique indexes are finalized.
 - Exact public API contract for the future UI/mobile clients is not accepted yet.
 - PostgreSQL target schema for POS domains is not accepted yet.
 - Capability keys for POS business operations are not defined yet.
@@ -134,6 +137,7 @@ Deliverables:
 Proof:
 - generated inventory docs under `docs/evidence/`;
 - current partial proof: `docs/evidence/0001_laravel_stage0_schema_and_route_inventory.md`;
+- current catalog proof: `docs/evidence/0002_laravel_productcatalog_servicecatalog_inventory.md`;
 - no implementation yet.
 
 ### Stage 1 - Go Quality Foundation
@@ -448,10 +452,8 @@ Do not start with business CRUD.
 Next valid active implementation step:
 
 ```text
-Continue Stage 0 with the next Laravel data batch:
-- inspect omitted alter/index/FK/timestamp product and service catalog migrations;
-- inspect ProductCatalog and ServiceCatalog core/application/ports/adapters/controllers/requests/tests;
-- turn the evidence into the first domain blueprint for servicecatalog/productcatalog.
+Resolve the ProductCatalog duplicate policy in `docs/blueprints/0020_catalog_foundation_migration.md`,
+then implement catalog foundation in the blueprint order.
 ```
 
 ## DOD
