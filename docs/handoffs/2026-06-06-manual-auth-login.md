@@ -28,6 +28,16 @@ Manual auth login foundation for local/build/testing auth requirements.
 - `internal/modules/auth/transport/http/manual_login_handler_error_test.go`
 - `internal/modules/auth/transport/http/manual_login_handler_test_helpers_test.go`
 - `internal/platform/postgres/manual_account_repository.go`
+- `docs/blueprints/0023_quality_security_hex_audit_gates.md`
+- `internal/modules/system/ports/health_checker.go`
+- `internal/platform/postgres/health_checker.go`
+- `scripts/audit_format.sh`
+- `scripts/audit_go_vet.sh`
+- `scripts/audit_hexagonal.sh`
+- `scripts/audit_all.sh`
+- `Makefile`
+- `docs/scripts/0090_makefile_and_scripts.md`
+- `scripts/audit_ai_rules.sh`
 
 ## Decision
 
@@ -39,6 +49,10 @@ Manual auth login foundation for local/build/testing auth requirements.
   - `kasir@example.com` -> `cashier`
 - Both allowed emails require password `12345678`.
 - The route reuses normal account, role, session, refresh token, access token, and auth middleware behavior.
+- Quality gate now includes format, vet, file size, hexagonal import-boundary, docs audit, and security gosec target.
+- `make check` runs format, vet, file size, hexagonal, and docs audits.
+- `make verify` delegates to aggregate audit.
+- Health transport no longer imports `pgxpool`; it uses a `system/ports.HealthChecker` implemented by PostgreSQL platform code.
 
 ## Proof Collected
 
@@ -63,17 +77,35 @@ PASS
 
 bash scripts/audit_ai_rules.sh
 PASS
+
+make check
+PASS
+
+bash scripts/audit_format.sh
+PASS
+
+bash scripts/audit_hexagonal.sh
+PASS
+
+bash scripts/audit_go_vet.sh
+PASS
+
+GOCACHE=/tmp/go-build-cache go test ./internal/modules/system/...
+PASS
 ```
 
 ## Blocked Or Partial Proof
 
 `go test ./internal/app/bootstrap` with real tests could not run in the sandbox because it needs a PostgreSQL socket at `127.0.0.1:5432`, and the sandbox returned `socket: operation not permitted`.
 
+`bash scripts/audit_security_gosec.sh` did not complete because the installed gosec binary reports `Version: dev` and fails to load Go stdlib package `unsafe` from `/usr/lib/go/src/unsafe`. The script is wired as a security gate, but this environment needs gosec/toolchain repair before claiming security scan proof.
+
 ## Open Gaps
 
 - No runtime curl proof yet against a running local database.
 - No production password login exists; this is intentionally debug/local only.
 - No capability-control integration yet because capability foundation remains a separate blueprint.
+- No passing gosec proof yet due local gosec/toolchain issue.
 
 ## Next Valid Active Step
 
@@ -90,10 +122,12 @@ GET /api/me with returned bearer token
 
 ## Estimated Progress
 
-Manual auth login foundation: 85%.
+Manual auth login foundation: 88%.
 
-Remaining work is runtime DB proof and optional API envelope centralization if required by the next API contract pass.
+Quality/security/hex audit gates: 75%.
+
+Remaining work is runtime DB proof, gosec/toolchain repair, optional API envelope centralization if required by the next API contract pass, and future capability-control audit once capability foundation exists.
 
 ## Context Window Status
 
-Current session context is long but still usable. Handoff exists so the next model can resume safely from this file.
+Current session context is long but still usable. Estimated context capacity used: 78%. Handoff exists so the next model can resume safely from this file.

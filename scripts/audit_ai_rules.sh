@@ -37,6 +37,9 @@ required_files=(
   "docs/templates/0125_data_capture_and_evidence_prompts.md"
   "docs/templates/0126_resume_after_pause_prompts.md"
   "docs/adr/0001-foundation-raw-go-echo-postgres-hexagonal.md"
+  "scripts/audit_format.sh"
+  "scripts/audit_go_vet.sh"
+  "scripts/audit_hexagonal.sh"
 )
 
 required_readme_dirs=(
@@ -99,6 +102,9 @@ check_contains "docs/templates/0122_web_ai_session_prompts.md" "Use the GitHub c
 check_contains "docs/workflow/0071_handoff_protocol.md" "Automatic Handoff Triggers"
 check_contains "docs/README.md" "Documentation Cascade Rule"
 check_contains "docs/AGENTS.md" "context-window status"
+check_contains "scripts/audit_hexagonal.sh" "hexagonal import audit"
+check_contains "scripts/audit_format.sh" "format audit"
+check_contains "scripts/audit_go_vet.sh" "go vet audit"
 check_contains "docs/adr/0001-foundation-raw-go-echo-postgres-hexagonal.md" "## Decision"
 
 echo
