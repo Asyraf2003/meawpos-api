@@ -181,6 +181,7 @@ Documents must not overlap roles.
 - Handoffs continue sessions.
 - Evidence records proof.
 - Archive is historical and cannot override active rules.
+- Each folder has a local `README.md` so readers can enter from any part of the documentation tree.
 
 ## For AI Assistants
 

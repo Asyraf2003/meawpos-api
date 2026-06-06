@@ -55,8 +55,8 @@ Do not reuse numbers for different meanings.
 ## Cleanliness Rules
 
 - One document owns one purpose.
+- Every folder under `docs/` should have a `README.md` that explains the folder role, its active files, and when to use it.
 - No duplicate active blueprint for the same scope.
 - No "latest final v2 fixed" naming.
 - No completion status without proof reference.
 - No decision hidden only in chat.
-
