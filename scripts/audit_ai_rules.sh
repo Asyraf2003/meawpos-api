@@ -87,6 +87,10 @@ for d in "${required_readme_dirs[@]}"; do
   check_file "$d/README.md"
 done
 
+while IFS= read -r d; do
+  check_file "$d/README.md"
+done < <(fd . docs -t d)
+
 echo
 echo "== content checks =="
 check_contains "docs/README.md" "First Read Order"
@@ -101,7 +105,7 @@ check_contains "docs/core/0012_step_by_step_execution.md" "An active step must h
 check_contains "docs/core/0013_proof_and_progress.md" "Accepted Proof"
 check_contains "docs/architecture/0021_package_boundaries.md" "One Folder One Package"
 check_contains "docs/architecture/0024_current_repo_layout.md" "Protected Contracts"
-check_contains "docs/workflow/0070_docs_go_workflow.md" "Every folder under `docs/` should have a `README.md`"
+check_contains "docs/workflow/0070_docs_go_workflow.md" 'Every folder under `docs/` should have a `README.md`'
 check_contains "docs/scripts/0090_makefile_and_scripts.md" "Required Make Targets"
 check_contains "docs/style/0100_go_style.md" "Forbidden Patterns"
 check_contains "docs/adr/0001-foundation-raw-go-echo-postgres-hexagonal.md" "## Decision"

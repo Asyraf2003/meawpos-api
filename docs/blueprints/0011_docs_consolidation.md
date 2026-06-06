@@ -16,6 +16,7 @@
 - Legacy `docs/AI_RULES` and `docs/core` are archived, not mixed into active standards.
 - Useful legacy layout guidance is preserved as an active `docs/architecture` standard.
 - `docsgo/` is removed after successful consolidation.
+- Every folder under `docs/` gets a local `README.md` entry point.
 
 ## SCOPE-IN
 - Move the `docsgo` standards package under `docs/`.
@@ -23,6 +24,7 @@
 - Archive legacy `docs/AI_RULES` and `docs/core`.
 - Update root and docs-local `AGENTS.md`.
 - Update path references and AI rules audit script.
+- Add local README files for documentation navigation.
 
 ## SCOPE-OUT
 - Product capability-control implementation.
@@ -41,6 +43,7 @@
 - Inspect file tree with `fd`.
 - Search for stale `docsgo` references with `rg`.
 - Run `bash scripts/audit_ai_rules.sh`.
+- Verify every folder under `docs/` has `README.md`.
 - Inspect git diff summary.
 
 ## STEP ORDER
