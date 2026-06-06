@@ -1,0 +1,105 @@
+# Laravel To Go Transition Progress Ledger
+
+## Status
+
+Date updated: 2026-06-07
+
+Active blueprint:
+
+```text
+docs/blueprints/0012_laravel_to_go_api_transition_master_plan.md
+```
+
+Related blueprints:
+
+```text
+docs/blueprints/0010_capability_control_foundation.md
+docs/blueprints/0020_catalog_foundation_migration.md
+docs/blueprints/0022_manual_auth_login_foundation.md
+docs/blueprints/0023_quality_security_hex_audit_gates.md
+```
+
+Related evidence:
+
+```text
+docs/evidence/0001_laravel_stage0_schema_and_route_inventory.md
+docs/evidence/0002_laravel_productcatalog_servicecatalog_inventory.md
+docs/evidence/2026-06-06-auth-runtime-local-dev.md
+```
+
+Related handoffs:
+
+```text
+docs/handoffs/2026-06-06-manual-auth-login.md
+docs/handoffs/2026-06-06-auth-runtime-local-dev.md
+```
+
+## Current Decision
+
+Do not start broad Laravel code translation yet.
+
+The valid order is:
+
+1. Keep the progress ledger current.
+2. Complete capability-control foundation proof.
+3. Repair or prove security audit gate.
+4. Complete missing Stage 0 inventory batches.
+5. Start `servicecatalog`.
+6. Start `productcatalog`.
+
+Protected POS endpoints must wait for capability-control proof.
+
+## Stage Progress
+
+| Stage | Scope | Status | Estimate | Proof |
+| --- | --- | --- | --- | --- |
+| Stage 0 | Laravel source inventory and parity matrix | Partial | 40% | `0001_laravel_stage0_schema_and_route_inventory.md`, `0002_laravel_productcatalog_servicecatalog_inventory.md` |
+| Stage 1 | Go quality foundation | Partial | 70% | `2026-06-06-manual-auth-login.md` handoff reports passing format, vet, hex, docs, file-size, and auth tests; gosec remains unproven |
+| Stage 2 | PostgreSQL target baseline for POS domains | Not started | 0% | No accepted POS PostgreSQL migration baseline proof yet |
+| Stage 3 | API foundation and capability control | Partial | 20% | Auth/session foundation exists; capability blueprint exists; capability implementation proof missing |
+| Stage 4 | Cross-cutting modules | Not started | 0% | No audit/language/notification/idempotency transition implementation proof yet |
+| Business Phase 1 | Service catalog and product catalog | Not started | 0% | Catalog evidence and blueprint exist; Go business modules not implemented |
+| Overall Laravel-to-Go transition | POS API migration | Early foundation | 15% | Docs, auth debug lane, and quality gates exist; POS domains are not implemented |
+
+## Completed Work With Proof
+
+- Docs consolidation and AI workflow rules exist under `docs/`.
+- Codex, web AI, analysis, testing, evidence, and resume templates exist under `docs/templates/`.
+- Web AI GitHub connector rules are documented as read-only by default.
+- Manual debug login foundation is documented in `docs/handoffs/2026-06-06-manual-auth-login.md`.
+- Manual debug accounts are documented as:
+  - `admin@example.com` with password `12345678`;
+  - `kasir@example.com` with password `12345678`.
+- Quality and architecture audit scripts are documented as wired.
+
+## Open Gaps
+
+- Full Laravel source inventory is incomplete for many business domains.
+- Laravel alter, foreign key, index, timestamp, and seed migrations are not fully inventoried.
+- Product duplicate policy still needs an owner decision before final PostgreSQL indexes.
+- Capability-control foundation is not implemented yet.
+- Runtime DB proof for manual auth login is still incomplete.
+- Security audit script is wired, but gosec passing proof is missing because the local toolchain/gosec run was blocked in the prior session.
+- No POS domain PostgreSQL baseline has been accepted.
+- No `servicecatalog` or `productcatalog` Go business module has implementation proof.
+
+## Next Valid Active Step
+
+Implement or complete `docs/blueprints/0010_capability_control_foundation.md` before exposing protected POS endpoints.
+
+Minimum next-step proof:
+
+- capability domain/usecase tests;
+- disabled capability returns `403` before validation/usecase;
+- route-to-capability audit script or placeholder proof;
+- updated handoff and progress ledger.
+
+## Handoff Requirement
+
+Any Codex or web AI session that changes Laravel-to-Go transition docs, capability foundation, quality gates, or POS domain implementation must update this ledger or explicitly state why the ledger is unchanged.
+
+The same session must create or update a handoff when durable work was done.
+
+## Context Window Status
+
+Current ledger update context status: enough context for one focused next implementation step after this docs step.

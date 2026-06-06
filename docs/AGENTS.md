@@ -24,13 +24,14 @@ Before giving technical guidance, planning implementation, editing files, or pro
 16. `docs/testing/0060_test_and_quality_gates.md`
 17. `docs/workflow/0070_docs_go_workflow.md`
 18. `docs/workflow/0071_handoff_protocol.md`
-19. `docs/security/0080_security_baseline.md`
-20. `docs/scripts/0090_makefile_and_scripts.md`
-21. `docs/style/0100_go_style.md`
-22. `docs/templates/0110_domain_scope_packet.md`
-23. `docs/templates/0120_prompt_authoring_rules.md`
-24. `docs/templates/0121_codex_session_prompts.md`
-25. `docs/templates/0122_web_ai_session_prompts.md`
+19. `docs/workflow/0072_transition_progress_ledger_protocol.md`
+20. `docs/security/0080_security_baseline.md`
+21. `docs/scripts/0090_makefile_and_scripts.md`
+22. `docs/style/0100_go_style.md`
+23. `docs/templates/0110_domain_scope_packet.md`
+24. `docs/templates/0120_prompt_authoring_rules.md`
+25. `docs/templates/0121_codex_session_prompts.md`
+26. `docs/templates/0122_web_ai_session_prompts.md`
 
 If the user names a blueprint, ADR, handoff, error log, branch, commit, command output, API, domain, table, or module, that reference defines the active scope until the user changes it.
 
@@ -55,4 +56,5 @@ If the user names a blueprint, ADR, handoff, error log, branch, commit, command 
 - Docs workflow changes must cascade to impacted README/index/AGENTS/template/audit files when feasible.
 - Non-trivial final reports must include proof, estimated active-scope progress, context-window status, and next valid step.
 - Create or update a handoff before context runs low or when durable work needs continuation.
+- For long-running transition scopes, update the active progress ledger when progress, proof, gaps, or next valid step changes.
 - Makefile/script contracts must stay stable so terminal Codex and GPT web workflows use the same proof language.

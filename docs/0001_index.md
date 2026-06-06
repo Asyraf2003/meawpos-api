@@ -40,13 +40,14 @@ It prevents:
 15. `testing/0060_test_and_quality_gates.md`
 16. `workflow/0070_docs_go_workflow.md`
 17. `workflow/0071_handoff_protocol.md`
-18. `security/0080_security_baseline.md`
-19. `scripts/0090_makefile_and_scripts.md`
-20. `style/0100_go_style.md`
-21. `templates/0110_domain_scope_packet.md`
-22. `templates/0120_prompt_authoring_rules.md`
-23. `templates/0121_codex_session_prompts.md`
-24. `templates/0122_web_ai_session_prompts.md`
+18. `workflow/0072_transition_progress_ledger_protocol.md`
+19. `security/0080_security_baseline.md`
+20. `scripts/0090_makefile_and_scripts.md`
+21. `style/0100_go_style.md`
+22. `templates/0110_domain_scope_packet.md`
+23. `templates/0120_prompt_authoring_rules.md`
+24. `templates/0121_codex_session_prompts.md`
+25. `templates/0122_web_ai_session_prompts.md`
 
 ## Constitution Summary
 
@@ -91,4 +92,5 @@ It prevents:
 - Web AI must not mutate files, branches, commits, refs, pull requests, issues, labels, reviewers, merges, or remote CI unless the prompt gives exact mutation permission naming the action, target repository, branch, path or issue/PR, and intended content.
 - Web AI prompts that say "write docs/...", "update docs/...", "create evidence", "prepare handoff", or "close scope" mean draft paste-ready response content, not repository mutation.
 - Do not leave mandatory workflow updates only in chat; cascade impacted docs and audit rules.
+- For long-running transition scopes, do not change progress, proof, gaps, or next valid step without updating the active progress ledger or explicitly stating why it is unchanged.
 - For non-trivial work, final status must include proof, estimated active-scope progress, context-window status, and next valid step.
