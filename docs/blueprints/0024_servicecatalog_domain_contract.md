@@ -8,6 +8,28 @@ Accepted domain contract.
 
 2026-06-08
 
+## Current Implementation Note
+
+This domain contract remains accepted as the ServiceCatalog source contract.
+
+Post-contract implementation status now lives in:
+
+```text
+docs/blueprints/0025_servicecatalog_implementation_slice_1.md
+docs/evidence/0003_laravel_to_go_transition_progress_ledger.md
+docs/handoffs/2026-06-08-servicecatalog-implementation-slice-1.md
+```
+
+ServiceCatalog slice 1 is implemented and closed with proof for:
+
+```text
+internal/modules/servicecatalog/domain
+internal/modules/servicecatalog/ports
+internal/modules/servicecatalog/usecase
+```
+
+This contract should still be used for lifecycle, API, PostgreSQL, authorization, capability, audit, and transaction decisions for later slices.
+
 ## Active Scope
 
 Create the first POS business-domain blueprint/domain contract after capability-control foundation closeout.
@@ -35,7 +57,7 @@ servicecatalog
 - Exact seed row contents for `service_catalog_items` need source proof before writing Go migrations/seeds.
 - Audit module implementation is not available yet.
 - No PostgreSQL migration has been accepted for `service_catalog_items`.
-- No Go package, handler, repository, usecase, or test implementation is active in this blueprint.
+- ServiceCatalog HTTP handler, PostgreSQL repository, migration, route registration, and capability seed implementation are not active in this contract blueprint.
 
 ## DECISION
 
