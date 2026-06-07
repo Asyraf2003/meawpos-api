@@ -1,17 +1,18 @@
-package postgres_test
+//go:build integration
+
+package postgres
 
 import (
 	"context"
 	"testing"
-
-	"pos-go/internal/platform/postgres"
 )
 
 func TestSeededExistingProtectedCapabilities(t *testing.T) {
-	t.Parallel()
+	ctx := context.Background()
+	pool := mustOpenIntegrationPool(t, ctx)
+	defer pool.Close()
 
-	pool := integrationPool(t)
-	repo := postgres.NewCapabilityRepository(pool)
+	repository := NewCapabilityRepository(pool)
 
 	expected := map[string]struct {
 		method             string
@@ -46,21 +47,24 @@ func TestSeededExistingProtectedCapabilities(t *testing.T) {
 	}
 
 	for key, want := range expected {
-		got, err := repo.Get(context.Background(), key)
+		got, err := repository.Get(ctx, key)
 		if err != nil {
 			t.Fatalf("expected seeded capability %q: %v", key, err)
 		}
 		if got.Method != want.method {
-			t.Fatalf("%s method: got %q want %q", key, got.Method, want.method)
+			t.Fatalf("%s method = %q, want %q", key, got.Method, want.method)
 		}
 		if got.Path != want.path {
-			t.Fatalf("%s path: got %q want %q", key, got.Path, want.path)
+			t.Fatalf("%s path = %q, want %q", key, got.Path, want.path)
 		}
 		if got.RequiredPermission != want.requiredPermission {
-			t.Fatalf("%s permission: got %q want %q", key, got.RequiredPermission, want.requiredPermission)
+			t.Fatalf("%s required permission = %q, want %q", key, got.RequiredPermission, want.requiredPermission)
 		}
-		if !got.Enabled || !got.DefaultEnabled {
-			t.Fatalf("%s should be enabled by default", key)
+		if !got.DefaultEnabled {
+			t.Fatalf("%s default enabled = false, want true", key)
+		}
+		if !got.Enabled {
+			t.Fatalf("%s enabled = false, want true", key)
 		}
 	}
 }
