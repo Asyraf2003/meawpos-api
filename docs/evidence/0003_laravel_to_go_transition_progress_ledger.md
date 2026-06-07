@@ -17,6 +17,7 @@ docs/blueprints/0010_capability_control_foundation.md
 docs/blueprints/0020_catalog_foundation_migration.md
 docs/blueprints/0022_manual_auth_login_foundation.md
 docs/blueprints/0023_quality_security_hex_audit_gates.md
+docs/blueprints/0024_servicecatalog_domain_contract.md
 ```
 
 Related evidence:
@@ -43,6 +44,7 @@ docs/handoffs/2026-06-07-web-ai-owner-terminal-output-test.md
 docs/handoffs/2026-06-08-capability-route-audit-script.md
 docs/handoffs/2026-06-08-capability-route-disabled-proof.md
 docs/handoffs/2026-06-08-capability-control-closeout.md
+docs/handoffs/2026-06-08-servicecatalog-domain-contract-blueprint.md
 ```
 
 ## Current Decision
@@ -122,17 +124,17 @@ Protected POS CRUD implementation must wait for accepted domain contracts, POS P
 - Runtime DB proof for manual auth login is still incomplete.
 - No POS domain PostgreSQL baseline has been accepted.
 - No first POS business-domain blueprint/domain contract has been accepted yet.
+- ServiceCatalog domain contract blueprint exists but is not accepted yet.
 - No `servicecatalog` or `productcatalog` Go business module has implementation proof.
 
 ## Next Valid Active Step
 
-Capability-control foundation is closed.
+Continue `docs/blueprints/0024_servicecatalog_domain_contract.md`.
 
-Start the first POS business-domain blueprint/domain contract.
-
-- do not start POS CRUD implementation;
-- do not add future POS business capability seeds before accepted domain contracts;
-- keep protected POS endpoint implementation blocked until the domain contract, PostgreSQL baseline, authorization/capability map, transaction/audit decisions, and tests are accepted.
+- Review and accept or adjust the ServiceCatalog domain contract.
+- Do not start POS CRUD implementation.
+- Do not add ServiceCatalog capability seeds before the domain contract is accepted.
+- Do not implement migrations, handlers, repositories, or usecases before the contract is accepted.
 
 ## Handoff Requirement
 
