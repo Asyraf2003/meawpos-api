@@ -8,7 +8,11 @@ Web AI sessions are read-only by default.
 
 The GitHub connector may be used only for read-only repository facts unless the owner gives exact mutation permission in the prompt. A task that says "write docs/...", "update docs/...", "create evidence", "prepare handoff", or "close scope" means draft paste-ready content in the chat response. It does not mean creating, updating, deleting, committing, branching, commenting, labeling, merging, rerunning CI, or otherwise mutating GitHub.
 
-Web AI prompts must not include Codex local implementation instructions unless they are drafting clearly separated `HANDOFF TEXT FOR CODEX`.
+Web AI prompts must not include Codex local implementation instructions unless they are drafting clearly separated `OPTIONAL HANDOFF TEXT FOR CODEX`.
+
+Web AI should not assume Terminal Codex is the executor. For normal Web AI analysis, prefer `COMMAND PLAN FOR OWNER / LOCAL TERMINAL`.
+
+Use `OPTIONAL HANDOFF TEXT FOR CODEX` only when the owner explicitly asks for Codex or when the task is to prepare a Codex handoff.
 
 Before sending any Web AI prompt, check:
 
@@ -16,8 +20,10 @@ Before sending any Web AI prompt, check:
 - template source is `docs/templates/0122_web_ai_session_prompts.md`;
 - GitHub connector remains read-only by default;
 - local runtime, test, database, migration, and server proof is not claimed unless exact output is provided;
-- commands that still need local execution are under `PROOF THE TERMINAL AGENT MUST RUN`;
+- commands that still need local execution are under `PROOF THE OWNER OR TERMINAL AGENT MUST RUN`;
 - no Codex implementation task is mixed into the Web AI task section unless the owner explicitly requested collaboration.
+- Web AI did not assume Codex executor.
+- Optional Codex handoff is omitted unless owner requested it.
 
 ## Open A Web AI Session
 
@@ -68,8 +74,11 @@ REPLACE_WITH_TASK
 
 RULES
 - Answer in English unless the requested user-facing app text must be Indonesian.
-- Do not include Codex local implementation instructions unless drafting HANDOFF TEXT FOR CODEX.
-- HANDOFF TEXT FOR CODEX must be clearly separated from Web AI analysis.
+- Do not include Codex local implementation instructions unless drafting OPTIONAL HANDOFF TEXT FOR CODEX.
+- OPTIONAL HANDOFF TEXT FOR CODEX must be clearly separated from Web AI analysis.
+- Do not assume Terminal Codex is the executor.
+- Prefer COMMAND PLAN FOR OWNER / LOCAL TERMINAL for normal Web AI analysis.
+- Include OPTIONAL HANDOFF TEXT FOR CODEX only when owner explicitly asks for Codex or the task is to prepare a Codex handoff.
 - Do not invent files, tests, schema, or repo state.
 - Work in one focused active step.
 - Analyze enough context first, then provide a concise plan or patch plan.
@@ -80,7 +89,7 @@ RULES
 - Do not call GitHub mutation tools unless exact mutation permission is provided.
 - Treat "write docs/...", "update docs/...", "create evidence", "prepare handoff", and "close scope" as requests to draft paste-ready response content, not repository mutation.
 - Do not claim local commands were run unless exact command output is provided.
-- Put runtime, test, database, git-status, migration, and server-start proof under PROOF THE TERMINAL AGENT MUST RUN when you cannot run them.
+- Put runtime, test, database, git-status, migration, and server-start proof under PROOF THE OWNER OR TERMINAL AGENT MUST RUN when you cannot run them.
 - Mark missing repo facts, missing command output, missing source docs, and missing local proof as GAP.
 - Keep domain logic out of HTTP handlers.
 - Keep SQL inside persistence adapters.
@@ -88,7 +97,7 @@ RULES
 - Do not claim implementation completion, runtime success, tests passed, file creation, repository update, or scope closure without proof.
 - Do not use "ready", "done", "closed", or "complete" unless every stated acceptance gate has proof.
 - Keep one active step.
-- Since you usually cannot execute local CLI commands, provide exact commands for Terminal Codex or the owner under PROOF THE TERMINAL AGENT MUST RUN.
+- Since you usually cannot execute local CLI commands, provide exact commands for owner/local terminal under COMMAND PLAN FOR OWNER / LOCAL TERMINAL.
 - Separate proposed commands from command output that was actually provided.
 
 EXPECTED OUTPUT
@@ -97,16 +106,21 @@ EXPECTED OUTPUT
 - DECISION
 - BLUEPRINT or PATCH PLAN
 - RISKS
-- PROOF THE TERMINAL AGENT MUST RUN
-- HANDOFF TEXT FOR CODEX
+- COMMAND PLAN FOR OWNER / LOCAL TERMINAL
+- PROOF THE OWNER OR TERMINAL AGENT MUST RUN
+- OPTIONAL HANDOFF TEXT FOR CODEX, only when owner explicitly requests Codex
 
 SELF-CHECK
 - Prompt target is Web AI only.
 - Template source is docs/templates/0122_web_ai_session_prompts.md.
 - GitHub connector remains read-only by default.
+- Web AI did not assume Codex executor.
 - Local runtime/test/database proof is not claimed unless exact output is provided.
-- Commands needing local execution are under PROOF THE TERMINAL AGENT MUST RUN.
+- Commands for owner/local terminal are separated from proof already run.
+- Commands needing local execution are under PROOF THE OWNER OR TERMINAL AGENT MUST RUN.
+- Optional Codex handoff is omitted unless owner requested it.
 - No Codex implementation task is mixed into TASK unless owner explicitly requested collaboration.
+- No repo mutation is claimed.
 
 STYLE
 - Be direct and concise.
@@ -150,8 +164,11 @@ General phrases such as "write docs/...", "update docs/...", "create evidence", 
 
 RULES
 - Preserve existing decisions unless new evidence contradicts them.
-- Do not include Codex local implementation instructions unless drafting HANDOFF TEXT FOR CODEX.
-- HANDOFF TEXT FOR CODEX must be clearly separated from Web AI analysis.
+- Do not include Codex local implementation instructions unless drafting OPTIONAL HANDOFF TEXT FOR CODEX.
+- OPTIONAL HANDOFF TEXT FOR CODEX must be clearly separated from Web AI analysis.
+- Do not assume Terminal Codex is the executor.
+- Prefer COMMAND PLAN FOR OWNER / LOCAL TERMINAL for normal Web AI analysis.
+- Include OPTIONAL HANDOFF TEXT FOR CODEX only when owner explicitly asks for Codex or the task is to prepare a Codex handoff.
 - If new evidence changes the plan, say exactly what changed and why.
 - Continue with one focused active step.
 - If source data is missing, ask for the smallest specific source batch.
@@ -160,14 +177,14 @@ RULES
 - Do not call GitHub mutation tools unless exact mutation permission is provided.
 - Draft docs, evidence, handoffs, patch plans, and closeout text in the response only.
 - Do not run or claim local commands unless an actual runtime is available and exact output is shown.
-- Put runtime, test, database, git-status, migration, and server-start proof under PROOF THE TERMINAL AGENT MUST RUN when you cannot run them.
+- Put runtime, test, database, git-status, migration, and server-start proof under PROOF THE OWNER OR TERMINAL AGENT MUST RUN when you cannot run them.
 - Mark missing repo facts, missing command output, missing source docs, and missing local proof as GAP.
 - Keep domain logic out of HTTP handlers.
 - Keep SQL inside persistence adapters.
 - Do not propose an endpoint without a capability key.
 - Do not claim implementation completion, runtime success, tests passed, file creation, repository update, or scope closure without proof.
 - Keep output structured so it can be pasted into docs/handoffs or docs/evidence.
-- Provide exact CLI commands for Terminal Codex or the owner when execution is required.
+- Provide exact CLI commands for owner/local terminal when execution is required.
 
 EXPECTED OUTPUT
 - FACT
@@ -175,16 +192,22 @@ EXPECTED OUTPUT
 - DECISION
 - PATCH PLAN OR UPDATED HANDOFF
 - RISKS
-- PROOF THE TERMINAL AGENT MUST RUN
+- COMMAND PLAN FOR OWNER / LOCAL TERMINAL
+- PROOF THE OWNER OR TERMINAL AGENT MUST RUN
+- OPTIONAL HANDOFF TEXT FOR CODEX, only when owner explicitly requests Codex
 - NEXT
 
 SELF-CHECK
 - Prompt target is Web AI only.
 - Template source is docs/templates/0122_web_ai_session_prompts.md.
 - GitHub connector remains read-only by default.
+- Web AI did not assume Codex executor.
 - Local runtime/test/database proof is not claimed unless exact output is provided.
-- Commands needing local execution are under PROOF THE TERMINAL AGENT MUST RUN.
+- Commands for owner/local terminal are separated from proof already run.
+- Commands needing local execution are under PROOF THE OWNER OR TERMINAL AGENT MUST RUN.
+- Optional Codex handoff is omitted unless owner requested it.
 - No Codex implementation task is mixed into TASK NOW unless owner explicitly requested collaboration.
+- No repo mutation is claimed.
 ```
 
 ## Close A Web AI Session
@@ -198,7 +221,8 @@ Prepare a handoff for terminal Codex.
 IMPORTANT
 You are Web AI / browser AI. You are read-only by default.
 Closing a Web AI session means drafting a Terminal Codex handoff in this response. It does not mean writing a file, creating evidence, committing, opening a PR, commenting, labeling, merging, rerunning CI, or changing GitHub state.
-Do not include Codex local implementation instructions outside the clearly separated handoff text.
+Use this prompt only when the owner explicitly asks for Codex or asks to prepare a Codex handoff.
+Do not include Codex local implementation instructions outside the clearly separated OPTIONAL HANDOFF TEXT FOR CODEX.
 
 OUTPUT FORMAT
 Use plain text headings.
@@ -227,9 +251,11 @@ SELF-CHECK
 Prompt target is Web AI only.
 Template source is docs/templates/0122_web_ai_session_prompts.md.
 GitHub connector remains read-only by default.
+Web AI did not assume Codex executor; owner requested Codex handoff for this prompt.
 Local runtime/test/database proof is not claimed unless exact output is provided.
 Commands needing local execution are under Proof commands Codex should run.
 No Codex implementation task is mixed into the Web AI task section unless owner explicitly requested collaboration.
+No repo mutation is claimed.
 ```
 
 ## Web AI Output Cleanup Prompt
@@ -242,7 +268,8 @@ Rewrite your previous answer so it is safe to paste into a repository Markdown f
 
 RULES
 - English only.
-- Do not include Codex local implementation instructions unless drafting HANDOFF TEXT FOR CODEX.
+- Do not include Codex local implementation instructions unless drafting OPTIONAL HANDOFF TEXT FOR CODEX.
+- Do not assume Terminal Codex is the executor.
 - ASCII only.
 - No nested Markdown code fences.
 - Use file paths exactly.
@@ -253,13 +280,15 @@ RULES
 - Remove or relabel any claim that files were created, tests passed, runtime worked, GitHub was updated, or scope was closed unless proof is included.
 - Treat "write docs/...", "update docs/...", "create evidence", "prepare handoff", and "close scope" as draft response content only unless exact mutation permission was provided.
 - Do not convert proposed commands into passed commands.
-- Put local runtime, test, database, migration, server-start, and git-status checks that still need execution under PROOF THE TERMINAL AGENT MUST RUN.
+- Put local runtime, test, database, migration, server-start, and git-status checks that still need execution under PROOF THE OWNER OR TERMINAL AGENT MUST RUN.
 
 OUTPUT FORMAT
 - FACT
 - GAP
 - DECISION
 - CLEANED TEXT
-- PROOF THE TERMINAL AGENT MUST RUN
+- COMMAND PLAN FOR OWNER / LOCAL TERMINAL
+- PROOF THE OWNER OR TERMINAL AGENT MUST RUN
+- OPTIONAL HANDOFF TEXT FOR CODEX, only when owner explicitly requests Codex
 - NEXT
 ```

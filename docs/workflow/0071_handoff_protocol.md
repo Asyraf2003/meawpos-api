@@ -38,6 +38,23 @@ If the handoff recommends a next AI session, it must also include:
 - progress percentage;
 - context-window status.
 
+## Handoff Target Types
+
+A handoff that recommends further action must name one next execution channel:
+
+- owner/local terminal;
+- Terminal Codex;
+- Web AI;
+- explicit collaboration packet.
+
+Use owner/local terminal when the owner can run a command plan and then push repository changes for later Web AI connector review.
+
+Use Terminal Codex only when the owner asks for local implementation by Codex.
+
+Use Web AI only when the owner asks for read-only analysis, planning, review, or paste-ready text through the connector-backed Web AI loop.
+
+Use explicit collaboration packet only when the owner explicitly requests Web AI, Terminal Codex, owner/local terminal, and repository state to collaborate for a specific problem.
+
 ## Automatic Handoff Triggers
 
 Create or update a handoff without waiting for the owner to repeat the request when:
@@ -94,6 +111,9 @@ The receiving AI must:
 - Do not omit the target agent from a next-session prompt.
 - Do not write "Web AI or Codex next session" as a single prompt.
 - Do not mix Web AI and Codex instructions unless the owner explicitly requested a collaboration packet.
+- Do not write "send to Codex" when owner/local terminal can run the command plan and Web AI can validate after push.
+- Do not make `HANDOFF TEXT FOR CODEX` mandatory Web AI output.
+- Do not use collaboration mode unless it says the owner explicitly requested it.
 - Do not send only code files without rules and proof requirements.
 - Do not let archive docs override active blueprint.
 - Do not ask another AI to edit files outside the packet.

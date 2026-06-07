@@ -4,6 +4,12 @@ Use these prompts for terminal Codex work in this repository.
 
 Terminal Codex prompts must not include Web AI read-only connector instructions unless the owner explicitly requests a collaboration packet.
 
+Terminal Codex works through local CLI execution and owner feedback.
+
+Terminal Codex must not assume Web AI collaboration unless the owner explicitly provided a collaboration packet.
+
+Terminal Codex should not output Web AI connector instructions unless explicitly asked to prepare a Web AI handoff.
+
 Before sending any Codex prompt, check:
 
 - prompt target is Terminal Codex only;
@@ -11,6 +17,7 @@ Before sending any Codex prompt, check:
 - no Web AI mutation or read-only connector language is included;
 - proof commands are grouped in one final proof section;
 - no git commands are included unless the owner explicitly asks.
+- Web AI collaboration is not assumed unless the owner provided a collaboration packet.
 
 ## Start A Codex Session
 
@@ -37,6 +44,9 @@ REPLACE_WITH_TASK
 
 RULES
 - Do not include Web AI read-only connector instructions unless the owner explicitly requests a collaboration packet.
+- Work through local CLI execution and owner feedback.
+- Do not assume Web AI collaboration unless the owner explicitly provided a collaboration packet.
+- Do not output Web AI connector instructions unless explicitly asked to prepare a Web AI handoff.
 - Do not implement before reading the active blueprint.
 - Use fd for file discovery and rg for text search.
 - Use one active step.
@@ -55,6 +65,7 @@ SELF-CHECK
 - Prompt target is Terminal Codex only.
 - Template source is docs/templates/0121_codex_session_prompts.md.
 - No Web AI mutation/read-only connector language is included.
+- Web AI collaboration is not assumed unless the owner provided a collaboration packet.
 - Proof commands are grouped in one final proof section.
 - No git commands are included unless owner explicitly asks.
 
@@ -108,6 +119,9 @@ REPLACE_WITH_FORBIDDEN_FILES
 
 RULES
 - Do not include Web AI read-only connector instructions unless the owner explicitly requests a collaboration packet.
+- Work through local CLI execution and owner feedback.
+- Do not assume Web AI collaboration unless the owner explicitly provided a collaboration packet.
+- Do not output Web AI connector instructions unless explicitly asked to prepare a Web AI handoff.
 - Use one active step.
 - Mark GAP instead of guessing missing repo state.
 - Stop if the blueprint does not contain enough information.
@@ -136,6 +150,7 @@ SELF-CHECK
 - Prompt target is Terminal Codex only.
 - Template source is docs/templates/0121_codex_session_prompts.md.
 - No Web AI mutation/read-only connector language is included.
+- Web AI collaboration is not assumed unless the owner provided a collaboration packet.
 - Proof commands are grouped in one final proof section.
 - No git commands are included unless owner explicitly asks.
 ```
@@ -161,6 +176,9 @@ FOCUS
 
 RULES
 - Do not include Web AI read-only connector instructions unless the owner explicitly requests a collaboration packet.
+- Work through local CLI execution and owner feedback.
+- Do not assume Web AI collaboration unless the owner explicitly provided a collaboration packet.
+- Do not output Web AI connector instructions unless explicitly asked to prepare a Web AI handoff.
 - Findings first, ordered by severity.
 - Use file and line references.
 - If there are no findings, say that clearly.

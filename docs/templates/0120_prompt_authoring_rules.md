@@ -59,6 +59,51 @@ Final self-check before sharing a generated prompt:
 - proof commands are grouped in the correct proof section for that target agent;
 - no git commands are included unless the owner explicitly asked for them.
 
+## AI Execution Channel Rule
+
+Web AI is a read-only analysis and planning agent by default.
+
+Web AI normally returns:
+
+- analysis;
+- patch plans;
+- command plans;
+- docs text;
+- evidence text;
+- validation notes.
+
+Web AI may provide commands for the owner/local terminal to run.
+
+Web AI must not assume Terminal Codex is the executor.
+
+Terminal Codex is a local CLI implementation agent. Terminal Codex works through local CLI execution and owner feedback.
+
+Owner/local terminal may execute command plans, collect proof, and push changes.
+
+Collaboration packets involving Web AI, Terminal Codex, owner/local terminal, and repository state are special-case only. They require explicit owner instruction for a specific problem.
+
+If the next executor is unclear, ask one concise clarification question.
+
+Do not convert a Web AI analysis task into a Terminal Codex handoff unless the owner asked for Codex.
+
+Normal Web AI loop:
+
+```text
+owner -> Web AI -> GitHub connector read-only -> Web AI -> owner -> owner/local terminal -> owner pushes repo -> Web AI reads repo via connector -> loop
+```
+
+Normal Terminal Codex loop:
+
+```text
+owner -> Terminal Codex -> local CLI -> owner pushes repo -> Terminal Codex continues through local CLI/user feedback -> loop
+```
+
+Explicit collaboration loop:
+
+```text
+Web AI + Terminal Codex + owner/local terminal + repo may collaborate only when the owner explicitly requests that mode.
+```
+
 ## Required Prompt Sections
 
 Use these sections for serious work:
@@ -116,9 +161,10 @@ When a web AI has a GitHub connector available:
 Web AI execution model:
 
 - Web AI drafts patch plans, exact shell commands, docs text, evidence text, and handoff text.
-- Terminal Codex or the owner runs commands and applies repository changes unless exact GitHub mutation permission is provided.
+- Owner/local terminal normally runs command plans and applies repository changes unless exact GitHub mutation permission is provided.
+- Terminal Codex runs command plans only when the owner has targeted Terminal Codex or requested a Codex handoff.
 - Web AI must separate proposed commands from commands that actually ran.
-- Web AI should produce copyable CLI commands for the owner when terminal execution is required.
+- Web AI should produce copyable CLI commands for owner/local terminal when terminal execution is required.
 
 ## Backtick Guidance For Web AI
 
