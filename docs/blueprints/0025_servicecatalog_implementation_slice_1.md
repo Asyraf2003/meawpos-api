@@ -2,7 +2,7 @@
 
 ## Status
 
-Draft implementation slice plan.
+Accepted implementation slice plan.
 
 ## Date
 
@@ -169,4 +169,44 @@ Usecase tests:
 
 ## NEXT ACTIVE STEP
 
-Implement ServiceCatalog slice 1 only after this blueprint is accepted.
+ServiceCatalog implementation slice 1 is accepted.
+
+Next valid active step:
+
+```text
+Implement ServiceCatalog slice 1: domain, ports, usecase contracts, and unit tests only.
+```
+
+Do not implement HTTP transport, PostgreSQL adapter, migrations, route registration, or capability seeds in this slice.
+
+## ACCEPTANCE
+
+ServiceCatalog implementation slice 1 accepted on 2026-06-08.
+
+Accepted implementation scope:
+
+```text
+internal/modules/servicecatalog/domain
+internal/modules/servicecatalog/ports
+internal/modules/servicecatalog/usecase
+unit tests for domain and usecase behavior
+```
+
+Forbidden in this slice:
+
+```text
+HTTP transport
+PostgreSQL adapter
+PostgreSQL migrations
+route registration
+capability seed migrations
+ProductCatalog
+Inventory
+```
+
+Proof required after implementation:
+
+```text
+go test ./internal/modules/servicecatalog/...
+make verify
+```
