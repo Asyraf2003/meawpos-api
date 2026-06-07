@@ -49,6 +49,7 @@ docs/handoffs/2026-06-08-servicecatalog-domain-contract-blueprint.md
 docs/handoffs/2026-06-08-servicecatalog-domain-contract-accepted.md
 docs/handoffs/2026-06-08-servicecatalog-implementation-slice-1-plan.md
 docs/handoffs/2026-06-08-servicecatalog-implementation-slice-1-accepted.md
+docs/handoffs/2026-06-08-servicecatalog-implementation-slice-1.md
 docs/handoffs/2026-06-08-docs-quality-feedback-crosscheck.md
 ```
 
@@ -78,8 +79,8 @@ Protected POS CRUD implementation must wait for accepted domain contracts, POS P
 | Stage 2 | PostgreSQL target baseline for POS domains | Not started | 0% | No accepted POS PostgreSQL migration baseline proof yet |
 | Stage 3 | API foundation and capability control | Closed | 100% | Auth/session foundation exists; capability contracts pass tests; PostgreSQL capability migration is applied; PostgreSQL adapter integration tests pass; runtime capability middleware tests pass; protected route seed migration exists; admin HTTP surface implementation and full `make verify` proof pass; route-to-capability audit script exists and is wired into `make verify`; route-level disabled protected endpoint proof passes for current protected route capability keys; final closeout proof passed on 2026-06-08 |
 | Stage 4 | Cross-cutting modules | Not started | 0% | No audit/language/notification/idempotency transition implementation proof yet |
-| Business Phase 1 | Service catalog and product catalog | Not started | 0% | Catalog evidence and blueprint exist; Go business modules not implemented |
-| Overall Laravel-to-Go transition | POS API migration | Early foundation | 20% | Docs, auth debug lane, full verify gate, capability contracts, capability PostgreSQL state, runtime capability middleware, protected route seeds, admin capability HTTP surface, and route-to-capability audit exist; POS domains are not implemented |
+| Business Phase 1 | Service catalog and product catalog | Partial | 15% | ServiceCatalog slice 1 domain, ports, usecase contracts, and unit tests exist; ProductCatalog not implemented |
+| Overall Laravel-to-Go transition | POS API migration | Early foundation | 22% | Docs, auth debug lane, full verify gate, capability contracts, capability PostgreSQL state, runtime capability middleware, protected route seeds, admin capability HTTP surface, route-to-capability audit, and ServiceCatalog slice 1 domain/usecase implementation proof exist; POS HTTP and PostgreSQL business-domain adapters are not implemented |
 
 ## Completed Work With Proof
 
@@ -122,6 +123,13 @@ Protected POS CRUD implementation must wait for accepted domain contracts, POS P
 - Final closeout `make verify` passed with gosec reporting 97 files, 3978 lines, 0 nosec, and 0 issues.
 - Docs quality feedback crosscheck added a 5-minute quick reference, evidence status index, incomplete auth runtime evidence gap marker, blueprint/log boundary rule, and concrete ServiceCatalog scope packet example.
 - This docs quality improvement does not increase Laravel-to-Go implementation progress.
+- ServiceCatalog slice 1 implementation exists under `internal/modules/servicecatalog/domain`, `internal/modules/servicecatalog/ports`, and `internal/modules/servicecatalog/usecase`.
+- ServiceCatalog domain rules prove name normalization, blank-name rejection, positive default price validation, and active-by-default creation.
+- ServiceCatalog ports define repository contracts for create, update, find by ID, find by normalized name, list, lookup, and set active.
+- ServiceCatalog usecase tests prove create, duplicate rejection, update, lifecycle activation/deactivation, missing show not-found, list status filtering, lookup active-only default behavior, and lookup max-limit enforcement.
+- Focused proof passed: `go test ./internal/modules/servicecatalog/...`.
+- Full proof passed: `make verify`, including `go test ./...`, go vet, format, AI rules, file-size, hexagonal import, route capability, and gosec audits.
+- Final `make verify` gosec summary reported 112 files, 4659 lines, 0 nosec, and 0 issues.
 
 ## Open Gaps
 
@@ -131,20 +139,18 @@ Protected POS CRUD implementation must wait for accepted domain contracts, POS P
 - Runtime DB proof for manual auth login is still incomplete.
 - No POS domain PostgreSQL baseline has been accepted.
 - ServiceCatalog domain contract is accepted.
-- ServiceCatalog implementation slice 1 plan is accepted.
+- ServiceCatalog implementation slice 1 plan is accepted and implemented with proof.
+- ServiceCatalog HTTP transport, PostgreSQL adapter, migrations, route registration, and capability seeds are not implemented.
 - ProductCatalog domain contract has not been accepted yet.
-- No `servicecatalog` or `productcatalog` Go business module has implementation proof.
+- No `productcatalog` Go business module has implementation proof.
 
 ## Next Valid Active Step
 
-Implement ServiceCatalog slice 1 from `docs/blueprints/0025_servicecatalog_implementation_slice_1.md`.
+Plan the next ServiceCatalog implementation slice after `docs/blueprints/0025_servicecatalog_implementation_slice_1.md`.
 
-- Implement domain, ports, usecase contracts, and unit tests only.
-- Do not add HTTP transport.
-- Do not add PostgreSQL migrations or repositories.
-- Do not add route registration.
-- Do not add capability seeds.
-- Required proof: `go test ./internal/modules/servicecatalog/...` and `make verify`.
+- Candidate next scope: ServiceCatalog HTTP transport, PostgreSQL adapter, migrations, route registration, and capability seeds.
+- Do not implement the next scope until a new accepted blueprint defines exact files, route/capability mapping, persistence schema, audit behavior, and proof commands.
+- ProductCatalog remains blocked until its own accepted domain contract and duplicate policy decision exist.
 ## Handoff Requirement
 
 Any Codex or web AI session that changes Laravel-to-Go transition docs, capability foundation, quality gates, or POS domain implementation must update this ledger or explicitly state why the ledger is unchanged.
@@ -153,4 +159,4 @@ The same session must create or update a handoff when durable work was done.
 
 ## Context Window Status
 
-Current ledger update context status: updated after capability-control foundation closeout proof; enough context for the first POS business-domain blueprint/domain contract.
+Current ledger update context status: updated after ServiceCatalog slice 1 implementation proof; enough context to plan the next ServiceCatalog implementation slice.
