@@ -177,4 +177,5 @@ disabled_reason
 - Proof includes file inspection and diff inspection.
 
 ## NEXT ACTIVE STEP
-Seed existing protected routes as capability records.
+
+Add route-level disabled protected endpoint proof for current protected routes.
