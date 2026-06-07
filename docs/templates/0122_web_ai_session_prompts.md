@@ -14,6 +14,8 @@ Web AI should not assume Terminal Codex is the executor. For normal Web AI analy
 
 Use `OPTIONAL HANDOFF TEXT FOR CODEX` only when the owner explicitly asks for Codex or when the task is to prepare a Codex handoff.
 
+Compatibility note: the older audit anchor `PROOF THE TERMINAL AGENT MUST RUN` means `PROOF THE OWNER OR TERMINAL AGENT MUST RUN` in current Web AI prompts.
+
 Before sending any Web AI prompt, check:
 
 - prompt target is Web AI only;
