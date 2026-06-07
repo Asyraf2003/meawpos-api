@@ -61,10 +61,10 @@ Protected POS endpoints must wait for capability-control proof.
 | Stage 0 | Laravel source inventory and parity matrix | Partial | 40% | `0001_laravel_stage0_schema_and_route_inventory.md`, `0002_laravel_productcatalog_servicecatalog_inventory.md` |
 | Stage 1 | Go quality foundation | Partial | 85% | `make verify` passes, including tests, vet, format, AI rules, file-size, hexagonal, and gosec; route-to-capability audit is still pending |
 | Stage 2 | PostgreSQL target baseline for POS domains | Not started | 0% | No accepted POS PostgreSQL migration baseline proof yet |
-| Stage 3 | API foundation and capability control | Partial | 60% | Auth/session foundation exists; capability contracts pass tests; PostgreSQL capability migration is applied; PostgreSQL adapter integration tests pass; runtime capability middleware tests pass; protected route seed migration exists; admin HTTP surface implementation is present locally with proof pending; route audit remains missing |
+| Stage 3 | API foundation and capability control | Partial | 75% | Auth/session foundation exists; capability contracts pass tests; PostgreSQL capability migration is applied; PostgreSQL adapter integration tests pass; runtime capability middleware tests pass; protected route seed migration exists; admin HTTP surface implementation and full `make verify` proof pass; route audit remains missing |
 | Stage 4 | Cross-cutting modules | Not started | 0% | No audit/language/notification/idempotency transition implementation proof yet |
 | Business Phase 1 | Service catalog and product catalog | Not started | 0% | Catalog evidence and blueprint exist; Go business modules not implemented |
-| Overall Laravel-to-Go transition | POS API migration | Early foundation | 19% | Docs, auth debug lane, full verify gate, capability contracts, capability PostgreSQL state, and runtime capability middleware exist; POS domains are not implemented |
+| Overall Laravel-to-Go transition | POS API migration | Early foundation | 20% | Docs, auth debug lane, full verify gate, capability contracts, capability PostgreSQL state, runtime capability middleware, protected route seeds, and admin capability HTTP surface exist; POS domains are not implemented |
 
 ## Completed Work With Proof
 
@@ -84,22 +84,19 @@ Protected POS endpoints must wait for capability-control proof.
 - Runtime capability middleware exists under `internal/transport/http/middleware`.
 - Runtime capability middleware tests prove enabled capability allows handler execution, disabled capability returns `403` before handler execution, checker errors return `500`, and misconfigured guards return `500`.
 - Protected route capability seed migration `migrations/0007_seed_existing_protected_capabilities.up.sql` exists for current protected routes.
-
-## Current Local Implementation With Proof Pending
-
 - Migration `0008_seed_capability_manage_permission` adds `capability.manage`, assigns it to `admin`, and seeds `api_capabilities.key = 'capability.manage'`.
 - Capability response DTO mapping exists under `internal/presentation/http/id/capability/`.
 - Admin capability list/show/enable/disable handler exists under `internal/modules/capability/transport/http/`.
 - Bootstrap wires `/api/admin/capabilities...` behind authn, `capability.manage` authorization, and runtime capability check.
-- Proof for migration application, SQL rows, focused Go tests, bootstrap tests, and `make verify` is still pending user command output.
+- User-provided SQL proof confirmed `capability.manage` permission, admin role assignment, and `api_capabilities` row.
+- Local proof confirmed capability handler files pass file-size audit, focused capability tests pass, bootstrap tests pass, and `make verify` passes.
 
 ## Open Gaps
 
 - Full Laravel source inventory is incomplete for many business domains.
 - Laravel alter, foreign key, index, timestamp, and seed migrations are not fully inventoried.
 - Product duplicate policy still needs an owner decision before final PostgreSQL indexes.
-- Capability-control foundation is partially implemented; admin HTTP surface proof, route audit, and disabled route-level API proof are still missing.
-- `capability.manage` permission seed exists locally in migration `0008`, but SQL proof is still pending.
+- Capability-control foundation is partially implemented; route audit and disabled route-level API proof are still missing.
 - Runtime DB proof for manual auth login is still incomplete.
 - No POS domain PostgreSQL baseline has been accepted.
 - No `servicecatalog` or `productcatalog` Go business module has implementation proof.
@@ -108,12 +105,8 @@ Protected POS endpoints must wait for capability-control proof.
 
 Continue `docs/blueprints/0010_capability_control_foundation.md` before exposing protected POS endpoints.
 
-- collect proof for admin capability HTTP surface;
-- verify `capability.manage` permission SQL rows;
-- verify admin role permission SQL rows;
-- verify `api_capabilities.key = 'capability.manage'`;
-- verify focused capability handler and bootstrap tests;
-- verify `make verify`;
+- add route-to-capability audit script;
+- preserve current admin capability HTTP proof;
 - do not start POS CRUD before capability-control proof is complete.
 
 ## Handoff Requirement
@@ -124,4 +117,4 @@ The same session must create or update a handoff when durable work was done.
 
 ## Context Window Status
 
-Current ledger update context status: enough context to collect proof for the admin capability HTTP surface step.
+Current ledger update context status: enough context for the next capability-control foundation step after admin capability HTTP proof.
