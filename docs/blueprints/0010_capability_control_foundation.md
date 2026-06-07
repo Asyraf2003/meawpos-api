@@ -13,7 +13,7 @@
 - There is no first-class capability registry, storage, middleware, or admin control surface yet.
 - There is no active business-domain blueprint for products, sale orders, payments, or inventory.
 - There is no domain contract yet for POS business CRUD or transaction lifecycle.
-- There is no route-to-capability audit script yet.
+- Route-to-capability audit script now has owner-provided local proof; route-level disabled protected endpoint proof remains open.
 - Runtime middleware tests prove disabled capabilities stop before the next handler.
 - There is no route-level API contract test proving disabled protected routes stop before validation and use case execution.
 
@@ -155,7 +155,7 @@ disabled_reason
 - Middleware tests proving disabled capability returns `403` before handler/usecase execution.
 - Repository/integration tests for PostgreSQL capability state when `DATABASE_URL` is available.
 - `go test ./...` remains mandatory for Go changes.
-- Add or extend script proof later for route-to-capability coverage, aligned with `docs/scripts/0090_makefile_and_scripts.md`.
+- Route-to-capability audit script proof is wired into `make verify`, aligned with `docs/scripts/0090_makefile_and_scripts.md`.
 - Full local proof target should remain `make audit-all` or future `make verify` when available.
 
 ## STEP ORDER
@@ -165,7 +165,7 @@ disabled_reason
 4. Add runtime capability check middleware/policy. Done with proof in `docs/handoffs/2026-06-07-capability-runtime-middleware.md`.
 5. Seed existing protected routes as capability records.
 6. Add admin capability HTTP surface.
-7. Add route-to-capability audit script.
+7. Add route-to-capability audit script. Done with proof in `docs/handoffs/2026-06-08-capability-route-audit-script.md`.
 8. Only after capability-control proof, create the first POS business-domain blueprint.
 
 ## DOD
