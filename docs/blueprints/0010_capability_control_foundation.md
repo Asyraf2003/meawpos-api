@@ -13,9 +13,9 @@
 - There is no first-class capability registry, storage, middleware, or admin control surface yet.
 - There is no active business-domain blueprint for products, sale orders, payments, or inventory.
 - There is no domain contract yet for POS business CRUD or transaction lifecycle.
-- Route-to-capability audit script now has owner-provided local proof; route-level disabled protected endpoint proof remains open.
+- Route-to-capability audit script has owner-provided local proof.
 - Runtime middleware tests prove disabled capabilities stop before the next handler.
-- There is no route-level API contract test proving disabled protected routes stop before validation and use case execution.
+- Route-level disabled protected endpoint proof now covers current protected route capability keys.
 
 ## DECISION
 - Capability-control foundation is the next active product blueprint before POS business APIs.
@@ -166,7 +166,8 @@ disabled_reason
 5. Seed existing protected routes as capability records.
 6. Add admin capability HTTP surface.
 7. Add route-to-capability audit script. Done with proof in `docs/handoffs/2026-06-08-capability-route-audit-script.md`.
-8. Only after capability-control proof, create the first POS business-domain blueprint.
+8. Add route-level disabled protected endpoint proof. Done with proof in `docs/handoffs/2026-06-08-capability-route-disabled-proof.md`.
+9. Only after capability-control proof closeout, create the first POS business-domain blueprint.
 
 ## DOD
 - Blueprint exists in `docs/blueprints/`.
@@ -178,4 +179,4 @@ disabled_reason
 
 ## NEXT ACTIVE STEP
 
-Add route-level disabled protected endpoint proof for current protected routes.
+Close capability-control foundation proof and decide whether the first POS business-domain blueprint can start.

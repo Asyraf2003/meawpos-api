@@ -41,6 +41,7 @@ docs/handoffs/2026-06-07-prompt-template-selection-rule.md
 docs/handoffs/2026-06-07-ai-execution-channel-boundaries.md
 docs/handoffs/2026-06-07-web-ai-owner-terminal-output-test.md
 docs/handoffs/2026-06-08-capability-route-audit-script.md
+docs/handoffs/2026-06-08-capability-route-disabled-proof.md
 ```
 
 ## Current Decision
@@ -65,7 +66,7 @@ Protected POS endpoints must wait for capability-control proof.
 | Stage 0 | Laravel source inventory and parity matrix | Partial | 40% | `0001_laravel_stage0_schema_and_route_inventory.md`, `0002_laravel_productcatalog_servicecatalog_inventory.md` |
 | Stage 1 | Go quality foundation | Partial | 90% | `make verify` passes, including tests, vet, format, AI rules, file-size, hexagonal, route-to-capability audit, and gosec |
 | Stage 2 | PostgreSQL target baseline for POS domains | Not started | 0% | No accepted POS PostgreSQL migration baseline proof yet |
-| Stage 3 | API foundation and capability control | Partial | 85% | Auth/session foundation exists; capability contracts pass tests; PostgreSQL capability migration is applied; PostgreSQL adapter integration tests pass; runtime capability middleware tests pass; protected route seed migration exists; admin HTTP surface implementation and full `make verify` proof pass; route-to-capability audit script exists and is wired into `make verify`; route-level disabled protected endpoint proof remains missing |
+| Stage 3 | API foundation and capability control | Partial | 95% | Auth/session foundation exists; capability contracts pass tests; PostgreSQL capability migration is applied; PostgreSQL adapter integration tests pass; runtime capability middleware tests pass; protected route seed migration exists; admin HTTP surface implementation and full `make verify` proof pass; route-to-capability audit script exists and is wired into `make verify`; route-level disabled protected endpoint proof passes for current protected route capability keys |
 | Stage 4 | Cross-cutting modules | Not started | 0% | No audit/language/notification/idempotency transition implementation proof yet |
 | Business Phase 1 | Service catalog and product catalog | Not started | 0% | Catalog evidence and blueprint exist; Go business modules not implemented |
 | Overall Laravel-to-Go transition | POS API migration | Early foundation | 20% | Docs, auth debug lane, full verify gate, capability contracts, capability PostgreSQL state, runtime capability middleware, protected route seeds, admin capability HTTP surface, and route-to-capability audit exist; POS domains are not implemented |
@@ -105,13 +106,14 @@ Protected POS endpoints must wait for capability-control proof.
 - Local proof confirmed capability handler files pass file-size audit, focused capability tests pass, bootstrap tests pass, and `make verify` passes.
 - Route-to-capability audit script exists with manifest coverage for 6 current protected route capability rows.
 - `make verify` summary now includes route capability audit and passes aggregate audit.
+- Route-level disabled protected endpoint proof passes for current protected route capability keys.
 
 ## Open Gaps
 
 - Full Laravel source inventory is incomplete for many business domains.
 - Laravel alter, foreign key, index, timestamp, and seed migrations are not fully inventoried.
 - Product duplicate policy still needs an owner decision before final PostgreSQL indexes.
-- Capability-control foundation is partially implemented; disabled route-level API proof is still missing.
+- Capability-control foundation is nearly complete; proof closeout review remains before starting POS business blueprint work.
 - Runtime DB proof for manual auth login is still incomplete.
 - No POS domain PostgreSQL baseline has been accepted.
 - No `servicecatalog` or `productcatalog` Go business module has implementation proof.
@@ -120,9 +122,9 @@ Protected POS endpoints must wait for capability-control proof.
 
 Continue `docs/blueprints/0010_capability_control_foundation.md` before exposing protected POS endpoints.
 
-- add route-level disabled protected endpoint proof for current protected routes;
+- close capability-control foundation proof;
 - preserve current admin capability HTTP proof;
-- do not start POS CRUD before capability-control proof is complete.
+- do not start POS CRUD before explicit capability-control closeout.
 
 ## Handoff Requirement
 
@@ -132,4 +134,4 @@ The same session must create or update a handoff when durable work was done.
 
 ## Context Window Status
 
-Current ledger update context status: enough context for the next capability-control foundation proof step after route-to-capability audit script.
+Current ledger update context status: enough context for capability-control foundation closeout review.
