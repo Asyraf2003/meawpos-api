@@ -90,17 +90,57 @@ docs/workflow/0072_transition_progress_ledger_protocol.md
 
 ## Proof Collected
 
-Pending until commands run in this session.
+```text
+rg -n "5-Minute Quick Reference|Evidence Status Index|Incomplete local runtime evidence|Blueprints should|Concrete Example: ServiceCatalog Slice 1|Docs quality feedback crosscheck|does not increase Laravel-to-Go implementation progress|This evidence file is incomplete" docs/README.md docs/evidence docs/workflow docs/blueprints docs/templates docs/handoffs
+```
+
+Result:
+
+```text
+docs/README.md includes 5-Minute Quick Reference.
+docs/evidence/README.md includes Evidence Status Index.
+docs/evidence/2026-06-06-auth-runtime-local-dev.md marks the evidence file incomplete and lists missing proof.
+docs/workflow/0070_docs_go_workflow.md and docs/blueprints/README.md clarify blueprint/log boundaries.
+docs/templates/0110_domain_scope_packet.md includes a concrete ServiceCatalog slice 1 example.
+docs/evidence/0003_laravel_to_go_transition_progress_ledger.md records the docs quality improvement without increasing implementation progress.
+```
+
+```text
+make verify
+```
+
+Result:
+
+```text
+[PASS] go test ./...
+[PASS] go vet audit passed
+[PASS] format audit passed
+[PASS] AI rules audit passed
+[FAIL] file size audit failed
+
+Oversized files reported:
+internal/modules/servicecatalog/domain/service_catalog_item.go (127 lines)
+internal/modules/servicecatalog/usecase/create_update_item_test.go (124 lines)
+internal/modules/servicecatalog/usecase/fake_repository_test.go (180 lines)
+internal/modules/servicecatalog/usecase/lifecycle_query_item_test.go (135 lines)
+```
+
+The `make verify` failure is outside this docs-quality scope because it is caused by ServiceCatalog Go implementation files, not by docs changes.
 
 ## Tests Or Commands Run
 
-Pending until commands run in this session.
+```text
+rg -n "5-Minute Quick Reference|Evidence Status Index|Incomplete local runtime evidence|Blueprints should|Concrete Example: ServiceCatalog Slice 1|Docs quality feedback crosscheck|does not increase Laravel-to-Go implementation progress|This evidence file is incomplete" docs/README.md docs/evidence docs/workflow docs/blueprints docs/templates docs/handoffs
+make verify
+wc -l internal/modules/servicecatalog/domain/service_catalog_item.go internal/modules/servicecatalog/usecase/create_update_item_test.go internal/modules/servicecatalog/usecase/fake_repository_test.go internal/modules/servicecatalog/usecase/lifecycle_query_item_test.go
+```
 
 ## Gaps
 
 - ADR completion proof mapping was not audited in this step.
 - Full evidence content audit beyond status labeling remains possible.
 - Rule cascade duplication remains by design unless future drift appears.
+- Full `make verify` is currently blocked by ServiceCatalog file-size audit failures outside this docs-quality scope.
 
 ## Next Valid Active Step
 
@@ -108,7 +148,7 @@ Implement ServiceCatalog slice 1 from `docs/blueprints/0025_servicecatalog_imple
 
 ## Estimated Scope Progress Percentage
 
-Docs quality feedback crosscheck scope: pending proof.
+Docs quality feedback crosscheck scope: 90%.
 
 Laravel-to-Go transition: unchanged at 20%.
 
