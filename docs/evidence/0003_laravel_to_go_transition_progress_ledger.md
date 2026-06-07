@@ -27,6 +27,7 @@ Related evidence:
 docs/evidence/0001_laravel_stage0_schema_and_route_inventory.md
 docs/evidence/0002_laravel_productcatalog_servicecatalog_inventory.md
 docs/evidence/2026-06-06-auth-runtime-local-dev.md
+docs/evidence/0004_adr_implementation_proof_index.md
 ```
 
 Related handoffs:
@@ -123,6 +124,7 @@ Protected POS CRUD implementation must wait for accepted domain contracts, POS P
 - Final closeout `make verify` passed with gosec reporting 97 files, 3978 lines, 0 nosec, and 0 issues.
 - Docs quality feedback crosscheck added a 5-minute quick reference, evidence status index, incomplete auth runtime evidence gap marker, blueprint/log boundary rule, and concrete ServiceCatalog scope packet example.
 - This docs quality improvement does not increase Laravel-to-Go implementation progress.
+- ADR implementation proof index exists at `docs/evidence/0004_adr_implementation_proof_index.md`; ADR proof tracking is now explicit and does not increase POS implementation progress.
 - ServiceCatalog slice 1 implementation exists under `internal/modules/servicecatalog/domain`, `internal/modules/servicecatalog/ports`, and `internal/modules/servicecatalog/usecase`.
 - ServiceCatalog domain rules prove name normalization, blank-name rejection, positive default price validation, and active-by-default creation.
 - ServiceCatalog ports define repository contracts for create, update, find by ID, find by normalized name, list, lookup, and set active.
@@ -137,6 +139,8 @@ Protected POS CRUD implementation must wait for accepted domain contracts, POS P
 - Laravel alter, foreign key, index, timestamp, and seed migrations are not fully inventoried.
 - Product duplicate policy still needs an owner decision before final PostgreSQL indexes.
 - Runtime DB proof for manual auth login is still incomplete.
+- ADR `0009` debug auth lane remains partial because manual auth runtime proof evidence is incomplete.
+- ADR `0012` API output contract centralization remains partial because full response/error envelope coverage is not proven for every API surface.
 - No POS domain PostgreSQL baseline has been accepted.
 - ServiceCatalog domain contract is accepted.
 - ServiceCatalog implementation slice 1 plan is accepted and implemented with proof.

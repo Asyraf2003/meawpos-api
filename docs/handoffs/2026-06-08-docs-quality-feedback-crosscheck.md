@@ -26,6 +26,7 @@ docs/templates/0110_domain_scope_packet.md
 docs/evidence/README.md
 docs/evidence/2026-06-06-auth-runtime-local-dev.md
 docs/evidence/0003_laravel_to_go_transition_progress_ledger.md
+docs/evidence/0004_adr_implementation_proof_index.md
 ```
 
 ## Files Changed
@@ -36,6 +37,8 @@ docs/blueprints/README.md
 docs/evidence/README.md
 docs/evidence/2026-06-06-auth-runtime-local-dev.md
 docs/evidence/0003_laravel_to_go_transition_progress_ledger.md
+docs/evidence/0004_adr_implementation_proof_index.md
+docs/adr/README.md
 docs/templates/0110_domain_scope_packet.md
 docs/workflow/0070_docs_go_workflow.md
 docs/handoffs/2026-06-08-docs-quality-feedback-crosscheck.md
@@ -71,7 +74,7 @@ docs/workflow/0072_transition_progress_ledger_protocol.md
 | --- | --- | --- | --- |
 | Folder structure | 9/10 | Folder roles and README coverage are explicit. | No change. |
 | AI governance | 9/10 | Bootstrap, proof, one-step, and prompt-channel rules exist. | No change. |
-| ADR quality | 8/10 | ADR files exist and are linked by topic, but proof completion is tracked outside ADRs. | No change in this step. |
+| ADR quality | 8/10 | ADR files exist and are linked by topic, but proof completion was not indexed in one place. | Added ADR implementation proof index. |
 | Blueprint quality | 7/10 | `0010` contains closeout proof and step completion markers. | Added blueprint/log boundary rule instead of rewriting closed proof. |
 | Handoff consistency | 9/10 | Handoffs use consistent fields. | No change. |
 | Redundant rules | 6/10 | Duplication is partly intentional cascade for AI bootstrap. | No removal; cascade remains intentional. |
@@ -87,6 +90,7 @@ docs/workflow/0072_transition_progress_ledger_protocol.md
 - Add a quick onboarding reference to improve first-pass navigation.
 - Add evidence status labels so incomplete evidence is not misread as complete proof.
 - Add one concrete domain scope packet example using accepted ServiceCatalog slice 1 facts.
+- Add ADR implementation proof index and link it from ADR README, evidence README, and the active transition ledger.
 
 ## Proof Collected
 
@@ -103,6 +107,7 @@ docs/evidence/2026-06-06-auth-runtime-local-dev.md marks the evidence file incom
 docs/workflow/0070_docs_go_workflow.md and docs/blueprints/README.md clarify blueprint/log boundaries.
 docs/templates/0110_domain_scope_packet.md includes a concrete ServiceCatalog slice 1 example.
 docs/evidence/0003_laravel_to_go_transition_progress_ledger.md records the docs quality improvement without increasing implementation progress.
+docs/evidence/0004_adr_implementation_proof_index.md maps accepted ADRs to implementation proof status.
 ```
 
 ```text
@@ -113,44 +118,50 @@ Result:
 
 ```text
 [PASS] go test ./...
-[PASS] go vet audit passed
-[PASS] format audit passed
-[PASS] AI rules audit passed
-[FAIL] file size audit failed
-
-Oversized files reported:
-internal/modules/servicecatalog/domain/service_catalog_item.go (127 lines)
-internal/modules/servicecatalog/usecase/create_update_item_test.go (124 lines)
-internal/modules/servicecatalog/usecase/fake_repository_test.go (180 lines)
-internal/modules/servicecatalog/usecase/lifecycle_query_item_test.go (135 lines)
+[PASS] go vet audit
+[PASS] format audit
+[PASS] AI rules audit
+[PASS] file size audit
+[PASS] hexagonal import audit
+[PASS] route capability audit
+[PASS] security gosec audit
+[PASS] aggregate audit passed
 ```
 
-The `make verify` failure is outside this docs-quality scope because it is caused by ServiceCatalog Go implementation files, not by docs changes.
+Gosec summary:
+
+```text
+Files: 112
+Lines: 4659
+Nosec: 0
+Issues: 0
+```
 
 ## Tests Or Commands Run
 
 ```text
 rg -n "5-Minute Quick Reference|Evidence Status Index|Incomplete local runtime evidence|Blueprints should|Concrete Example: ServiceCatalog Slice 1|Docs quality feedback crosscheck|does not increase Laravel-to-Go implementation progress|This evidence file is incomplete" docs/README.md docs/evidence docs/workflow docs/blueprints docs/templates docs/handoffs
+rg -n "ADR Implementation Proof Index|0009.*Partial|0012.*Partial|8.5/10|Proof Tracking" docs/adr docs/evidence docs/handoffs
 make verify
-wc -l internal/modules/servicecatalog/domain/service_catalog_item.go internal/modules/servicecatalog/usecase/create_update_item_test.go internal/modules/servicecatalog/usecase/fake_repository_test.go internal/modules/servicecatalog/usecase/lifecycle_query_item_test.go
 ```
 
 ## Gaps
 
-- ADR completion proof mapping was not audited in this step.
+- ADR completion proof mapping is now indexed in `docs/evidence/0004_adr_implementation_proof_index.md`.
 - Full evidence content audit beyond status labeling remains possible.
 - Rule cascade duplication remains by design unless future drift appears.
-- Full `make verify` is currently blocked by ServiceCatalog file-size audit failures outside this docs-quality scope.
+- ADR `0009` debug auth lane remains partial until manual auth runtime proof is completed.
+- ADR `0012` API output contract centralization remains partial until response/error envelope proof covers every API surface.
 
 ## Next Valid Active Step
 
-Implement ServiceCatalog slice 1 from `docs/blueprints/0025_servicecatalog_implementation_slice_1.md`.
+Plan the next ServiceCatalog implementation slice after `docs/blueprints/0025_servicecatalog_implementation_slice_1.md`.
 
 ## Estimated Scope Progress Percentage
 
-Docs quality feedback crosscheck scope: 90%.
+Docs quality feedback crosscheck scope: 100%.
 
-Laravel-to-Go transition: unchanged at 20%.
+Laravel-to-Go transition: unchanged by docs quality changes. Current active ledger estimate is 22%.
 
 ## Estimated Context-Window Status
 
