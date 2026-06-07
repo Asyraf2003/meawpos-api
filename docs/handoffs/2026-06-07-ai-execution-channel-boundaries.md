@@ -95,11 +95,40 @@ docs/handoffs/2026-06-07-prompt-template-selection-rule.md
 
 ## Proof Collected
 
-Proof is pending until the required `rg` and `make verify` commands pass after this handoff is written.
+```text
+rg -n "AI Execution Channel Rule|owner/local terminal|COMMAND PLAN FOR OWNER|OPTIONAL HANDOFF TEXT FOR CODEX|collaboration packet|Web AI did not assume Codex|Terminal Codex works through local CLI" docs/templates docs/workflow docs/handoffs docs/evidence docs/README.md docs/AGENTS.md docs/0001_index.md
+```
+
+Result:
+
+```text
+docs/templates/0120_prompt_authoring_rules.md includes AI Execution Channel Rule.
+docs/templates/0122_web_ai_session_prompts.md includes COMMAND PLAN FOR OWNER / LOCAL TERMINAL.
+docs/templates/0122_web_ai_session_prompts.md includes OPTIONAL HANDOFF TEXT FOR CODEX.
+docs/templates/0122_web_ai_session_prompts.md includes Web AI did not assume Codex executor self-check text.
+docs/templates/0121_codex_session_prompts.md states Terminal Codex works through local CLI execution and owner feedback.
+docs/workflow/0071_handoff_protocol.md includes owner/local terminal, Terminal Codex, Web AI, and explicit collaboration packet target types.
+docs/README.md, docs/AGENTS.md, docs/0001_index.md include cascade execution-channel rules.
+docs/evidence/0003_laravel_to_go_transition_progress_ledger.md records this workflow/docs quality improvement.
+```
+
+```text
+make verify
+```
+
+Result:
+
+```text
+[PASS] go vet audit passed
+[PASS] format audit passed
+[PASS] AI rules audit passed
+[PASS] file size audit passed
+[PASS] hexagonal import audit passed
+[PASS] gosec audit passed
+[PASS] aggregate audit passed
+```
 
 ## Tests Or Commands Run
-
-Pending:
 
 ```text
 rg -n "AI Execution Channel Rule|owner/local terminal|COMMAND PLAN FOR OWNER|OPTIONAL HANDOFF TEXT FOR CODEX|collaboration packet|Web AI did not assume Codex|Terminal Codex works through local CLI" docs/templates docs/workflow docs/handoffs docs/evidence docs/README.md docs/AGENTS.md docs/0001_index.md
@@ -125,13 +154,13 @@ Recommended next execution channel:
 
 ## Estimated Scope Progress Percentage
 
-AI execution-channel hardening scope: 90% until proof passes.
+AI execution-channel hardening scope: 100%.
 
 Laravel-to-Go transition: unchanged at 20%.
 
 ## Estimated Context-Window Status
 
-Enough context remains to run proof and update this handoff with final results.
+Enough context remains for one focused follow-up step.
 
 ## Assessment For Web AI Review
 
