@@ -21,6 +21,12 @@ Blueprints must be scoped to one domain, capability, migration, or architecture 
 
 Blueprints must not be used as handoffs.
 
+Blueprints should describe plan, scope, acceptance gates, and step order.
+
+Ongoing session logs, command transcripts, and progress history belong in handoffs or progress ledgers.
+
+A closed blueprint may keep a compact closeout summary or proof reference, but detailed proof history should stay in the linked handoff or ledger.
+
 ## Handoff Rules
 
 Handoffs must state:

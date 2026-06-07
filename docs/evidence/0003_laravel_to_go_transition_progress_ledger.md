@@ -49,6 +49,7 @@ docs/handoffs/2026-06-08-servicecatalog-domain-contract-blueprint.md
 docs/handoffs/2026-06-08-servicecatalog-domain-contract-accepted.md
 docs/handoffs/2026-06-08-servicecatalog-implementation-slice-1-plan.md
 docs/handoffs/2026-06-08-servicecatalog-implementation-slice-1-accepted.md
+docs/handoffs/2026-06-08-docs-quality-feedback-crosscheck.md
 ```
 
 ## Current Decision
@@ -119,6 +120,8 @@ Protected POS CRUD implementation must wait for accepted domain contracts, POS P
 - Capability-control foundation closeout proof passed on 2026-06-08 with focused tests, route capability audit, DB migration status, and `make verify`.
 - DB migration status confirmed `0006_capability_control.up.sql`, `0007_seed_existing_protected_capabilities.up.sql`, and `0008_seed_capability_manage_permission.up.sql` are applied.
 - Final closeout `make verify` passed with gosec reporting 97 files, 3978 lines, 0 nosec, and 0 issues.
+- Docs quality feedback crosscheck added a 5-minute quick reference, evidence status index, incomplete auth runtime evidence gap marker, blueprint/log boundary rule, and concrete ServiceCatalog scope packet example.
+- This docs quality improvement does not increase Laravel-to-Go implementation progress.
 
 ## Open Gaps
 

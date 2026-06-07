@@ -9,3 +9,18 @@ Progress ledgers for long-running transitions may also live here when each estim
 Active ledgers:
 
 - `0003_laravel_to_go_transition_progress_ledger.md`: current Laravel-to-Go API transition status.
+
+## Evidence Status Index
+
+Use this index before treating an evidence file as complete proof.
+
+| File | Status | Use Guidance |
+| --- | --- | --- |
+| `0001_laravel_stage0_schema_and_route_inventory.md` | Partial source inventory | Use for captured Laravel schema and route facts only. Do not treat omitted alter, foreign key, index, timestamp, or seed migrations as proven. |
+| `0002_laravel_productcatalog_servicecatalog_inventory.md` | Partial source inventory | Use for ProductCatalog and ServiceCatalog facts captured from provided Laravel source. Product duplicate policy still needs owner decision. |
+| `0003_laravel_to_go_transition_progress_ledger.md` | Active ledger | Use as the current transition status, progress, gaps, and next valid active step source. |
+| `2026-06-06-auth-runtime-local-dev.md` | Incomplete local runtime evidence | Use only for the DB connectivity facts explicitly recorded in the file. Do not use it as complete manual auth runtime proof. |
+
+Partial or incomplete evidence can support only the facts written inside that file.
+
+Do not close a gap from a partial or incomplete evidence file unless the missing proof is added or referenced by the active ledger.

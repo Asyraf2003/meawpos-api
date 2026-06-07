@@ -40,6 +40,34 @@ The target project is:
 - dynamic UI consumption through API contracts and capability metadata;
 - strict test and script gates.
 
+## 5-Minute Quick Reference
+
+Architecture direction:
+
+```text
+Echo HTTP -> usecase -> domain -> ports -> PostgreSQL adapter
+```
+
+First local command when checking the current repo state:
+
+```bash
+make verify
+```
+
+Current transition status and next valid step live in:
+
+```text
+docs/evidence/0003_laravel_to_go_transition_progress_ledger.md
+```
+
+Five rules most likely to prevent bad work:
+
+- do not invent facts when a file or command output can be inspected;
+- use exactly one active step;
+- do not claim progress without proof;
+- do not expose protected API behavior without capability metadata and runtime capability check;
+- keep business rules out of Echo handlers, SQL builders, and UI contracts.
+
 ## First Read Order
 
 Read in this order:

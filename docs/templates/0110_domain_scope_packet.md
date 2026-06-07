@@ -121,3 +121,67 @@ Next valid active step:
 ```text
 REPLACE_WITH_NEXT_STEP
 ```
+
+## Concrete Example: ServiceCatalog Slice 1
+
+Use this as a shape example only. Replace values for the active scope.
+
+Active domain/API:
+
+```text
+servicecatalog
+```
+
+Goal:
+
+```text
+Implement ServiceCatalog slice 1: domain, ports, usecase contracts, and unit tests only.
+```
+
+Read-only context:
+
+```text
+docs/README.md
+docs/AGENTS.md
+docs/evidence/0003_laravel_to_go_transition_progress_ledger.md
+docs/blueprints/0024_servicecatalog_domain_contract.md
+docs/blueprints/0025_servicecatalog_implementation_slice_1.md
+```
+
+Editable files:
+
+```text
+internal/modules/servicecatalog/domain/**
+internal/modules/servicecatalog/ports/**
+internal/modules/servicecatalog/usecase/**
+```
+
+Forbidden files:
+
+```text
+internal/modules/servicecatalog/transport/**
+internal/platform/postgres/**
+migrations/**
+cmd/**
+route registration
+capability seed migrations
+```
+
+Capability keys:
+
+```text
+service_catalog.list
+service_catalog.lookup
+service_catalog.show
+service_catalog.create
+service_catalog.update
+service_catalog.activate
+service_catalog.deactivate
+```
+
+Focused proof:
+
+```bash
+go test ./internal/modules/servicecatalog/...
+make verify
+```
