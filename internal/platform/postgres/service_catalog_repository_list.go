@@ -1,0 +1,60 @@
+package postgres
+
+import (
+	"context"
+	"strings"
+
+	"pos-go/internal/modules/servicecatalog/domain"
+	"pos-go/internal/modules/servicecatalog/ports"
+)
+
+func (r *ServiceCatalogRepository) List(
+	ctx context.Context,
+	filter ports.ListServiceCatalogItemsFilter,
+) ([]domain.ServiceCatalogItem, error) {
+	args := []any{}
+	conditions := []string{}
+	nextArg := 1
+
+	if strings.TrimSpace(filter.Query) != "" {
+		conditions = append(conditions, "normalized_name LIKE $"+itoa(nextArg))
+		args = append(args, "%"+domain.NormalizeName(filter.Query)+"%")
+		nextArg++
+	}
+
+	switch filter.Status {
+	case ports.ListStatusActive, "":
+		conditions = append(conditions, "is_active = true")
+	case ports.ListStatusInactive:
+		conditions = append(conditions, "is_active = false")
+	case ports.ListStatusAll:
+	default:
+		conditions = append(conditions, "is_active = true")
+	}
+
+	page := filter.Page
+	if page <= 0 {
+		page = 1
+	}
+
+	perPage := filter.PerPage
+	if perPage <= 0 {
+		perPage = 10
+	}
+
+	offset := (page - 1) * perPage
+	args = append(args, perPage, offset)
+
+	sql := serviceCatalogItemSelectSQL()
+	if len(conditions) > 0 {
+		sql += "\n\t\tWHERE " + strings.Join(conditions, " AND ")
+	}
+	sql += "\n\t\tORDER BY normalized_name, id"
+	sql += "\n\t\tLIMIT $" + itoa(nextArg) + " OFFSET $" + itoa(nextArg+1)
+
+	return r.findMany(ctx, sql, args...)
+}
+
+func itoa(value int) string {
+	return strconvFormatInt(int64(value))
+}
