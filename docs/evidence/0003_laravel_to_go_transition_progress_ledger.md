@@ -107,6 +107,7 @@ Protected POS endpoints must wait for capability-control proof.
 - Route-to-capability audit script exists with manifest coverage for 6 current protected route capability rows.
 - `make verify` summary now includes route capability audit and passes aggregate audit.
 - Route-level disabled protected endpoint proof passes for current protected route capability keys.
+- Route-level disabled protected endpoint proof passes for current protected route capability keys.
 
 ## Open Gaps
 
