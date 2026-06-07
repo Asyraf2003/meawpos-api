@@ -18,6 +18,7 @@ docs/blueprints/0020_catalog_foundation_migration.md
 docs/blueprints/0022_manual_auth_login_foundation.md
 docs/blueprints/0023_quality_security_hex_audit_gates.md
 docs/blueprints/0024_servicecatalog_domain_contract.md
+docs/blueprints/0025_servicecatalog_implementation_slice_1.md
 ```
 
 Related evidence:
@@ -45,6 +46,8 @@ docs/handoffs/2026-06-08-capability-route-audit-script.md
 docs/handoffs/2026-06-08-capability-route-disabled-proof.md
 docs/handoffs/2026-06-08-capability-control-closeout.md
 docs/handoffs/2026-06-08-servicecatalog-domain-contract-blueprint.md
+docs/handoffs/2026-06-08-servicecatalog-domain-contract-accepted.md
+docs/handoffs/2026-06-08-servicecatalog-implementation-slice-1-plan.md
 ```
 
 ## Current Decision
@@ -123,19 +126,19 @@ Protected POS CRUD implementation must wait for accepted domain contracts, POS P
 - Product duplicate policy still needs an owner decision before final PostgreSQL indexes.
 - Runtime DB proof for manual auth login is still incomplete.
 - No POS domain PostgreSQL baseline has been accepted.
-- No first POS business-domain blueprint/domain contract has been accepted yet.
-- ServiceCatalog domain contract blueprint exists but is not accepted yet.
+- ServiceCatalog domain contract is accepted.
+- ServiceCatalog implementation slice 1 plan exists but is not accepted yet.
+- ProductCatalog domain contract has not been accepted yet.
 - No `servicecatalog` or `productcatalog` Go business module has implementation proof.
 
 ## Next Valid Active Step
 
-Continue `docs/blueprints/0024_servicecatalog_domain_contract.md`.
+Continue `docs/blueprints/0025_servicecatalog_implementation_slice_1.md`.
 
-- Review and accept or adjust the ServiceCatalog domain contract.
-- Do not start POS CRUD implementation.
-- Do not add ServiceCatalog capability seeds before the domain contract is accepted.
-- Do not implement migrations, handlers, repositories, or usecases before the contract is accepted.
-
+- Review and accept or adjust the ServiceCatalog implementation slice 1 plan.
+- Do not implement before the implementation slice is accepted.
+- Keep slice 1 limited to domain and usecase contracts with tests.
+- Do not add HTTP, PostgreSQL migrations, PostgreSQL repositories, route registration, or capability seeds in slice 1.
 ## Handoff Requirement
 
 Any Codex or web AI session that changes Laravel-to-Go transition docs, capability foundation, quality gates, or POS domain implementation must update this ledger or explicitly state why the ledger is unchanged.

@@ -2,7 +2,7 @@
 
 ## Status
 
-Draft domain contract blueprint.
+Accepted domain contract.
 
 ## Date
 
@@ -480,8 +480,30 @@ Before implementation starts:
 
 ## NEXT ACTIVE STEP
 
-Owner decision:
+ServiceCatalog domain contract is accepted.
 
-Accept this ServiceCatalog domain contract, or request adjustment before implementation planning.
+Next valid active step:
 
-Implementation remains blocked until the contract is accepted.
+```text
+Plan ServiceCatalog implementation slice 1 without coding yet.
+```
+
+Implementation remains blocked until an implementation blueprint/patch plan is accepted.
+
+## ACCEPTANCE
+
+ServiceCatalog domain contract accepted on 2026-06-08.
+
+Accepted decisions:
+
+```text
+domain = servicecatalog
+delete policy = forbidden physical delete
+lifecycle = active/inactive
+initial permissions = service_catalog.read, service_catalog.manage
+capability keys = service_catalog.list, service_catalog.lookup, service_catalog.show, service_catalog.create, service_catalog.update, service_catalog.activate, service_catalog.deactivate
+idempotency = not required for first implementation
+audit = required by decision, first implementation may record audit intent if audit sink is not available
+```
+
+Implementation remains blocked until the implementation slice is planned and accepted.
