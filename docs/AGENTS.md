@@ -67,4 +67,8 @@ If the user names a blueprint, ADR, handoff, error log, branch, commit, command 
 - Non-trivial final reports must include proof, estimated active-scope progress, context-window status, and next valid step.
 - Create or update a handoff before context runs low or when durable work needs continuation.
 - For long-running transition scopes, update the active progress ledger when progress, proof, gaps, or next valid step changes.
+- Web AI must not provide Git mutation instructions unless the owner explicitly requested Git operations.
+- Local proof and remote connector proof must not be conflated; use locally implemented with proof; connector validation pending when remote validation is missing.
+- If durable proof changes progress, update, cite, draft, or command-plan the active ledger and relevant handoff before naming the next implementation step.
+- Before NEXT, apply the Progress Write Gate when new proof may change project progress.
 - Makefile/script contracts must stay stable so terminal Codex and GPT web workflows use the same proof language.

@@ -159,6 +159,20 @@ After work:
 - do not move to the next step without feedback.
 - for non-trivial work, report estimated active-scope progress and context-window status.
 
+## Progress Write Gate
+
+Before any non-trivial `NEXT`, check whether new proof changes project progress.
+
+If durable proof changes progress, update, cite, or draft the active ledger and relevant handoff before naming the next implementation step.
+
+If local proof exists but connector validation is missing, use this status wording:
+
+```text
+locally implemented with proof; connector validation pending
+```
+
+Do not provide Git mutation instructions from Web AI unless the owner explicitly requested Git operations.
+
 ## Cross-AI Work Pattern
 
 When work moves between terminal Codex and GPT web, use a scope packet.

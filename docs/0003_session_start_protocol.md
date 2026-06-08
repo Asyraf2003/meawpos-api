@@ -15,6 +15,7 @@ Every session must start with scope control before coding, planning, or commands
 7. Build a short blueprint for the active scope.
 8. State exactly one active step.
 9. Define expected proof.
+10. Before naming NEXT, apply the Progress Write Gate when new proof may change project progress.
 
 ## Required Work Sections
 
@@ -46,5 +47,6 @@ Stop and mark GAP if:
 - DB ownership is unknown;
 - capability-control behavior is unknown;
 - tests cannot be identified for a mutation;
-- the change would cross a forbidden boundary.
+- the change would cross a forbidden boundary;
+- durable proof changes progress but the active ledger and relevant handoff have not been updated, cited, drafted, or placed in an owner/local command plan;
 
