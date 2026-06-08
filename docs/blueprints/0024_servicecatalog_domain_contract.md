@@ -17,7 +17,7 @@ Post-contract implementation status now lives in:
 ```text
 docs/blueprints/0025_servicecatalog_implementation_slice_1.md
 docs/evidence/0003_laravel_to_go_transition_progress_ledger.md
-docs/handoffs/2026-06-08-servicecatalog-implementation-slice-1.md
+docs/archive/handoffs-closed/2026-06-08-servicecatalog-implementation-slice-1.md
 ```
 
 ServiceCatalog slice 1 is implemented and closed with proof for:
