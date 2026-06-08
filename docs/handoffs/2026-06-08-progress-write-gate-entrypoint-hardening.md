@@ -20,19 +20,31 @@ Harden docs entrypoints so the Progress Write Gate is visible before future AI s
 
 ## PROOF
 
-Run:
-
-```bash
-bash scripts/audit_ai_rules.sh
-make verify
-```
-
-Expected result:
+Owner-provided local proof on 2026-06-08:
 
 ```text
+bash scripts/audit_ai_rules.sh
+
+Result:
+
 [PASS] AI rules audit passed
+
+bash scripts/audit_all.sh
+
+Result summary:
+
+[PASS] go test ./...
+[PASS] go vet audit
+[PASS] format audit
+[PASS] AI rules audit
+[PASS] file size audit
+[PASS] hexagonal import audit
+[PASS] route capability audit
+[PASS] security gosec audit
 [PASS] aggregate audit passed
 ```
+
+Relevant grep output confirmed Progress Write Gate anchors in scripts and docs.
 
 ## LOCAL PROOF UPDATE
 
@@ -80,7 +92,7 @@ Local proof and remote connector proof are now both available for Progress Write
 
 Status:
 
-remote-visible through GitHub connector; local audit proof passed
+locally implemented with proof; connector validation pending
 
 ## GAP
 
@@ -89,9 +101,9 @@ remote-visible through GitHub connector; local audit proof passed
 
 ## PROGRESS
 
-Workflow hardening is validated locally and remotely for visibility.
+Estimated scope progress percentage: 100%.
 
-Progress Write Gate entrypoint hardening is visible in GitHub connector facts and passes local audit proof.
+Progress Write Gate entrypoint hardening is locally validated by owner-provided local proof.
 
 This does not change Laravel-to-Go implementation progress.
 
