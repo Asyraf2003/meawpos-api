@@ -92,7 +92,7 @@ Local proof and remote connector proof are now both available for Progress Write
 
 Status:
 
-locally implemented with proof; connector validation pending
+remote-visible through GitHub connector; local audit proof passed
 
 ## GAP
 
@@ -111,7 +111,7 @@ This does not change Laravel-to-Go implementation progress.
 
 Execution channel: owner/local terminal.
 
-Save this handoff update locally, run the proof commands again, then continue only through the normal repository publication and connector-validation flow.
+Review and publish this handoff status correction, then request Web AI connector validation for the updated handoff if needed.
 
 ## CONTEXT WINDOW STATUS
 
