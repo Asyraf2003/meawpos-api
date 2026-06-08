@@ -1,44 +1,54 @@
 # Handoffs
 
-This folder contains session continuation notes.
+This folder contains current session continuation notes only.
 
-Each handoff must include:
+Use the active transition ledger for current state first:
+
+```text
+docs/evidence/0003_laravel_to_go_transition_progress_ledger.md
+```
+
+Closed or historical handoffs live in:
+
+```text
+docs/archive/handoffs-closed/
+```
+
+Archive index:
+
+```text
+docs/archive/handoffs-closed/README.md
+```
+
+## Current
+
+- `2026-06-08-servicecatalog-runtime-capability-implementation.md`: latest ServiceCatalog runtime/capability closeout context and next planning-only scope.
+- `2026-06-08-servicecatalog-runtime-capability-blueprint-accepted.md`: accepted blueprint 0027 context retained until the next scoped session prompt is prepared.
+
+## Pending / Needs Follow-Up
+
+- `2026-06-06-auth-runtime-local-dev.md`: auth runtime proof remains incomplete; keep visible until ADR `0009` runtime proof is closed or superseded.
+
+## Archive Policy
+
+Move a handoff to `docs/archive/handoffs-closed/` when all conditions are true:
+
+- the scope is closed with proof or clearly historical;
+- the proof is summarized in the active ledger, evidence history, or archive index;
+- no current next step depends on scanning the full handoff;
+- the owner approves early archive or the handoff is old enough under project policy.
+
+Archived handoffs are historical only and cannot override active ledgers, blueprints, ADRs, source code, or command output.
+
+## Required Handoff Fields
+
+Each active handoff must include:
+
 - active scope;
 - files changed;
 - proof collected;
 - tests run;
 - open gaps;
-- next valid active step.
-
-For long-running transition scopes, each handoff must also point to the active progress ledger and state whether the ledger was updated.
-
-Active transition ledger:
-
-- `docs/evidence/0003_laravel_to_go_transition_progress_ledger.md`
-
-## Current Continuation Index
-
-Use the active transition ledger for current state first.
-
-Current handoffs:
-
-- `2026-06-08-servicecatalog-postgres-persistence-blueprint.md`: ServiceCatalog persistence closeout proof and next runtime/capability slice context.
-- `2026-06-08-docs-scalability-blueprint-cleanup.md`: docs scalability cleanup, archived duplicate blueprint, and handoff policy context.
-
-Historical handoffs:
-
-- Capability-control handoffs before `2026-06-08-capability-control-closeout.md` are historical unless the ledger names them as proof references.
-- Prompt/template hardening handoffs from 2026-06-07 are historical unless the active task is AI workflow maintenance.
-- ServiceCatalog slice 1 handoffs are historical after `2026-06-08-servicecatalog-implementation-slice-1.md` and the active ledger summary.
-- `2026-06-08-docs-quality-feedback-crosscheck.md` is historical after `2026-06-08-docs-scalability-blueprint-cleanup.md` and the active ledger summary.
-
-## Archiving Policy
-
-Closed handoffs may be moved to `docs/archive/handoffs-closed/` when all conditions are true:
-
-- the scope is closed with proof;
-- the proof is referenced in the active ledger or a historical evidence snapshot;
-- no current next step depends on the handoff details;
-- the handoff is at least 30 days old, unless the owner explicitly approves earlier archiving.
-
-Archived handoffs are historical only and cannot override active ledgers, blueprints, ADRs, source code, or command output.
+- next valid active step;
+- estimated scope progress percentage;
+- estimated context-window status.
