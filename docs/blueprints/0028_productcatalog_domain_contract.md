@@ -2,7 +2,7 @@
 
 ## Status
 
-Proposed.
+Accepted.
 
 ## Date
 
@@ -560,16 +560,37 @@ Do not start implementation until:
 - Audit/versioning behavior is accepted.
 - ProductCatalog implementation slice blueprint is created and accepted.
 
-## NEXT ACTIVE STEP
+## ACCEPTANCE
 
-Owner decision required:
+Accepted on: 2026-06-09
 
-Accept duplicate policy Option A:
+Owner decision:
+
+```text
+ACCEPT OPTION A
+```
+
+Accepted duplicate policy:
 
 ```text
 Preserve Laravel-compatible duplicate behavior.
 ```
 
-After owner acceptance, next valid step is:
+Accepted rules:
+
+- Active non-null `kode_barang` must be unique.
+- Blank `kode_barang` becomes null.
+- Same normalized `nama_barang + merek + ukuran` is rejected when the code exception does not apply.
+- Same normalized identity is allowed only when both existing and candidate products have distinct non-null `kode_barang`.
+- PostgreSQL must not use a strict active unique index on `(nama_barang_normalized, merek_normalized, ukuran)`.
+- PostgreSQL should use a partial unique index for active non-null `kode_barang`.
+- The nuanced identity duplicate rule belongs in ProductCatalog usecase/repository guard inside a transaction.
+- Inventory stock adjustment remains deferred to future Inventory scope.
+
+## NEXT ACTIVE STEP
+
+Owner decision accepted.
+
+Next valid step:
 
 Plan ProductCatalog implementation slice 1 without coding yet.
