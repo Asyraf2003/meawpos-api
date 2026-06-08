@@ -2,7 +2,7 @@
 
 ## Status
 
-Proposed implementation slice.
+Accepted implementation slice plan.
 
 ## Date
 
@@ -48,6 +48,28 @@ Do not implement inventory behavior.
 Do not implement broad audit sink behavior beyond capability metadata and proof.
 
 Do not change ServiceCatalog persistence behavior unless required to wire existing usecases.
+
+## Laravel Parity Stance
+
+This slice uses Laravel as behavioral evidence, not as a file-by-file implementation template.
+
+Laravel source confirms the project uses layered architecture with Core, Application, Ports, Adapters, Providers, Requests, Presenters, routes, and migrations.
+
+The Go target keeps the same separation of concerns but implements it as:
+
+```text
+domain
+ports
+usecase
+transport/http
+presentation/http/id
+platform/postgres
+app/bootstrap
+```
+
+This slice must not copy Laravel page controllers, Blade view behavior, or UI table-data endpoints.
+
+ServiceCatalog runtime routes in this slice are Go API contracts. They may be informed by Laravel ServiceCatalog behavior, normalizer rules, seeds, and schema, but they are not Laravel web route clones.
 
 ## SCOPE-IN
 

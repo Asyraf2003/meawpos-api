@@ -20,6 +20,7 @@ docs/blueprints/0023_quality_security_hex_audit_gates.md
 docs/blueprints/0024_servicecatalog_domain_contract.md
 docs/blueprints/0025_servicecatalog_implementation_slice_1.md
 docs/blueprints/0026_servicecatalog_postgres_persistence_slice.md
+docs/blueprints/0027_servicecatalog_runtime_capability_slice.md
 ```
 
 Related evidence:
@@ -56,6 +57,7 @@ docs/handoffs/2026-06-08-servicecatalog-implementation-slice-1.md
 docs/handoffs/2026-06-08-servicecatalog-postgres-persistence-blueprint.md
 docs/handoffs/2026-06-08-docs-quality-feedback-crosscheck.md
 docs/handoffs/2026-06-08-docs-scalability-blueprint-cleanup.md
+docs/handoffs/2026-06-08-servicecatalog-runtime-capability-blueprint-accepted.md
 ```
 
 ## Current Decision
@@ -96,6 +98,7 @@ Protected POS CRUD implementation must wait for accepted domain contracts, POS P
 - ADR implementation proof index exists at `docs/evidence/0004_adr_implementation_proof_index.md`.
 - Detailed completed-work history is archived in `docs/evidence/0005_laravel_to_go_transition_history_2026_06_08.md`.
 - ServiceCatalog PostgreSQL persistence slice is implemented and closed with proof.
+- ServiceCatalog runtime/capability blueprint 0027 is accepted as a plan; implementation remains 0%.
 
 ## Open Gaps
 
@@ -118,7 +121,7 @@ Protected POS CRUD implementation must wait for accepted domain contracts, POS P
 
 ## Next Valid Active Step
 
-Create and accept the next ServiceCatalog runtime/capability blueprint.
+Implement the accepted ServiceCatalog runtime/capability slice.
 
 - Candidate accepted scope: ServiceCatalog HTTP transport, route registration, request/response presenters, permission seed rows, capability seed rows, route capability manifest updates, and disabled-capability proof.
 - Do not implement ProductCatalog or UI in this slice.
