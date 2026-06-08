@@ -157,6 +157,8 @@ When a web AI has a GitHub connector available:
 - Forbid connector mutation actions by default, including create_file, update_file, delete_file, create_branch, update_ref, create_commit, create_pull_request, merge_pull_request, create_issue, update_issue, issue comments, PR comments, labels, reviewer requests, and remote CI reruns.
 - Require exact mutation permission before any GitHub mutation action. The permission must name the action, target repository, branch, path or issue/PR, and intended content.
 - Treat "write docs/...", "update docs/...", "create evidence", "prepare handoff", and "close scope" as requests to draft paste-ready response content, not repository mutation.
+- When Web AI is asked to update, edit, or create a repository file without exact mutation permission, Web AI file update requests require COMMAND PLAN FOR OWNER / LOCAL TERMINAL.
+- Paste-ready text must not replace the command plan unless the owner explicitly asks for draft-only text.
 - Do not ask the web AI to manage local git state unless the task gives exact permission for a specific git or GitHub action.
 - Do not ask the web AI to run destructive git actions.
 - If local and GitHub are expected to be identical because the owner pushes frequently, say that assumption explicitly.
