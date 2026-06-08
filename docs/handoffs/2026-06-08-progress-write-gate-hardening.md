@@ -1,0 +1,83 @@
+# Handoff: Progress Write Gate Hardening
+
+## Date
+
+2026-06-08
+
+## Active Scope
+
+AI workflow guardrail hardening after Web AI progress/write-gate incident.
+
+## FACT
+
+- Web AI read-only and proof-before-progress rules already existed.
+- The missing control was a mandatory output gate before `NEXT`.
+- This scope changes docs and audit guardrails only.
+- Runtime application behavior is unchanged.
+
+## Files Included
+
+```text
+docs/templates/0122_web_ai_session_prompts.md
+docs/workflow/0072_transition_progress_ledger_protocol.md
+docs/core/0013_proof_and_progress.md
+docs/workflow/0071_handoff_protocol.md
+scripts/audit_ai_rules.sh
+```
+
+## Files Changed
+
+```text
+docs/templates/0122_web_ai_session_prompts.md
+docs/workflow/0072_transition_progress_ledger_protocol.md
+docs/core/0013_proof_and_progress.md
+docs/workflow/0071_handoff_protocol.md
+scripts/audit_ai_rules.sh
+docs/handoffs/2026-06-08-progress-write-gate-hardening.md
+```
+
+## Files Forbidden To Touch
+
+```text
+internal/**
+cmd/**
+migrations/**
+scripts/config/route_capabilities.tsv
+production secrets
+GitHub branches, commits, pull requests, issues, labels, reviewers, merges, refs, or CI
+```
+
+## Decisions Made
+
+- Add `Progress Write Gate` to the Web AI template.
+- Add `Progress Update Gate` to the transition ledger protocol.
+- Require local proof and remote connector proof to be separated.
+- Require local-only status wording: `locally implemented with proof; connector validation pending`.
+- Block `NEXT` from skipping required ledger or handoff updates after durable proof.
+- Keep Git mutation commands out of Web AI output unless the owner explicitly requests Git operations.
+- Add audit anchors for the new guardrails.
+
+## PROOF
+
+Pending final proof in this session.
+
+## GAP
+
+- The audit checks stable text anchors, not full semantic compliance of every future model answer.
+- Git mutation safety still depends on the prompt and connector permission model outside the local repo.
+
+## PROGRESS
+
+Workflow guardrail hardening scope: pending proof.
+
+Laravel-to-Go implementation progress: unchanged.
+
+## NEXT
+
+Next execution channel: owner/local terminal.
+
+Review proof output and continue only after ledger/handoff progress rules are satisfied.
+
+## CONTEXT WINDOW STATUS
+
+Enough context remains for proof and final reporting.
