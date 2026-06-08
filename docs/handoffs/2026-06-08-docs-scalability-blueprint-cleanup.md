@@ -78,11 +78,16 @@ docs/workflow/0072_transition_progress_ledger_protocol.md
 
 ## Proof Collected
 
-Pending until commands run in this session.
+- `rg` proof found docs cleanup anchors for archived duplicate blueprint, active ledger current-state split, history evidence, handoff archiving policy, ADR closeout backlog, incomplete evidence review trigger, and required later runtime/capability blueprint ownership.
+- `make verify` passed after docs cleanup.
 
 ## Tests Or Commands Run
 
-Pending until commands run in this session.
+```text
+rg -n "0026_servicecatalog_runtime_slice_2_plan|docs/archive/blueprints-superseded|Current State Summary|0005_laravel_to_go_transition_history|Archiving Policy|ADR closeout backlog|2026-06-15|runtime/capability blueprint|ServiceCatalog PostgreSQL persistence slice is implemented|Create and accept the next ServiceCatalog runtime/capability blueprint|permission seed rows|capability seed rows" docs
+
+make verify
+```
 
 ## Gaps
 
@@ -98,7 +103,7 @@ The next blueprint must own ServiceCatalog HTTP transport, route registration, r
 
 ## Estimated Scope Progress Percentage
 
-Docs scalability and blueprint cleanup scope: pending proof.
+Docs scalability and blueprint cleanup scope: 100%.
 
 Laravel-to-Go transition: unchanged by docs cleanup. Current active ledger estimate is 25%.
 
