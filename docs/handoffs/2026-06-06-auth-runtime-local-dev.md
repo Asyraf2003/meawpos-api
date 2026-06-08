@@ -4,13 +4,13 @@ Manual auth local runtime proof and local developer workflow cleanup for pos-go 
 
 Blueprint referenced
 
-docs/handoffs/2026-06-06-manual-auth-login.md
+docs/archive/handoffs-closed/2026-06-06-manual-auth-login.md
 
 Files that Codex should read
 
 AGENTS.md
 docs/AGENTS.md
-docs/handoffs/2026-06-06-manual-auth-login.md
+docs/archive/handoffs-closed/2026-06-06-manual-auth-login.md
 Makefile
 README.md
 .env.example

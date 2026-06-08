@@ -161,14 +161,14 @@ disabled_reason
 
 ## STEP ORDER
 1. Add this active blueprint.
-2. Add capability domain and usecase contracts without HTTP wiring. Done with proof in `docs/handoffs/2026-06-07-capability-contracts.md`.
-3. Add PostgreSQL migration and adapter for capability state. Done with proof in `docs/handoffs/2026-06-07-capability-postgres-state.md`.
-4. Add runtime capability check middleware/policy. Done with proof in `docs/handoffs/2026-06-07-capability-runtime-middleware.md`.
-5. Seed existing protected routes as capability records. Done with proof in `docs/handoffs/2026-06-07-capability-route-seeds.md`.
-6. Add admin capability HTTP surface. Done with proof in `docs/handoffs/2026-06-07-capability-admin-http-surface.md`.
-7. Add route-to-capability audit script. Done with proof in `docs/handoffs/2026-06-08-capability-route-audit-script.md`.
-8. Add route-level disabled protected endpoint proof. Done with proof in `docs/handoffs/2026-06-08-capability-route-disabled-proof.md`.
-9. Close capability-control foundation proof. Done with proof in `docs/handoffs/2026-06-08-capability-control-closeout.md`.
+2. Add capability domain and usecase contracts without HTTP wiring. Done with proof in `docs/archive/handoffs-closed/2026-06-07-capability-contracts.md`.
+3. Add PostgreSQL migration and adapter for capability state. Done with proof in `docs/archive/handoffs-closed/2026-06-07-capability-postgres-state.md`.
+4. Add runtime capability check middleware/policy. Done with proof in `docs/archive/handoffs-closed/2026-06-07-capability-runtime-middleware.md`.
+5. Seed existing protected routes as capability records. Done with proof in `docs/archive/handoffs-closed/2026-06-07-capability-route-seeds.md`.
+6. Add admin capability HTTP surface. Done with proof in `docs/archive/handoffs-closed/2026-06-07-capability-admin-http-surface.md`.
+7. Add route-to-capability audit script. Done with proof in `docs/archive/handoffs-closed/2026-06-08-capability-route-audit-script.md`.
+8. Add route-level disabled protected endpoint proof. Done with proof in `docs/archive/handoffs-closed/2026-06-08-capability-route-disabled-proof.md`.
+9. Close capability-control foundation proof. Done with proof in `docs/archive/handoffs-closed/2026-06-08-capability-control-closeout.md`.
 10. Only after capability-control proof closeout, create the first POS business-domain blueprint/domain contract.
 
 ## DOD
