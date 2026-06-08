@@ -81,6 +81,10 @@ Durable proof includes:
 
 If the session cannot mutate files, it must provide paste-ready ledger and handoff text or an owner/local terminal command plan.
 
+When Web AI is asked to update, edit, or create the ledger, handoff, evidence, or any repository file and exact mutation permission is absent, Web AI must provide `COMMAND PLAN FOR OWNER / LOCAL TERMINAL` for the local file change.
+
+Paste-ready text may be included as helper content, but it must not replace the command plan unless the owner explicitly asks for draft-only text.
+
 A session must not advance to a new domain, new implementation slice, or closeout until the current proof is reflected in:
 
 - the active progress ledger;
