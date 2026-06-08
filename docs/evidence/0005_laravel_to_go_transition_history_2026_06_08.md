@@ -27,6 +27,7 @@ docs/evidence/0003_laravel_to_go_transition_progress_ledger.md
 - Capability contracts, PostgreSQL state, runtime middleware, route seeds, admin HTTP surface, route audit, disabled-route proof, and final closeout are recorded in related handoffs.
 - ServiceCatalog domain contract is accepted.
 - ServiceCatalog slice 1 domain, ports, usecase contracts, and unit tests are implemented with proof.
+- ServiceCatalog PostgreSQL persistence slice is implemented with migration, repository adapter, integration tests, and proof.
 - Docs quality feedback crosscheck added quick reference, evidence status index, incomplete evidence marker, blueprint/log boundary rule, concrete ServiceCatalog scope packet example, and ADR proof index.
 
 ## Proof References
@@ -38,6 +39,7 @@ docs/evidence/0003_laravel_to_go_transition_progress_ledger.md
 docs/evidence/0004_adr_implementation_proof_index.md
 docs/handoffs/2026-06-08-capability-control-closeout.md
 docs/handoffs/2026-06-08-servicecatalog-implementation-slice-1.md
+docs/handoffs/2026-06-08-servicecatalog-postgres-persistence-blueprint.md
 docs/handoffs/2026-06-08-docs-quality-feedback-crosscheck.md
 ```
 
