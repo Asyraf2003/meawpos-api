@@ -22,14 +22,15 @@ Use the active transition ledger for current state first.
 
 Current handoffs:
 
-- `2026-06-08-servicecatalog-postgres-persistence-blueprint.md`: current ServiceCatalog persistence blueprint proposal context.
-- `2026-06-08-docs-quality-feedback-crosscheck.md`: current docs-quality cleanup and proof context.
+- `2026-06-08-servicecatalog-postgres-persistence-blueprint.md`: ServiceCatalog persistence closeout proof and next runtime/capability slice context.
+- `2026-06-08-docs-scalability-blueprint-cleanup.md`: docs scalability cleanup, archived duplicate blueprint, and handoff policy context.
 
 Historical handoffs:
 
 - Capability-control handoffs before `2026-06-08-capability-control-closeout.md` are historical unless the ledger names them as proof references.
 - Prompt/template hardening handoffs from 2026-06-07 are historical unless the active task is AI workflow maintenance.
 - ServiceCatalog slice 1 handoffs are historical after `2026-06-08-servicecatalog-implementation-slice-1.md` and the active ledger summary.
+- `2026-06-08-docs-quality-feedback-crosscheck.md` is historical after `2026-06-08-docs-scalability-blueprint-cleanup.md` and the active ledger summary.
 
 ## Archiving Policy
 
