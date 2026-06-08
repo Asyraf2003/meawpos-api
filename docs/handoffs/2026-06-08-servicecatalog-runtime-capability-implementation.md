@@ -77,6 +77,6 @@ Overall Laravel-to-Go transition: 30%.
 
 ## NEXT
 
-Execution channel: Web AI connector validation.
+Execution channel: owner/local terminal.
 
 Add focused ServiceCatalog HTTP handler tests and disabled-capability proof before closing blueprint 0027 or starting ProductCatalog.
