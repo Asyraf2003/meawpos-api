@@ -21,7 +21,7 @@ docs/evidence/0003_laravel_to_go_transition_progress_ledger.md
 - Hybrid Web AI/Codex next-session prompts are forbidden unless explicitly requested as a collaboration packet.
 - AI execution channel boundaries are clarified: Web AI no longer defaults to Codex as executor, owner/local terminal command-plan loop is documented, and collaboration packet remains special-case only.
 - Normal Web AI analysis must prefer owner/local terminal command plans and omit Codex handoff unless explicitly requested.
-- Manual debug login foundation is documented in `docs/handoffs/2026-06-06-manual-auth-login.md`.
+- Manual debug login foundation is documented in `docs/archive/handoffs-closed/2026-06-06-manual-auth-login.md`.
 - Manual debug accounts are documented as `admin@example.com` and `kasir@example.com` with password `12345678`.
 - Capability-control foundation is closed with proof.
 - Capability contracts, PostgreSQL state, runtime middleware, route seeds, admin HTTP surface, route audit, disabled-route proof, and final closeout are recorded in related handoffs.
@@ -37,10 +37,11 @@ Use these files for detailed proof:
 ```text
 docs/evidence/0003_laravel_to_go_transition_progress_ledger.md
 docs/evidence/0004_adr_implementation_proof_index.md
-docs/handoffs/2026-06-08-capability-control-closeout.md
-docs/handoffs/2026-06-08-servicecatalog-implementation-slice-1.md
-docs/handoffs/2026-06-08-servicecatalog-postgres-persistence-blueprint.md
-docs/handoffs/2026-06-08-docs-quality-feedback-crosscheck.md
+docs/archive/handoffs-closed/README.md
+docs/archive/handoffs-closed/2026-06-08-capability-control-closeout.md
+docs/archive/handoffs-closed/2026-06-08-servicecatalog-implementation-slice-1.md
+docs/archive/handoffs-closed/2026-06-08-servicecatalog-postgres-persistence-blueprint.md
+docs/archive/handoffs-closed/2026-06-08-docs-quality-feedback-crosscheck.md
 ```
 
 ## Current Proof At Snapshot Time
