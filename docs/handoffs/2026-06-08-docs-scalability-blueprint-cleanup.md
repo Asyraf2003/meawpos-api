@@ -92,13 +92,15 @@ Pending until commands run in this session.
 
 ## Next Valid Active Step
 
-Accept or revise `docs/blueprints/0026_servicecatalog_postgres_persistence_slice.md`.
+Create and accept the next ServiceCatalog runtime/capability blueprint.
+
+The next blueprint must own ServiceCatalog HTTP transport, route registration, request/response presenters, permission seed rows, capability seed rows, route capability manifest updates, and disabled-capability proof before protected ServiceCatalog routes are registered.
 
 ## Estimated Scope Progress Percentage
 
 Docs scalability and blueprint cleanup scope: pending proof.
 
-Laravel-to-Go transition: unchanged at 22%.
+Laravel-to-Go transition: unchanged by docs cleanup. Current active ledger estimate is 25%.
 
 ## Estimated Context-Window Status
 
