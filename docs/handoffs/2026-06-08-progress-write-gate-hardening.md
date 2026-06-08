@@ -59,7 +59,39 @@ GitHub branches, commits, pull requests, issues, labels, reviewers, merges, refs
 
 ## PROOF
 
-Pending final proof in this session.
+```text
+bash scripts/audit_ai_rules.sh
+```
+
+Result:
+
+```text
+[OK] text found in docs/templates/0122_web_ai_session_prompts.md :: Progress Write Gate
+[OK] text found in docs/workflow/0072_transition_progress_ledger_protocol.md :: Progress Update Gate
+[OK] text found in docs/templates/0122_web_ai_session_prompts.md :: locally implemented with proof; connector validation pending
+[OK] text found in docs/templates/0122_web_ai_session_prompts.md :: Local proof and remote connector proof are not conflated
+[OK] text found in docs/templates/0122_web_ai_session_prompts.md :: Git mutation instructions are absent unless the owner explicitly requested Git operations
+[OK] text found in docs/templates/0122_web_ai_session_prompts.md :: NEXT does not skip required progress ledger or handoff updates
+[PASS] AI rules audit passed
+```
+
+```text
+make verify
+```
+
+Result:
+
+```text
+[PASS] go test ./...
+[PASS] go vet audit
+[PASS] format audit
+[PASS] AI rules audit
+[PASS] file size audit
+[PASS] hexagonal import audit
+[PASS] route capability audit
+[PASS] security gosec audit
+[PASS] aggregate audit passed
+```
 
 ## GAP
 
@@ -68,7 +100,7 @@ Pending final proof in this session.
 
 ## PROGRESS
 
-Workflow guardrail hardening scope: pending proof.
+Workflow guardrail hardening scope: 100%.
 
 Laravel-to-Go implementation progress: unchanged.
 
