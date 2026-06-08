@@ -86,11 +86,10 @@ Protected POS CRUD implementation must wait for accepted domain contracts, POS P
 | Stage 2 | PostgreSQL target baseline for POS domains | Not started | 0% | No accepted POS PostgreSQL migration baseline proof yet |
 | Stage 3 | API foundation and capability control | Closed | 100% | Auth/session foundation exists; capability contracts pass tests; PostgreSQL capability migration is applied; PostgreSQL adapter integration tests pass; runtime capability middleware tests pass; protected route seed migration exists; admin HTTP surface implementation and full `make verify` proof pass; route-to-capability audit script exists and is wired into `make verify`; route-level disabled protected endpoint proof passes for current protected route capability keys; final closeout proof passed on 2026-06-08 |
 | Stage 4 | Cross-cutting modules | Not started | 0% | No audit/language/notification/idempotency transition implementation proof yet |
-| Business Phase 1 | Service catalog and product catalog | Partial | 25% | ServiceCatalog domain/usecase slice and PostgreSQL persistence slice are implemented with proof; ServiceCatalog HTTP/capability integration and ProductCatalog are not implemented |
-| Overall Laravel-to-Go transition | POS API migration | Early foundation | 25% | Docs, auth debug lane, full verify gate, capability foundation, and ServiceCatalog domain/usecase plus PostgreSQL persistence implementation proof exist; POS HTTP business endpoints and ProductCatalog are not implemented |
+| Business Phase 1 | Service catalog and product catalog | Partial | 35% | ServiceCatalog domain/usecase, PostgreSQL persistence, and runtime/capability slice have local proof; ProductCatalog is not implemented |
+| Overall Laravel-to-Go transition | POS API migration | Early foundation | 30% | Docs, auth debug lane, full verify gate, capability foundation, and ServiceCatalog domain/usecase, PostgreSQL persistence, and runtime/capability local proof exist; ProductCatalog and broader POS APIs are not implemented |
 
 ## Current State Summary
-
 - Capability-control foundation is closed with proof.
 - ServiceCatalog domain contract is accepted.
 - ServiceCatalog slice 1 domain, ports, usecase contracts, and unit tests are implemented with proof.
@@ -99,9 +98,11 @@ Protected POS CRUD implementation must wait for accepted domain contracts, POS P
 - Detailed completed-work history is archived in `docs/evidence/0005_laravel_to_go_transition_history_2026_06_08.md`.
 - ServiceCatalog PostgreSQL persistence slice is implemented and closed with proof.
 - ServiceCatalog runtime/capability blueprint 0027 is accepted as a plan; implementation remains 0%.
+- ServiceCatalog runtime/capability slice 0027 is locally implemented with proof.
+- ServiceCatalog HTTP transport, route registration, request/response presenters, authorization/capability wiring, route capability manifest coverage, audit coverage, and capability/permission seed migration 0010 have local proof.
+- Migration `0010_seed_service_catalog_permissions_capabilities.up.sql` is applied in local database proof.
 
 ## Open Gaps
-
 - Full Laravel source inventory is incomplete for many business domains.
 - Laravel alter, foreign key, index, timestamp, and seed migrations are not fully inventoried.
 - Product duplicate policy still needs an owner decision before final PostgreSQL indexes.
@@ -114,19 +115,17 @@ Protected POS CRUD implementation must wait for accepted domain contracts, POS P
 - No POS domain PostgreSQL baseline has been accepted.
 - ServiceCatalog domain contract is accepted.
 - ServiceCatalog implementation slice 1 plan is accepted and implemented with proof.
-- ServiceCatalog HTTP transport, route registration, request/response presenters, authorization/capability wiring, and capability seeds are not implemented.
-- ServiceCatalog capability seed migration is deferred, but must be owned by a later accepted runtime/capability blueprint before any ServiceCatalog protected HTTP route registration.
 - ProductCatalog domain contract has not been accepted yet.
 - No `productcatalog` Go business module has implementation proof.
+- ServiceCatalog runtime/capability implementation has local proof, but connector validation is pending until the implementation commit is visible through GitHub.
 
 ## Next Valid Active Step
 
-Implement the accepted ServiceCatalog runtime/capability slice.
+Validate the ServiceCatalog runtime/capability implementation through GitHub connector after owner publishes local changes.
 
-- Candidate accepted scope: ServiceCatalog HTTP transport, route registration, request/response presenters, permission seed rows, capability seed rows, route capability manifest updates, and disabled-capability proof.
-- Do not implement ProductCatalog or UI in this slice.
-- Do not register protected ServiceCatalog HTTP routes before permission seeds, capability seeds, and route capability manifest coverage are included in the accepted blueprint.
-- ProductCatalog remains blocked until its own accepted domain contract and duplicate policy decision exist.
+- Do not start ProductCatalog until connector validation confirms the ServiceCatalog runtime/capability implementation and closeout docs.
+- Do not start a new runtime slice while local proof is not reflected in repository facts.
+
 ## Handoff Requirement
 
 Any Codex or web AI session that changes Laravel-to-Go transition docs, capability foundation, quality gates, or POS domain implementation must update this ledger or explicitly state why the ledger is unchanged.

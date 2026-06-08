@@ -63,7 +63,7 @@ Local aggregate proof:
 
 ## GAP
 
-- Remote connector validation is pending until the implementation commit is visible on GitHub.
+- Connector validation is pending until the implementation changes are visible through GitHub.
 - Handler package currently has no dedicated handler unit tests beyond aggregate compile/audit proof.
 - ProductCatalog remains unstarted and blocked by its own accepted domain contract and owner decisions.
 
@@ -79,5 +79,4 @@ Overall Laravel-to-Go transition: 30%.
 
 Execution channel: Web AI connector validation.
 
-Validate the pushed implementation commit through GitHub connector before closing blueprint 0027 or starting ProductCatalog.
-
+Validate the implementation through GitHub connector before closing blueprint 0027 or starting ProductCatalog.
