@@ -26,6 +26,15 @@ Every handoff must include:
 - estimated scope progress percentage;
 - estimated context-window status.
 
+Durable progress handoffs must also include explicit sections or fields named:
+
+- `FACT`;
+- `PROOF`;
+- `GAP`;
+- `PROGRESS`;
+- `NEXT`;
+- `CONTEXT WINDOW STATUS`.
+
 If the handoff recommends a next AI session, it must also include:
 
 - target agent for the next session;
@@ -65,12 +74,21 @@ Create or update a handoff without waiting for the owner to repeat the request w
 
 - the session is near context limit;
 - a long-running scope has changed files, evidence, blueprint, or decisions;
+- durable implementation proof changes project status;
 - work moves from Codex to web AI or from web AI to Codex;
 - a model switch is likely;
 - the owner asks to pause;
 - the active step ends with open GAP items that the next session must know.
 
 If the session is small and no durable decision, file change, or evidence was created, a handoff is optional.
+
+When local proof exists but connector validation is missing, the handoff status must say:
+
+```text
+locally implemented with proof; connector validation pending
+```
+
+Do not advance `NEXT` past required ledger or handoff updates after durable proof.
 
 ## Cascading Documentation Rule
 
@@ -121,6 +139,8 @@ The receiving AI must:
 - Do not treat `OPTIONAL HANDOFF TEXT FOR CODEX` as a harmless extra section.
 - Do not include extra Codex handoff text unless the owner requested Codex.
 - Do not leave a handoff or NEXT section without exactly one next execution channel: owner/local terminal, Web AI, Terminal Codex, or explicit collaboration packet.
+- Do not let `NEXT` skip required progress ledger or handoff updates.
+- Do not conflate local proof with remote connector validation.
 - Do not use collaboration mode unless it says the owner explicitly requested it.
 - Do not send only code files without rules and proof requirements.
 - Do not let archive docs override active blueprint.
