@@ -25,6 +25,8 @@ Progress must be tied to evidence.
 - Local proof and remote connector proof must be separated.
 - Remote validation must not be claimed from local terminal output.
 - Do not use "closed", "complete", "done", or "ready" until every acceptance gate and repository fact is proven.
+- Web AI file update requests require `COMMAND PLAN FOR OWNER / LOCAL TERMINAL` when exact mutation permission is absent.
+- Paste-ready text must not replace the command plan unless the owner explicitly asks for draft-only text.
 
 If local proof exists but connector validation is missing, use this status wording:
 
