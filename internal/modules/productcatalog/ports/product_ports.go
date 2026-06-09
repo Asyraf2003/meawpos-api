@@ -3,6 +3,7 @@ package ports
 import (
 	"context"
 	"errors"
+	"time"
 
 	"pos-go/internal/modules/productcatalog/domain"
 )
@@ -21,7 +22,28 @@ type ProductLookupQuery struct{}
 
 type ProductLookupItem struct{}
 
-type ProductVersionRecord struct{}
+type ProductVersionRecord struct {
+	ProductID        string
+	RevisionNo       int
+	EventName        string
+	ChangedByActorID string
+	ChangeReason     string
+	ChangedAt        time.Time
+}
+
+type ProductAuditRecord struct {
+	AggregateID string
+	EventName   string
+	Operation   string
+	ActorID     string
+	Reason      string
+	OccurredAt  time.Time
+	RevisionNo  int
+}
+
+type ProductAuditRecorder interface {
+	RecordProductAudit(ctx context.Context, record ProductAuditRecord) error
+}
 
 type ProductDuplicateCandidate struct {
 	Code            *string
