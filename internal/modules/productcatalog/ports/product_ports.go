@@ -23,7 +23,12 @@ type ProductLookupItem struct{}
 
 type ProductVersionRecord struct{}
 
-type ProductDuplicateCandidate struct{}
+type ProductDuplicateCandidate struct {
+	Code            *string
+	NormalizedName  string
+	NormalizedBrand string
+	Size            *int
+}
 
 type ProductRepository interface {
 	Create(ctx context.Context, product *domain.Product) error

@@ -84,7 +84,12 @@ func (uc *CreateProduct) Execute(
 		return CreateProductResult{}, err
 	}
 
-	if err := uc.duplicateChecker.CheckCreateDuplicate(ctx, ports.ProductDuplicateCandidate{}); err != nil {
+	if err := uc.duplicateChecker.CheckCreateDuplicate(ctx, ports.ProductDuplicateCandidate{
+		Code:            product.Code(),
+		NormalizedName:  product.NormalizedName(),
+		NormalizedBrand: product.NormalizedBrand(),
+		Size:            product.Size(),
+	}); err != nil {
 		return CreateProductResult{}, err
 	}
 
