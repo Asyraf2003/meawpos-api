@@ -471,6 +471,86 @@ product_restored
 
 Each version snapshot must include the product state and revision number.
 
+## AUDIT PERFORMANCE AND PAYLOAD CONTRACT
+
+Audit policy:
+
+```text
+transactional audit intent/outbox in the hot path; full audit telemetry deferred
+```
+
+ProductCatalog create/update/soft-delete/restore must not perform full telemetry, reporting projection, notification, external logging, or heavy audit enrichment inside the request hot path.
+
+The request hot path must only write minimal audit intent/outbox data inside the same transaction as the product row and product version row.
+
+Required hot-path transaction:
+
+```text
+begin transaction
+write products
+write product_versions
+write audit_outbox or audit_intents minimal record
+commit transaction
+return API response
+```
+
+Forbidden hot-path audit behavior:
+
+```text
+external network logging
+full telemetry export
+dashboard/report generation
+notification dispatch
+untracked goroutine audit writes
+slow audit enrichment
+```
+
+Full audit materialization may run later through a background worker that reads audit outbox/intent records.
+
+Audit intent/outbox minimal fields:
+
+```text
+id
+bounded_context = product_catalog
+aggregate_type = product
+aggregate_id
+event_name
+operation
+actor_id
+actor_role
+occurred_at
+reason nullable
+source_channel
+revision_no
+before_snapshot nullable
+after_snapshot nullable
+metadata_json
+status = pending
+created_at
+```
+
+Audit meaning:
+
+- `actor_id` answers who performed the action.
+- `actor_role` answers which role/authority performed the action.
+- `occurred_at` answers when the action happened and must be server-owned.
+- `event_name` / `operation` answers what action happened.
+- `before_snapshot` records relevant data before the action when available.
+- `after_snapshot` records relevant data after the action when available.
+- `reason` records why the action happened when supplied.
+- `metadata_json` may include request id, correlation id, product version id, and compact domain-specific context.
+
+Snapshot policy:
+
+- create may have `before_snapshot = null` and `after_snapshot = created product snapshot`.
+- update should include both before and after product snapshots or references to before/after versions.
+- soft delete should include before active snapshot and after deleted snapshot.
+- restore should include before deleted snapshot and after restored active snapshot.
+
+Performance rule:
+
+The audit outbox/intent write must be bounded and local to PostgreSQL. The API response must not wait for full audit enrichment. This preserves the <1 second API mission while keeping audit evidence durable.
+
 ## TEST MATRIX
 
 Domain tests:
