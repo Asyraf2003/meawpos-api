@@ -15,7 +15,7 @@ help:
 	'  make audit-ai-rules    - run AI rules audit' \
 	'  make audit-file-size   - run file size audit' \
 	'  make audit-hex         - run strict hexagonal import-boundary audit' \
-		'  make audit-route-capabilities - run protected route capability coverage audit' \
+	'  make audit-route-capabilities - run protected route capability coverage audit' \
 	'  make security-gosec    - run gosec security audit' \
 	'  make audit-all         - run test + all audit scripts' \
 	'  make screening         - alias to audit-all' \
