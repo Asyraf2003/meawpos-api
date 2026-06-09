@@ -64,5 +64,9 @@ func (uc *UpdateProduct) Execute(
 		return UpdateProductResult{}, err
 	}
 
+	if err := uc.repository.Update(ctx, candidate); err != nil {
+		return UpdateProductResult{}, err
+	}
+
 	return UpdateProductResult{}, nil
 }
