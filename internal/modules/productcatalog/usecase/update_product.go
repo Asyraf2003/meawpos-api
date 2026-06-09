@@ -68,5 +68,10 @@ func (uc *UpdateProduct) Execute(
 		return UpdateProductResult{}, err
 	}
 
+	now := uc.now()
+	if _, err := uc.recordUpdateProductVersion(ctx, candidate.ID(), cmd, now); err != nil {
+		return UpdateProductResult{}, err
+	}
+
 	return UpdateProductResult{}, nil
 }
