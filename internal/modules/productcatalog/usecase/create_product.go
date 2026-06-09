@@ -75,7 +75,12 @@ func (uc *CreateProduct) Execute(
 		return CreateProductResult{}, err
 	}
 
-	return createProductResultFromDomain(product, uc.now()), nil
+	now := uc.now()
+	if err := uc.recordCreateProductSideEffects(ctx, product, cmd, now); err != nil {
+		return CreateProductResult{}, err
+	}
+
+	return createProductResultFromDomain(product, now), nil
 }
 
 func createProductResultFromDomain(product *domain.Product, now time.Time) CreateProductResult {
