@@ -39,6 +39,7 @@ Related handoffs:
 docs/handoffs/2026-06-06-auth-runtime-local-dev.md
 docs/handoffs/2026-06-08-servicecatalog-runtime-capability-blueprint-accepted.md
 docs/handoffs/2026-06-08-servicecatalog-runtime-capability-implementation.md
+docs/handoffs/2026-06-09-productcatalog-domain-slice-1.md
 docs/archive/handoffs-closed/README.md
 ```
 
