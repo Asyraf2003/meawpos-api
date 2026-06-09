@@ -10,6 +10,7 @@ import (
 type fakeUpdateProductRepository struct {
 	product *domain.Product
 	updated *domain.Product
+	err     error
 }
 
 func (f *fakeUpdateProductRepository) Create(_ context.Context, _ *domain.Product) error {
@@ -19,7 +20,7 @@ func (f *fakeUpdateProductRepository) Create(_ context.Context, _ *domain.Produc
 func (f *fakeUpdateProductRepository) Update(_ context.Context, product *domain.Product) error {
 	f.updated = product
 
-	return nil
+	return f.err
 }
 
 func (f *fakeUpdateProductRepository) FindByID(
