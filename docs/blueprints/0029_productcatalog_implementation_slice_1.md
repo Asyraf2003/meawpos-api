@@ -2,7 +2,7 @@
 
 ## Status
 
-Proposed.
+Accepted.
 
 ## Date
 
@@ -291,9 +291,31 @@ Expected aggregate proof:
 - Inventory stock adjustment.
 - Inventory stock reversal.
 
+## ACCEPTANCE
+
+Accepted on: 2026-06-09
+
+Accepted scope:
+
+```text
+ProductCatalog implementation slice 1:
+domain, ports, usecase contract, and unit tests only.
+```
+
+Accepted constraints:
+
+```text
+Do not implement PostgreSQL persistence in this slice.
+Do not create database migrations in this slice.
+Do not implement Echo routes in this slice.
+Do not create capability seed migrations in this slice.
+Do not implement inventory stock adjustment in this slice.
+Preserve duplicate policy Option A from docs/blueprints/0028_productcatalog_domain_contract.md.
+```
+
 ## NEXT ACTIVE STEP
 
-Owner/local terminal may implement ProductCatalog slice 1 only after this blueprint is accepted.
+ProductCatalog slice 1 blueprint is accepted.
 
 First implementation step after acceptance:
 
