@@ -17,6 +17,8 @@ func TestCreateProductSuccessPersistsProductAndChecksDuplicateCandidate(t *testi
 	uc := NewCreateProduct(
 		repository,
 		duplicateChecker,
+		&fakeProductVersionRepository{},
+		&fakeProductAuditRecorder{},
 		fakeProductIDGenerator{id: "prod_001"},
 		func() time.Time { return fixedNow },
 	)
@@ -76,6 +78,8 @@ func TestCreateProductReturnsDuplicateCheckerError(t *testing.T) {
 	uc := NewCreateProduct(
 		&fakeProductRepository{},
 		&fakeProductDuplicateChecker{err: duplicateErr},
+		&fakeProductVersionRepository{},
+		&fakeProductAuditRecorder{},
 		fakeProductIDGenerator{id: "prod_002"},
 		time.Now,
 	)

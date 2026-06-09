@@ -62,3 +62,38 @@ func (f *fakeProductDuplicateChecker) CheckUpdateDuplicate(
 ) error {
 	return nil
 }
+
+type fakeProductVersionRepository struct {
+	appended []ports.ProductVersionRecord
+	err      error
+}
+
+func (f *fakeProductVersionRepository) Append(
+	_ context.Context,
+	version ports.ProductVersionRecord,
+) error {
+	f.appended = append(f.appended, version)
+
+	return f.err
+}
+
+func (f *fakeProductVersionRepository) ListByProductID(
+	_ context.Context,
+	_ string,
+) ([]ports.ProductVersionRecord, error) {
+	return nil, nil
+}
+
+type fakeProductAuditRecorder struct {
+	records []ports.ProductAuditRecord
+	err     error
+}
+
+func (f *fakeProductAuditRecorder) RecordProductAudit(
+	_ context.Context,
+	record ports.ProductAuditRecord,
+) error {
+	f.records = append(f.records, record)
+
+	return f.err
+}
