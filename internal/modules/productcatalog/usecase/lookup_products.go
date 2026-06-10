@@ -20,7 +20,7 @@ func (uc *LookupProducts) Execute(
 	ctx context.Context,
 	query LookupProductsQuery,
 ) (LookupProductsResult, error) {
-	_, err := uc.reader.Lookup(ctx, ports.ProductLookupQuery{
+	items, err := uc.reader.Lookup(ctx, ports.ProductLookupQuery{
 		Query:          query.Query,
 		Limit:          query.Limit,
 		IncludeDeleted: query.IncludeDeleted,
@@ -29,5 +29,20 @@ func (uc *LookupProducts) Execute(
 		return LookupProductsResult{}, err
 	}
 
-	return LookupProductsResult{}, nil
+	result := LookupProductsResult{
+		Items: make([]LookupProductsItem, 0, len(items)),
+	}
+	for _, item := range items {
+		result.Items = append(result.Items, LookupProductsItem{
+			ID:              item.ID,
+			Code:            item.Code,
+			Name:            item.Name,
+			Brand:           item.Brand,
+			Size:            item.Size,
+			SalePriceRupiah: item.SalePriceRupiah,
+			Status:          item.Status,
+		})
+	}
+
+	return result, nil
 }

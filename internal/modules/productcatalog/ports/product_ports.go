@@ -37,7 +37,15 @@ type ProductLookupQuery struct {
 	IncludeDeleted bool
 }
 
-type ProductLookupItem struct{}
+type ProductLookupItem struct {
+	ID              string
+	Code            *string
+	Name            string
+	Brand           string
+	Size            *int
+	SalePriceRupiah int64
+	Status          string
+}
 
 type ProductVersionRecord struct {
 	ProductID        string

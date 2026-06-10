@@ -24,6 +24,7 @@ func TestLookupProductsPropagatesReaderLookupError(t *testing.T) {
 
 type lookupProductsReaderDouble struct {
 	capturedQuery ports.ProductLookupQuery
+	lookupItems   []ports.ProductLookupItem
 	lookupErr     error
 }
 
@@ -46,6 +47,9 @@ func (d *lookupProductsReaderDouble) Lookup(
 	query ports.ProductLookupQuery,
 ) ([]ports.ProductLookupItem, error) {
 	d.capturedQuery = query
+	if d.lookupErr != nil {
+		return nil, d.lookupErr
+	}
 
-	return nil, d.lookupErr
+	return d.lookupItems, nil
 }

@@ -41,7 +41,7 @@ Implemented skeleton only:
 - LookupProducts usecase type with ports.ProductReader dependency
 - NewLookupProducts
 
-LookupProducts reader error propagation is implemented and remote-visible through GitHub connector.
+LookupProducts reader error propagation and query forwarding are implemented and remote-visible through GitHub connector.
 
 Focused proof passed:
 
@@ -57,7 +57,7 @@ wc -l internal/modules/productcatalog/usecase/lookup_products*.go
 
 ## GAP
 
-LookupProducts query forwarding, success mapping, and empty-list behavior are not implemented or behavior-tested yet.
+LookupProducts success mapping and empty-list behavior are not implemented or behavior-tested yet.
 
 Remaining ProductCatalog slice 1 read-query work:
 
@@ -79,7 +79,7 @@ Progress ledger was updated after focused proof:
 ```text
 Business Phase 1: 40%
 Overall Laravel-to-Go transition: 31%
-LookupProducts contract, constructor/skeleton, and reader error propagation are remote-visible through GitHub connector with focused proof.
+LookupProducts contract, constructor/skeleton, reader error propagation, and query forwarding are remote-visible through GitHub connector with focused proof.
 ```
 
 ## NEXT
@@ -110,7 +110,7 @@ GetProductDetail usecase behavior: 100% locally proven and connector-validated.
 
 ListProducts usecase behavior: 100% locally proven and connector-visible.
 
-LookupProducts reader error propagation: 100% locally proven and connector-validated.
+LookupProducts query forwarding: 100% locally proven and connector-validated.
 
 ProductCatalog slice 1 overall: 99% locally proven.
 
@@ -120,7 +120,7 @@ Overall transition: 31%.
 
 ## CONTEXT WINDOW STATUS
 
-Enough context remains to continue ProductCatalog slice 1 into LookupProducts query-forwarding behavior.
+Enough context remains to continue ProductCatalog slice 1 into LookupProducts success mapping behavior.
 
 Forbidden scope remains out:
 
