@@ -56,6 +56,10 @@ func (uc *SoftDeleteProduct) Execute(
 		return SoftDeleteProductResult{}, err
 	}
 
+	if err := uc.recordSoftDeleteProductAudit(ctx, product.ID(), cmd, deletedAt, revisionNo); err != nil {
+		return SoftDeleteProductResult{}, err
+	}
+
 	return SoftDeleteProductResult{
 		ID:         product.ID(),
 		Status:     string(product.Status()),
