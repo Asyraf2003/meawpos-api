@@ -70,3 +70,7 @@ func TestGetProductDetailReturnsProductDetail(t *testing.T) {
 		t.Fatalf("Status = %q, want active", result.Status)
 	}
 }
+
+func stringPtr(value string) *string {
+	return &value
+}
