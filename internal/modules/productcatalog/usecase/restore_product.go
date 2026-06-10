@@ -51,6 +51,10 @@ func (uc *RestoreProduct) Execute(
 		return RestoreProductResult{}, err
 	}
 
+	if err := uc.recordRestoreProductAudit(ctx, product.ID(), cmd, restoredAt, revisionNo); err != nil {
+		return RestoreProductResult{}, err
+	}
+
 	return RestoreProductResult{
 		ID:         product.ID(),
 		Status:     string(product.Status()),
