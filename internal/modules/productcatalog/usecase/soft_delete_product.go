@@ -47,6 +47,10 @@ func (uc *SoftDeleteProduct) Execute(
 		return SoftDeleteProductResult{}, err
 	}
 
+	if err := uc.repository.Update(ctx, product); err != nil {
+		return SoftDeleteProductResult{}, err
+	}
+
 	return SoftDeleteProductResult{
 		ID:        product.ID(),
 		Status:    string(product.Status()),
