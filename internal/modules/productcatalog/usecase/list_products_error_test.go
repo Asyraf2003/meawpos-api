@@ -23,7 +23,8 @@ func TestListProductsPropagatesReaderListError(t *testing.T) {
 }
 
 type listProductsReaderDouble struct {
-	listErr error
+	listErr       error
+	capturedQuery ports.ProductListQuery
 }
 
 func (d *listProductsReaderDouble) GetByID(
@@ -35,8 +36,10 @@ func (d *listProductsReaderDouble) GetByID(
 
 func (d *listProductsReaderDouble) List(
 	_ context.Context,
-	_ ports.ProductListQuery,
+	query ports.ProductListQuery,
 ) ([]ports.ProductListItem, error) {
+	d.capturedQuery = query
+
 	return nil, d.listErr
 }
 

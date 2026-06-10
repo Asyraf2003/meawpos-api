@@ -14,7 +14,12 @@ var (
 	ErrDuplicateProductIdentity = errors.New("duplicate product identity")
 )
 
-type ProductListQuery struct{}
+type ProductListQuery struct {
+	Search  string
+	Status  string
+	Page    int
+	PerPage int
+}
 
 type ProductListItem struct{}
 

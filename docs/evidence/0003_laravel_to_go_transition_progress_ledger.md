@@ -105,7 +105,7 @@ Protected POS CRUD implementation must wait for accepted domain contracts, POS P
 - ServiceCatalog runtime/capability implementation is remote-visible through GitHub connector with local proof; focused handler and disabled-capability proof are remote-visible through GitHub connector with local proof; connector validation passed for the latest closeout proof files.
 - ProductCatalog domain contract blueprint `docs/blueprints/0028_productcatalog_domain_contract.md` is accepted locally with Option A duplicate policy and `make verify` proof; connector validation pending.
 - ProductCatalog implementation slice 1 blueprint `docs/blueprints/0029_productcatalog_implementation_slice_1.md` is accepted locally with `make verify` proof; connector validation pending.
-- ProductCatalog domain package, ports, CreateProduct, UpdateProduct, SoftDeleteProduct, RestoreProduct, and GetProductDetail are remote-visible through GitHub connector with focused `go test ./internal/modules/productcatalog/...` proof and aggregate `make verify` proof; ListProducts contract, constructor/skeleton, and reader error propagation are locally implemented with focused `go test ./internal/modules/productcatalog/...` proof and aggregate `make verify` proof; connector validation pending for the latest ListProducts behavior files.
+- ProductCatalog domain package, ports, CreateProduct, UpdateProduct, SoftDeleteProduct, RestoreProduct, GetProductDetail, and ListProducts reader error propagation are remote-visible through GitHub connector with focused `go test ./internal/modules/productcatalog/...` proof and aggregate `make verify` proof.
 
 ## Next Valid Active Step
 
