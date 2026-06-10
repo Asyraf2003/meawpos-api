@@ -1,4 +1,4 @@
-# ProductCatalog ListProducts Skeleton Progress Handoff
+# ProductCatalog ListProducts Progress Handoff
 
 ## Date
 
@@ -24,24 +24,27 @@ internal/modules/productcatalog/usecase
 
 ## FACT
 
-ListProducts contract and constructor/skeleton are now locally implemented.
+ListProducts contract, constructor/skeleton, and first behavior are now locally implemented.
 
 Implemented files:
 
 ```text
 internal/modules/productcatalog/usecase/list_products_contract.go
 internal/modules/productcatalog/usecase/list_products.go
+internal/modules/productcatalog/usecase/list_products_error_test.go
 ```
 
-Implemented skeleton only:
+Implemented:
 
 - `ListProductsQuery`
 - `ListProductsResult`
 - `ListProductsItem`
 - `ListProducts` usecase type with `ports.ProductReader` dependency
 - `NewListProducts`
+- `ListProducts.Execute` calls `ProductReader.List`
+- `ListProducts.Execute` propagates `ProductReader.List` errors
 
-No ListProducts behavior has been implemented yet.
+Success mapping is not implemented yet.
 
 Focused proof passed:
 
@@ -52,7 +55,20 @@ ok  	pos-go/internal/modules/productcatalog/domain	(cached)
 ok  	pos-go/internal/modules/productcatalog/usecase	0.004s
 ```
 
-The first non-escalated test attempt failed because the sandbox could not read the normal Go build cache under `/home/asyraf/.cache/go-build`; rerunning the same command with approved `go test` access passed.
+Expected first failing proof occurred before implementation:
+
+```text
+internal/modules/productcatalog/usecase/list_products_error_test.go:18:20: usecase.Execute undefined (type *ListProducts has no field or method Execute)
+```
+
+Line-count checkpoint:
+
+```text
+  29 internal/modules/productcatalog/usecase/list_products.go
+  22 internal/modules/productcatalog/usecase/list_products_contract.go
+  48 internal/modules/productcatalog/usecase/list_products_error_test.go
+  99 total
+```
 
 Latest aggregate local proof passed:
 
@@ -73,30 +89,32 @@ Gosec summary:
 ```text
 Gosec  : dev
 Files  : 156
-Lines  : 6673
+Lines  : 6689
 Nosec  : 0
 Issues : 0
 ```
 
 ## GAP
 
-ListProducts behavior is not implemented or behavior-tested yet.
+ListProducts success mapping is not implemented or behavior-tested yet.
+
+ListProducts query forwarding is not behavior-tested yet.
 
 Remaining ProductCatalog slice 1 read-query work:
 
-- Add ListProducts behavior one failing test at a time.
+- Add remaining ListProducts behavior one failing test at a time.
 - Add LookupProducts contract/behavior later.
 - Add ListProductVersions contract/behavior later.
 
 ## DECISION
 
-Stop ListProducts work at contract and constructor/skeleton only until the next behavior-test step.
+Stop ListProducts work at reader error propagation only until the next behavior-test step.
 
 Do not start PostgreSQL adapter, migrations, Echo HTTP transport, presenters, route registration, capability seed, inventory stock mutation, UI, or ProductCatalog runtime HTTP slice.
 
 ## PROOF
 
-Focused ProductCatalog proof passed after ListProducts skeleton creation.
+Focused ProductCatalog proof passed after ListProducts error propagation implementation.
 
 Aggregate proof passed after ledger and handoff update.
 
@@ -105,7 +123,7 @@ Progress ledger was updated after focused proof:
 ```text
 Business Phase 1: 39%
 Overall Laravel-to-Go transition: 31%
-ListProducts contract and constructor/skeleton have local focused proof only.
+ListProducts contract, constructor/skeleton, and reader error propagation have local focused and aggregate proof.
 ```
 
 ## NEXT
@@ -114,7 +132,11 @@ Execution channel: owner/local terminal.
 
 Next valid implementation step:
 
-Add the first failing ListProducts behavior test only.
+Add the next failing ListProducts behavior test only.
+
+Recommended next behavior:
+
+Prove `ListProducts` forwards `ListProductsQuery` into `ports.ProductListQuery` for `ProductReader.List`.
 
 ## PROGRESS
 
@@ -132,7 +154,9 @@ RestoreProduct usecase behavior: 100% locally proven and connector-validated.
 
 GetProductDetail usecase behavior: 100% locally proven and connector-validated.
 
-ListProducts skeleton: 100% locally compile-proven.
+ListProducts error propagation: 100% locally proven.
+
+ListProducts query forwarding and success mapping: not started.
 
 ProductCatalog slice 1 overall: 99% locally proven.
 
@@ -142,7 +166,7 @@ Overall transition: 31%.
 
 ## CONTEXT WINDOW STATUS
 
-Enough context remains to continue ProductCatalog slice 1 into the first ListProducts behavior test.
+Enough context remains to continue ProductCatalog slice 1 into the next ListProducts behavior test.
 
 Forbidden scope remains out:
 
