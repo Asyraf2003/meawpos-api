@@ -1,6 +1,10 @@
 package usecase
 
-import "pos-go/internal/modules/productcatalog/ports"
+import (
+	"context"
+
+	"pos-go/internal/modules/productcatalog/ports"
+)
 
 type LookupProducts struct {
 	reader ports.ProductReader
@@ -10,4 +14,16 @@ func NewLookupProducts(reader ports.ProductReader) *LookupProducts {
 	return &LookupProducts{
 		reader: reader,
 	}
+}
+
+func (uc *LookupProducts) Execute(
+	ctx context.Context,
+	_ LookupProductsQuery,
+) (LookupProductsResult, error) {
+	_, err := uc.reader.Lookup(ctx, ports.ProductLookupQuery{})
+	if err != nil {
+		return LookupProductsResult{}, err
+	}
+
+	return LookupProductsResult{}, nil
 }
