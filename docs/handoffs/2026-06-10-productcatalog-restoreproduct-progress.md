@@ -75,7 +75,7 @@ Issues : 0
 
 ## GAP
 
-RestoreProduct connector validation is pending until owner pushes local changes.
+RestoreProduct connector validation passed after owner pushed local changes.
 
 Remaining ProductCatalog slice 1 work:
 
@@ -102,7 +102,7 @@ Progress ledger was updated after aggregate proof:
 ```text
 Business Phase 1: 38%
 Overall Laravel-to-Go transition: 31%
-ProductCatalog domain, ports, CreateProduct, UpdateProduct, SoftDeleteProduct, and RestoreProduct are locally implemented with proof; RestoreProduct connector validation pending.
+ProductCatalog domain, ports, CreateProduct, UpdateProduct, SoftDeleteProduct, and RestoreProduct are remote-visible through GitHub connector with local proof.
 ```
 
 ## NEXT
@@ -129,13 +129,13 @@ RestoreProduct usecase behavior: 100% locally proven.
 
 ProductCatalog slice 1 overall: 99% locally proven.
 
-Business Phase 1: 38% ledger-visible after owner pushes.
+Business Phase 1: 38% ledger-visible and connector-validated.
 
-Overall transition: 31% ledger-visible after owner pushes.
+Overall transition: 31% ledger-visible and connector-validated.
 
 ## CONTEXT WINDOW STATUS
 
-Enough context remains to continue ProductCatalog slice 1 into GetProductDetail contract work after connector validation.
+Enough context remains to continue ProductCatalog slice 1 into GetProductDetail contract work after RestoreProduct connector validation.
 
 Forbidden scope remains out:
 
