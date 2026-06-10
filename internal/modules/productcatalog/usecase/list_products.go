@@ -18,9 +18,14 @@ func NewListProducts(reader ports.ProductReader) *ListProducts {
 
 func (uc *ListProducts) Execute(
 	ctx context.Context,
-	_ ListProductsQuery,
+	query ListProductsQuery,
 ) (ListProductsResult, error) {
-	_, err := uc.reader.List(ctx, ports.ProductListQuery{})
+	_, err := uc.reader.List(ctx, ports.ProductListQuery{
+		Search:  query.Search,
+		Status:  query.Status,
+		Page:    query.Page,
+		PerPage: query.PerPage,
+	})
 	if err != nil {
 		return ListProductsResult{}, err
 	}
