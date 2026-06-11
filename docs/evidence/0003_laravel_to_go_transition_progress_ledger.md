@@ -114,11 +114,11 @@ Protected POS CRUD implementation must wait for accepted domain contracts, POS P
 - ProductCatalog domain package, ports, CreateProduct, UpdateProduct, SoftDeleteProduct, RestoreProduct, GetProductDetail, ListProducts, LookupProducts, and ListProductVersions behavior are locally proven with focused `go test ./internal/modules/productcatalog/...` proof and aggregate `make verify` proof; connector validation passed for the latest behavior checkpoint.
 - ProductCatalog ListProducts query forwarding, success item mapping, and empty-list behavior are remote-visible through GitHub connector with focused `go test ./internal/modules/productcatalog/...` proof and aggregate `make verify` proof.
 - ProductCatalog implementation slice 1 is closed after ListProductVersions behavior connector validation.
-- Proposed ProductCatalog PostgreSQL persistence blueprint exists at docs/blueprints/0030_productcatalog_postgres_persistence_slice.md; implementation has not started.
+- ProductCatalog PostgreSQL persistence blueprint `docs/blueprints/0030_productcatalog_postgres_persistence_slice.md` is accepted; implementation has not started. ProductCatalog PostgreSQL persistence blueprint includes performance and flexibility standards for CRUD, show, list, lookup, duplicate guard, and version-list query paths.
 
 ## Next Valid Active Step
 
-Review and accept or revise the proposed ProductCatalog PostgreSQL persistence slice blueprint before starting migrations or adapter implementation.
+Start ProductCatalog PostgreSQL persistence slice with migration-only implementation.
 
 - Do not start ProductCatalog PostgreSQL, Echo/runtime, migrations, capability seed, inventory mutation, or UI work in this slice.
 - Do not start a new runtime slice while local proof is not reflected in repository facts.
@@ -132,4 +132,4 @@ The same session must create or update a handoff when durable work was done.
 
 ## Context Window Status
 
-Current ledger update context status: updated after drafting the proposed ProductCatalog PostgreSQL persistence blueprint; implementation must wait for blueprint acceptance.
+Current ledger update context status: updated after accepting the ProductCatalog PostgreSQL persistence blueprint; next step is migration-only implementation.

@@ -2,7 +2,7 @@
 
 ## Status
 
-Proposed / pending acceptance.
+Accepted.
 
 ## Date
 
@@ -363,6 +363,45 @@ bounded max limit must remain usecase/adapter safe;
 
 deterministic order by normalized name, brand, size, and id unless a later blueprint changes it.
 
+## PERFORMANCE AND FLEXIBILITY STANDARD
+
+This slice must preserve fast admin CRUD, list, lookup, and show/read behavior without hardcoding runtime HTTP concerns.
+
+Performance rules:
+
+```text
+Create -> primary write plus active code uniqueness check must rely on indexed/unique paths.
+Update -> primary key lookup/write path must use products primary key.
+FindByID/GetByID/show -> primary key lookup must use products primary key.
+List active/default -> must be bounded by Page and PerPage and must filter deleted_at predictably.
+Lookup -> must be bounded by Limit and must not scan unbounded rows.
+Version list -> must use product_versions_product_changed_at_idx or product_versions_product_revision_unique-compatible ordering.
+Duplicate guard -> active kode_barang check must use products_kode_barang_unique.
+```
+
+Query-plan proof rule:
+
+Integration proof should include EXPLAIN or EXPLAIN ANALYZE notes for list, lookup, show/get-by-id, and duplicate guard queries when a local database is available.
+
+No fake SLA rule:
+
+Do not claim sub-second or millisecond performance without local database proof.
+
+Flexibility rules:
+
+Keep ProductListQuery and ProductLookupQuery adapter translation centralized.
+Do not spread SQL filter construction across usecase or HTTP layers.
+Keep future sort/filter additions localized to product_repository_query.go.
+Do not add inventory projection joins in this slice.
+Do not over-index speculative filters until a query exists and proof shows the need.
+
+Baseline acceptable behavior:
+
+CRUD and show must be index-backed.
+List and lookup must be bounded.
+Search behavior may start with normalized LIKE/ILIKE-compatible filtering, but trigram or full-text search must be deferred unless proof shows the current strategy is too slow.
+
+
 ## TRANSACTION POLICY
 
 This slice may use the existing platform/postgres transaction context pattern.
@@ -428,11 +467,21 @@ Aggregate proof:
 make verify
 ```
 
-Migration proof if local DB is available:
+Migration and query-plan proof if local DB is available:
 
 ```bash
 make db-up
 make db-status
+```
+
+Additional local DB proof should capture EXPLAIN or EXPLAIN ANALYZE for:
+
+```text
+products primary-key show/get-by-id
+products active list first page
+products lookup bounded search
+products active kode_barang duplicate guard
+product_versions list by product_id
 ```
 
 Expected migration status must include:
@@ -493,4 +542,4 @@ Inventory projection joins are out of scope and must not leak into product persi
 
 ## ACCEPTANCE RULE
 
-No implementation should start until this blueprint is accepted.
+This blueprint is accepted. Implementation must follow the documented step order and start with migration-only work.
