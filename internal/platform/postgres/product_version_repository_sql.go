@@ -16,38 +16,36 @@
 
 package postgres
 
-import (
-	"context"
-	"database/sql"
-
-	"pos-go/internal/modules/productcatalog/ports"
-
-	"github.com/google/uuid"
-)
-
-func (r *ProductRepository) Append(
-	ctx context.Context,
-	version ports.ProductVersionRecord,
-) error {
-	_, err := r.exec(ctx, productVersionInsertSQL(),
-		uuid.NewString(),
-		version.ProductID,
-		version.RevisionNo,
-		version.EventName,
-		nullableProductVersionText(version.ChangedByActorID),
-		nullableProductVersionText(version.ChangeReason),
-		version.ChangedAt,
-	)
-	return err
+func productVersionInsertSQL() string {
+	return `
+		INSERT INTO product_versions (
+			id,
+			product_id,
+			revision_no,
+			event_name,
+			changed_by_actor_id,
+			change_reason,
+			changed_at,
+			snapshot_json
+		)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, '{}'::jsonb)
+	`
 }
 
-func nullableProductVersionText(value string) sql.NullString {
-	if value == "" {
-		return sql.NullString{}
-	}
-
-	return sql.NullString{
-		String: value,
-		Valid:  true,
-	}
+func productVersionListSQL() string {
+	return `
+		SELECT
+			product_id,
+			revision_no,
+			event_name,
+			COALESCE(changed_by_actor_id, ''),
+			COALESCE(change_reason, ''),
+			changed_at
+		FROM product_versions
+		WHERE product_id = $1
+		ORDER BY
+			revision_no ASC,
+			changed_at ASC,
+			id ASC
+	`
 }

@@ -17,37 +17,30 @@
 package postgres
 
 import (
-	"context"
-	"database/sql"
-
 	"pos-go/internal/modules/productcatalog/ports"
 
-	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
 )
 
-func (r *ProductRepository) Append(
-	ctx context.Context,
-	version ports.ProductVersionRecord,
-) error {
-	_, err := r.exec(ctx, productVersionInsertSQL(),
-		uuid.NewString(),
-		version.ProductID,
-		version.RevisionNo,
-		version.EventName,
-		nullableProductVersionText(version.ChangedByActorID),
-		nullableProductVersionText(version.ChangeReason),
-		version.ChangedAt,
-	)
-	return err
-}
+func scanProductVersionRows(rows pgx.Rows) ([]ports.ProductVersionRecord, error) {
+	records := []ports.ProductVersionRecord{}
 
-func nullableProductVersionText(value string) sql.NullString {
-	if value == "" {
-		return sql.NullString{}
+	for rows.Next() {
+		var record ports.ProductVersionRecord
+		err := rows.Scan(
+			&record.ProductID,
+			&record.RevisionNo,
+			&record.EventName,
+			&record.ChangedByActorID,
+			&record.ChangeReason,
+			&record.ChangedAt,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		records = append(records, record)
 	}
 
-	return sql.NullString{
-		String: value,
-		Valid:  true,
-	}
+	return records, rows.Err()
 }

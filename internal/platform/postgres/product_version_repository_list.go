@@ -18,36 +18,19 @@ package postgres
 
 import (
 	"context"
-	"database/sql"
 
 	"pos-go/internal/modules/productcatalog/ports"
-
-	"github.com/google/uuid"
 )
 
-func (r *ProductRepository) Append(
+func (r *ProductRepository) ListByProductID(
 	ctx context.Context,
-	version ports.ProductVersionRecord,
-) error {
-	_, err := r.exec(ctx, productVersionInsertSQL(),
-		uuid.NewString(),
-		version.ProductID,
-		version.RevisionNo,
-		version.EventName,
-		nullableProductVersionText(version.ChangedByActorID),
-		nullableProductVersionText(version.ChangeReason),
-		version.ChangedAt,
-	)
-	return err
-}
-
-func nullableProductVersionText(value string) sql.NullString {
-	if value == "" {
-		return sql.NullString{}
+	productID string,
+) ([]ports.ProductVersionRecord, error) {
+	rows, err := r.query(ctx, productVersionListSQL(), productID)
+	if err != nil {
+		return nil, err
 	}
+	defer rows.Close()
 
-	return sql.NullString{
-		String: value,
-		Valid:  true,
-	}
+	return scanProductVersionRows(rows)
 }
