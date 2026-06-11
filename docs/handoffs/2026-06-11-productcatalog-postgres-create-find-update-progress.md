@@ -70,7 +70,7 @@ No EXPLAIN/query-plan proof exists yet.
 
 No ProductCatalog HTTP/runtime/capability/UI work has started.
 
-Aggregate make verify proof has not been provided for this checkpoint yet.
+Aggregate make verify proof passed for this checkpoint.
 
 ## DECISION
 
@@ -80,13 +80,7 @@ Do not start duplicate guard, reader list/lookup, version repository, EXPLAIN pr
 
 ## NEXT
 
-Run aggregate proof before starting the next repository behavior step:
-
-```text
-make verify
-```
-
-After aggregate proof passes, update or validate the ledger/handoff status, then choose the next blueprint-allowed repository behavior step.
+Choose the next blueprint-allowed ProductCatalog PostgreSQL repository behavior step.
 
 ## PROGRESS
 
@@ -102,9 +96,9 @@ Overall transition: 33%.
 
 ## CONTEXT WINDOW STATUS
 
-Enough context remains to run aggregate proof and then decide the next ProductCatalog PostgreSQL persistence step.
+Enough context remains to choose the next ProductCatalog PostgreSQL persistence step.
 
-Forbidden until aggregate proof and progress docs are validated:
+Forbidden outside the next blueprint-allowed repository behavior step:
 
 ```text
 ProductReader List/Lookup behavior

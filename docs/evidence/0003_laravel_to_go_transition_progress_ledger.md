@@ -72,10 +72,10 @@ Protected POS CRUD implementation must wait for accepted domain contracts, POS P
 | --- | --- | --- | --- | --- |
 | Stage 0 | Laravel source inventory and parity matrix | Partial | 40% | `0001_laravel_stage0_schema_and_route_inventory.md`, `0002_laravel_productcatalog_servicecatalog_inventory.md` |
 | Stage 1 | Go quality foundation | Partial | 90% | `make verify` passes, including tests, vet, format, AI rules, file-size, hexagonal, route-to-capability audit, and gosec |
-| Stage 2 | PostgreSQL target baseline for POS domains | Partial | 10% | ProductCatalog PostgreSQL migration 0011 has local DB apply proof; ProductCatalog PostgreSQL repository skeletons are remote-visible with compile-time port assertions; ProductRepository Create, FindByID, and Update behavior have focused local and integration proof; aggregate `make verify` proof pending |
+| Stage 2 | PostgreSQL target baseline for POS domains | Partial | 10% | ProductCatalog PostgreSQL migration 0011 has local DB apply proof; ProductCatalog PostgreSQL repository skeletons are remote-visible with compile-time port assertions; ProductRepository Create, FindByID, and Update behavior have focused local, integration, and aggregate `make verify` proof |
 | Stage 3 | API foundation and capability control | Closed | 100% | Auth/session foundation exists; capability contracts pass tests; PostgreSQL capability migration is applied; PostgreSQL adapter integration tests pass; runtime capability middleware tests pass; protected route seed migration exists; admin HTTP surface implementation and full `make verify` proof pass; route-to-capability audit script exists and is wired into `make verify`; route-level disabled protected endpoint proof passes for current protected route capability keys; final closeout proof passed on 2026-06-08 |
 | Stage 4 | Cross-cutting modules | Not started | 0% | No audit/language/notification/idempotency transition implementation proof yet |
-| Business Phase 1 | Service catalog and product catalog | Partial | 45% | ServiceCatalog domain/usecase, PostgreSQL persistence, and runtime/capability slice have local proof; ProductCatalog domain, ports, CreateProduct, UpdateProduct, SoftDeleteProduct, RestoreProduct, GetProductDetail, ListProducts, LookupProducts, ListProductVersions, and ProductRepository Create/FindByID/Update behavior have local focused proof; connector validation passed for the latest ProductCatalog behavior checkpoint; aggregate `make verify` proof for repository behavior checkpoint is pending |
+| Business Phase 1 | Service catalog and product catalog | Partial | 45% | ServiceCatalog domain/usecase, PostgreSQL persistence, and runtime/capability slice have local proof; ProductCatalog domain, ports, CreateProduct, UpdateProduct, SoftDeleteProduct, RestoreProduct, GetProductDetail, ListProducts, LookupProducts, ListProductVersions, and ProductRepository Create/FindByID/Update behavior have local focused and aggregate proof; connector validation passed for the latest ProductCatalog behavior checkpoint |
 | Overall Laravel-to-Go transition | POS API migration | Early foundation | 33% | Docs, auth debug lane, full verify gate, capability foundation, ServiceCatalog domain/usecase, PostgreSQL persistence, runtime/capability proof, ProductCatalog domain/usecase proof, and first ProductCatalog PostgreSQL repository behavior proof exist; ProductCatalog HTTP/runtime/capability/UI and broader POS APIs remain incomplete |
 
 ## Current State Summary
@@ -119,11 +119,11 @@ Protected POS CRUD implementation must wait for accepted domain contracts, POS P
 
 ## Next Valid Active Step
 
-Run aggregate proof for ProductRepository Create, FindByID, and Update behavior before starting the next ProductCatalog PostgreSQL repository behavior step.
+Choose the next blueprint-allowed ProductCatalog PostgreSQL repository behavior step after ProductRepository Create, FindByID, and Update behavior received focused, integration, aggregate, and connector proof.
 
-- Do not start ProductReader List/Lookup, ProductVersionRepository, ProductDuplicateChecker, EXPLAIN/query-plan, Echo/runtime, capability seed, inventory mutation, UI, or runtime HTTP work before aggregate proof and progress docs are validated.
+- Do not start Echo/runtime, capability seed, inventory mutation, UI, or runtime HTTP work in this persistence slice.
 - Do not start a new runtime slice while repository proof is not reflected in repository facts.
-- Stay inside blueprint-allowed ProductCatalog PostgreSQL repository behavior only after aggregate proof passes.
+- Stay inside blueprint-allowed ProductCatalog PostgreSQL repository behavior for the next step.
 
 ## Handoff Requirement
 
@@ -133,4 +133,4 @@ The same session must create or update a handoff when durable work was done.
 
 ## Context Window Status
 
-Current ledger update context status: updated after ProductRepository Create, FindByID, and Update behavior received focused local and integration proof; next step is aggregate proof before starting the next repository behavior step.
+Current ledger update context status: updated after ProductRepository Create, FindByID, and Update behavior received focused local, integration, aggregate, and connector proof; next step is selecting the next blueprint-allowed repository behavior step.
