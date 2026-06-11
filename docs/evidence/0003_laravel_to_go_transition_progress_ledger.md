@@ -73,10 +73,10 @@ Protected POS CRUD implementation must wait for accepted domain contracts, POS P
 | --- | --- | --- | --- | --- |
 | Stage 0 | Laravel source inventory and parity matrix | Partial | 40% | `0001_laravel_stage0_schema_and_route_inventory.md`, `0002_laravel_productcatalog_servicecatalog_inventory.md` |
 | Stage 1 | Go quality foundation | Partial | 90% | `make verify` passes, including tests, vet, format, AI rules, file-size, hexagonal, route-to-capability audit, and gosec |
-| Stage 2 | PostgreSQL target baseline for POS domains | Partial | 10% | ProductCatalog PostgreSQL migration 0011 has local DB apply proof; ProductCatalog PostgreSQL repository skeletons are remote-visible with compile-time port assertions; ProductRepository Create, FindByID, and Update behavior have focused local, integration, and aggregate `make verify` proof; ProductReader GetByID behavior has focused local/integration proof |
+| Stage 2 | PostgreSQL target baseline for POS domains | Partial | 10% | ProductCatalog PostgreSQL migration 0011 has local DB apply proof; ProductCatalog PostgreSQL repository skeletons are remote-visible with compile-time port assertions; ProductRepository Create, FindByID, and Update behavior have focused local, integration, and aggregate `make verify` proof; ProductReader GetByID behavior has focused local, integration, and aggregate `make verify` proof |
 | Stage 3 | API foundation and capability control | Closed | 100% | Auth/session foundation exists; capability contracts pass tests; PostgreSQL capability migration is applied; PostgreSQL adapter integration tests pass; runtime capability middleware tests pass; protected route seed migration exists; admin HTTP surface implementation and full `make verify` proof pass; route-to-capability audit script exists and is wired into `make verify`; route-level disabled protected endpoint proof passes for current protected route capability keys; final closeout proof passed on 2026-06-08 |
 | Stage 4 | Cross-cutting modules | Not started | 0% | No audit/language/notification/idempotency transition implementation proof yet |
-| Business Phase 1 | Service catalog and product catalog | Partial | 45% | ServiceCatalog domain/usecase, PostgreSQL persistence, and runtime/capability slice have local proof; ProductCatalog domain, ports, CreateProduct, UpdateProduct, SoftDeleteProduct, RestoreProduct, GetProductDetail, ListProducts, LookupProducts, ListProductVersions, ProductRepository Create/FindByID/Update, and ProductReader GetByID behavior have local focused proof; connector validation passed for the latest ProductCatalog behavior checkpoint; aggregate proof for GetByID is pending |
+| Business Phase 1 | Service catalog and product catalog | Partial | 45% | ServiceCatalog domain/usecase, PostgreSQL persistence, and runtime/capability slice have local proof; ProductCatalog domain, ports, CreateProduct, UpdateProduct, SoftDeleteProduct, RestoreProduct, GetProductDetail, ListProducts, LookupProducts, ListProductVersions, ProductRepository Create/FindByID/Update, and ProductReader GetByID behavior have local focused and aggregate proof; connector validation passed for the latest ProductCatalog behavior checkpoint |
 | Overall Laravel-to-Go transition | POS API migration | Early foundation | 33% | Docs, auth debug lane, full verify gate, capability foundation, ServiceCatalog domain/usecase, PostgreSQL persistence, runtime/capability proof, ProductCatalog domain/usecase proof, and first ProductCatalog PostgreSQL repository behavior proof exist; ProductCatalog HTTP/runtime/capability/UI and broader POS APIs remain incomplete |
 
 ## Current State Summary
@@ -109,7 +109,7 @@ Protected POS CRUD implementation must wait for accepted domain contracts, POS P
 - ServiceCatalog domain contract is accepted.
 - ServiceCatalog implementation slice 1 plan is accepted and implemented with proof.
 - ProductCatalog domain, ports, CreateProduct, UpdateProduct, SoftDeleteProduct, RestoreProduct, GetProductDetail, ListProducts, LookupProducts, and ListProductVersions behavior are locally proven; connector validation passed for the latest behavior checkpoint.
-- ProductCatalog PostgreSQL repository behavior is partial: ProductRepository Create, FindByID, and Update behavior have focused local/integration/aggregate proof and connector validation; ProductReader GetByID behavior has focused local/integration proof and connector validation; ProductReader List/Lookup, ProductVersionRepository, ProductDuplicateChecker, EXPLAIN/query-plan, runtime HTTP surface, route registration, presenter, capability seed, inventory mutation, and UI work are not started yet. ProductCatalog PostgreSQL migration 0011 has local DB apply proof and repository skeletons are remote-visible.
+- ProductCatalog PostgreSQL repository behavior is partial: ProductRepository Create, FindByID, and Update behavior have focused local/integration/aggregate proof and connector validation; ProductReader GetByID behavior has focused local/integration/aggregate proof and connector validation; ProductReader List/Lookup, ProductVersionRepository, ProductDuplicateChecker, EXPLAIN/query-plan, runtime HTTP surface, route registration, presenter, capability seed, inventory mutation, and UI work are not started yet. ProductCatalog PostgreSQL migration 0011 has local DB apply proof and repository skeletons are remote-visible.
 - ServiceCatalog runtime/capability implementation is remote-visible through GitHub connector with local proof; focused handler and disabled-capability proof are remote-visible through GitHub connector with local proof; connector validation passed for the latest closeout proof files.
 - ProductCatalog domain contract blueprint `docs/blueprints/0028_productcatalog_domain_contract.md` is accepted locally with Option A duplicate policy and `make verify` proof; connector validation pending.
 - ProductCatalog implementation slice 1 blueprint `docs/blueprints/0029_productcatalog_implementation_slice_1.md` is accepted locally with `make verify` proof; connector validation pending.
@@ -120,7 +120,7 @@ Protected POS CRUD implementation must wait for accepted domain contracts, POS P
 
 ## Next Valid Active Step
 
-Run aggregate proof for ProductReader GetByID behavior before starting the next ProductCatalog PostgreSQL repository behavior step.
+Choose the next blueprint-allowed ProductCatalog PostgreSQL repository behavior step after ProductReader GetByID behavior received focused, integration, aggregate, and connector proof.
 
 - Do not start Echo/runtime, capability seed, inventory mutation, UI, or runtime HTTP work in this persistence slice.
 - Do not start a new runtime slice while repository proof is not reflected in repository facts.
@@ -134,4 +134,4 @@ The same session must create or update a handoff when durable work was done.
 
 ## Context Window Status
 
-Current ledger update context status: updated after ProductReader GetByID behavior received focused local/integration proof and connector validation; next step is aggregate proof before starting the next repository behavior step.
+Current ledger update context status: updated after ProductReader GetByID behavior received focused local, integration, aggregate, and connector proof; next step is selecting the next blueprint-allowed repository behavior step.
