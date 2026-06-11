@@ -21,6 +21,7 @@ docs/blueprints/0024_servicecatalog_domain_contract.md
 docs/blueprints/0025_servicecatalog_implementation_slice_1.md
 docs/blueprints/0026_servicecatalog_postgres_persistence_slice.md
 docs/blueprints/0027_servicecatalog_runtime_capability_slice.md
+docs/blueprints/0030_productcatalog_postgres_persistence_slice.md
 ```
 
 Related evidence:
@@ -113,10 +114,11 @@ Protected POS CRUD implementation must wait for accepted domain contracts, POS P
 - ProductCatalog domain package, ports, CreateProduct, UpdateProduct, SoftDeleteProduct, RestoreProduct, GetProductDetail, ListProducts, LookupProducts, and ListProductVersions behavior are locally proven with focused `go test ./internal/modules/productcatalog/...` proof and aggregate `make verify` proof; connector validation passed for the latest behavior checkpoint.
 - ProductCatalog ListProducts query forwarding, success item mapping, and empty-list behavior are remote-visible through GitHub connector with focused `go test ./internal/modules/productcatalog/...` proof and aggregate `make verify` proof.
 - ProductCatalog implementation slice 1 is closed after ListProductVersions behavior connector validation.
+- Proposed ProductCatalog PostgreSQL persistence blueprint exists at docs/blueprints/0030_productcatalog_postgres_persistence_slice.md; implementation has not started.
 
 ## Next Valid Active Step
 
-ProductCatalog implementation slice 1 is closed; next valid step is to prepare the next accepted ProductCatalog transition slice.
+Review and accept or revise the proposed ProductCatalog PostgreSQL persistence slice blueprint before starting migrations or adapter implementation.
 
 - Do not start ProductCatalog PostgreSQL, Echo/runtime, migrations, capability seed, inventory mutation, or UI work in this slice.
 - Do not start a new runtime slice while local proof is not reflected in repository facts.
@@ -130,4 +132,4 @@ The same session must create or update a handoff when durable work was done.
 
 ## Context Window Status
 
-Current ledger update context status: updated after ProductCatalog ListProductVersions behavior connector validation; ProductCatalog implementation slice 1 is closed.
+Current ledger update context status: updated after drafting the proposed ProductCatalog PostgreSQL persistence blueprint; implementation must wait for blueprint acceptance.
