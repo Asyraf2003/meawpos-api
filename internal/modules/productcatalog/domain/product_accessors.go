@@ -60,3 +60,11 @@ func (p *Product) DeletedAt() *time.Time {
 	deletedAt := *p.deletedAt
 	return &deletedAt
 }
+
+func (p *Product) DeletedByActorID() string {
+	return p.deletedByActorID
+}
+
+func (p *Product) DeleteReason() string {
+	return p.deleteReason
+}
