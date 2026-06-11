@@ -50,8 +50,25 @@ func (r *ProductRepository) Create(ctx context.Context, product *domain.Product)
 }
 
 func (r *ProductRepository) Update(ctx context.Context, product *domain.Product) error {
-	_ = ctx
-	_ = product
+	sql := `
+		UPDATE products
+		SET
+			kode_barang = $2,
+			nama_barang = $3,
+			nama_barang_normalized = $4,
+			merek = $5,
+			merek_normalized = $6,
+			ukuran = $7,
+			harga_jual = $8,
+			reorder_point_qty = $9,
+			critical_threshold_qty = $10,
+			deleted_at = $11,
+			deleted_by_actor_id = $12,
+			delete_reason = $13,
+			updated_at = now()
+		WHERE id = $1
+	`
 
-	return errProductRepositoryNotImplemented
+	_, err := r.exec(ctx, sql, productArgs(product)...)
+	return err
 }
