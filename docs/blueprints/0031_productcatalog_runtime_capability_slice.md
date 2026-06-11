@@ -20,7 +20,7 @@ along with gopos-api. If not, see <https://www.gnu.org/licenses/>.
 
 ## Status
 
-Draft implementation slice plan.
+Accepted implementation slice plan.
 
 ## Date
 
@@ -94,6 +94,20 @@ app/bootstrap
 This slice must not copy Laravel page controllers, Blade view behavior, or UI table endpoints.
 
 ProductCatalog runtime routes are Go API contracts.
+
+Laravel runtime evidence confirms:
+
+```text
+ProductCatalog create/update web actions use:
+POST /product-catalog/products/create
+POST /product-catalog/products/{productId}/update
+
+Admin lifecycle actions use:
+DELETE /admin/products/{productId}
+PATCH  /admin/products/{productId}/restore
+```
+
+The Go API route shape remains API-only, while request and response field names preserve the Laravel/ProductCatalog public vocabulary where practical.
 
 ## SCOPE-IN
 
@@ -180,7 +194,7 @@ Register `/lookup` before `/:id`.
 
 Register `/:id/restore` and `/:id/versions` before generic `/:id` if the router requires explicit ordering for nested paths.
 
-Restore uses `PATCH` to match the accepted Laravel inventory candidate contract.
+Restore uses `PATCH` to match the accepted Laravel ProductCatalog lifecycle evidence.
 
 ## ROUTE AND CAPABILITY MAPPING
 
@@ -299,11 +313,11 @@ Create JSON body:
 
 ```json
 {
-  "code": "SKU-001",
-  "name": "Kampas Rem",
-  "brand": "Honda",
-  "size": 14,
-  "sale_price_rupiah": 40000,
+  "kode_barang": "SKU-001",
+  "nama_barang": "Kampas Rem",
+  "merek": "Honda",
+  "ukuran": 14,
+  "harga_jual": 40000,
   "reorder_point_qty": 5,
   "critical_threshold_qty": 2,
   "reason": "optional reason"
@@ -314,11 +328,11 @@ Update JSON body:
 
 ```json
 {
-  "code": "SKU-001",
-  "name": "Kampas Rem",
-  "brand": "Honda",
-  "size": 14,
-  "sale_price_rupiah": 40000,
+  "kode_barang": "SKU-001",
+  "nama_barang": "Kampas Rem",
+  "merek": "Honda",
+  "ukuran": 14,
+  "harga_jual": 40000,
   "reorder_point_qty": 5,
   "critical_threshold_qty": 2,
   "reason": "optional reason"
@@ -333,6 +347,8 @@ Soft delete JSON body:
 }
 ```
 
+Laravel admin soft delete does not submit a reason; it passes actor identity only. Reason remains optional in Go runtime because the Go usecase command already supports it.
+
 Restore JSON body:
 
 ```json
@@ -340,6 +356,8 @@ Restore JSON body:
   "reason": "optional reason"
 }
 ```
+
+Laravel admin restore does not submit a reason; it passes actor identity only. Reason remains optional in Go runtime because the Go usecase command already supports it.
 
 ## RESPONSE CONTRACT
 
@@ -358,11 +376,11 @@ List response data item:
 ```json
 {
   "id": "product-id",
-  "code": "SKU-001",
-  "name": "Kampas Rem",
-  "brand": "Honda",
-  "size": 14,
-  "sale_price_rupiah": 40000,
+  "kode_barang": "SKU-001",
+  "nama_barang": "Kampas Rem",
+  "merek": "Honda",
+  "ukuran": 14,
+  "harga_jual": 40000,
   "status": "active"
 }
 ```
@@ -372,31 +390,31 @@ Detail response data:
 ```json
 {
   "id": "product-id",
-  "code": "SKU-001",
-  "name": "Kampas Rem",
-  "normalized_name": "kampas rem",
-  "brand": "Honda",
-  "normalized_brand": "honda",
-  "size": 14,
-  "sale_price_rupiah": 40000,
+  "kode_barang": "SKU-001",
+  "nama_barang": "Kampas Rem",
+  "nama_barang_normalized": "kampas rem",
+  "merek": "Honda",
+  "merek_normalized": "honda",
+  "ukuran": 14,
+  "harga_jual": 40000,
   "reorder_point_qty": 5,
   "critical_threshold_qty": 2,
   "status": "active"
 }
 ```
 
-Write response data should include the usecase result fields and revision number where available.
+Write response data should use the public ProductCatalog field names above and include revision number where available.
 
 Lookup response data item:
 
 ```json
 {
   "id": "product-id",
-  "code": "SKU-001",
-  "name": "Kampas Rem",
-  "brand": "Honda",
-  "size": 14,
-  "sale_price_rupiah": 40000,
+  "kode_barang": "SKU-001",
+  "nama_barang": "Kampas Rem",
+  "merek": "Honda",
+  "ukuran": 14,
+  "harga_jual": 40000,
   "status": "active"
 }
 ```
