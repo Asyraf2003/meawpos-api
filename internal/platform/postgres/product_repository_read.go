@@ -43,8 +43,5 @@ func (r *ProductRepository) FindByID(ctx context.Context, id string) (*domain.Pr
 }
 
 func (r *ProductRepository) GetByID(ctx context.Context, id string) (*domain.Product, error) {
-	_ = ctx
-	_ = id
-
-	return nil, errProductRepositoryNotImplemented
+	return r.FindByID(ctx, id)
 }
