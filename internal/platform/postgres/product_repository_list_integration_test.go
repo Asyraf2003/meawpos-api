@@ -19,6 +19,7 @@
 package postgres
 
 import (
+	"context"
 	"testing"
 	"time"
 
@@ -28,7 +29,7 @@ import (
 func softDeleteProductForListTest(
 	t *testing.T,
 	repo *ProductRepository,
-	txCtx contextWithValue,
+	txCtx context.Context,
 	product *domain.Product,
 ) {
 	t.Helper()
