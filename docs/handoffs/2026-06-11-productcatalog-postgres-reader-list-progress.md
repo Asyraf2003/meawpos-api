@@ -61,7 +61,7 @@ GitHub connector validation passed for the implementation and focused integratio
 
 ## GAP
 
-Aggregate make verify proof has not been provided for the ProductReader.List checkpoint yet.
+Aggregate make verify proof passed for the ProductReader.List checkpoint.
 
 No ProductReader Lookup behavior has been implemented yet.
 
@@ -81,11 +81,7 @@ Do not start ProductReader Lookup, ProductVersionRepository, ProductDuplicateChe
 
 ## NEXT
 
-Run aggregate proof before starting the next repository behavior step:
-
-```text
-make verify
-```
+Choose the next blueprint-allowed ProductCatalog PostgreSQL repository behavior step.
 
 ## PROGRESS
 
@@ -101,9 +97,9 @@ Overall transition: 33%.
 
 ## CONTEXT WINDOW STATUS
 
-Enough context remains to run aggregate proof and then decide whether to continue in this session or start the next Web AI session.
+Enough context remains to start the next Web AI session for the next ProductCatalog PostgreSQL persistence step.
 
-Forbidden until aggregate proof and progress docs are validated:
+Forbidden outside the next blueprint-allowed repository behavior step:
 
 ```text
 ProductReader Lookup behavior
