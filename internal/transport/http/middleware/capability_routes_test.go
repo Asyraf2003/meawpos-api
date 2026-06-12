@@ -51,6 +51,14 @@ func TestProtectedRoutesRejectDisabledCapabilityBeforeHandler(t *testing.T) {
 		{"service catalog update", http.MethodPut, "/api/service-catalog/items/:id", "/api/service-catalog/items/svc_1", "service_catalog.update"},
 		{"service catalog activate", http.MethodPost, "/api/service-catalog/items/:id/activate", "/api/service-catalog/items/svc_1/activate", "service_catalog.activate"},
 		{"service catalog deactivate", http.MethodPost, "/api/service-catalog/items/:id/deactivate", "/api/service-catalog/items/svc_1/deactivate", "service_catalog.deactivate"},
+		{"product catalog list", http.MethodGet, "/api/products", "/api/products", "product_catalog.list"},
+		{"product catalog create", http.MethodPost, "/api/products", "/api/products", "product_catalog.create"},
+		{"product catalog lookup", http.MethodGet, "/api/products/lookup", "/api/products/lookup", "product_catalog.lookup"},
+		{"product catalog versions", http.MethodGet, "/api/products/:id/versions", "/api/products/product-1/versions", "product_catalog.versions"},
+		{"product catalog restore", http.MethodPatch, "/api/products/:id/restore", "/api/products/product-1/restore", "product_catalog.restore"},
+		{"product catalog show", http.MethodGet, "/api/products/:id", "/api/products/product-1", "product_catalog.show"},
+		{"product catalog update", http.MethodPut, "/api/products/:id", "/api/products/product-1", "product_catalog.update"},
+		{"product catalog delete", http.MethodDelete, "/api/products/:id", "/api/products/product-1", "product_catalog.delete"},
 	}
 
 	for _, tt := range tests {
