@@ -26,6 +26,8 @@ import (
 	authusecase "pos-go/internal/modules/auth/usecase"
 	capabilityhttp "pos-go/internal/modules/capability/transport/http"
 	capabilityusecase "pos-go/internal/modules/capability/usecase"
+	productcataloghttp "pos-go/internal/modules/productcatalog/transport/http"
+	productcatalogusecase "pos-go/internal/modules/productcatalog/usecase"
 	servicecatalogdomain "pos-go/internal/modules/servicecatalog/domain"
 	servicecataloghttp "pos-go/internal/modules/servicecatalog/transport/http"
 	servicecatalogusecase "pos-go/internal/modules/servicecatalog/usecase"
@@ -128,6 +130,51 @@ func New(ctx context.Context, cfg config.Config) (*App, error) {
 			updateServiceCatalogItemUsecase,
 			activateServiceCatalogItemUsecase,
 			deactivateServiceCatalogItemUsecase,
+		)
+
+		productRepository := postgres.NewProductRepository(pool)
+		productAuditRecorder := productCatalogNoopAuditRecorder{}
+		productIDGenerator := productCatalogUUIDGenerator{}
+		listProductsUsecase := productcatalogusecase.NewListProducts(productRepository)
+		lookupProductsUsecase := productcatalogusecase.NewLookupProducts(productRepository)
+		getProductDetailUsecase := productcatalogusecase.NewGetProductDetail(productRepository)
+		createProductUsecase := productcatalogusecase.NewCreateProduct(
+			productRepository,
+			productRepository,
+			productRepository,
+			productAuditRecorder,
+			productIDGenerator,
+			time.Now,
+		)
+		updateProductUsecase := productcatalogusecase.NewUpdateProduct(
+			productRepository,
+			productRepository,
+			productRepository,
+			productAuditRecorder,
+			time.Now,
+		)
+		softDeleteProductUsecase := productcatalogusecase.NewSoftDeleteProduct(
+			productRepository,
+			productRepository,
+			productAuditRecorder,
+			time.Now,
+		)
+		restoreProductUsecase := productcatalogusecase.NewRestoreProduct(
+			productRepository,
+			productRepository,
+			productAuditRecorder,
+			time.Now,
+		)
+		listProductVersionsUsecase := productcatalogusecase.NewListProductVersions(productRepository)
+		productCatalogHandler := productcataloghttp.NewProductCatalogHandler(
+			listProductsUsecase,
+			lookupProductsUsecase,
+			getProductDetailUsecase,
+			createProductUsecase,
+			updateProductUsecase,
+			softDeleteProductUsecase,
+			restoreProductUsecase,
+			listProductVersionsUsecase,
 		)
 
 		authGroup := api.Group("/auth")
@@ -283,6 +330,48 @@ func New(ctx context.Context, cfg config.Config) (*App, error) {
 		serviceCatalogDeactivateGroup.Use(httpmw.RequirePermission("service_catalog.manage"))
 		serviceCatalogDeactivateGroup.Use(httpmw.RequireCapability("service_catalog.deactivate", checkCapabilityUsecase))
 		serviceCatalogHandler.RegisterDeactivate(serviceCatalogDeactivateGroup)
+
+		newProductCatalogGroup := func(permissionKey, capabilityKey string) *echo.Group {
+			group := api.Group("")
+			group.Use(httpmw.RequireAuth(tokenVerifier, principalResolver, sessionStatusChecker))
+			group.Use(httpmw.RequirePermission(permissionKey))
+			group.Use(httpmw.RequireCapability(capabilityKey, checkCapabilityUsecase))
+
+			return group
+		}
+
+		productCatalogHandler.RegisterList(newProductCatalogGroup(
+			"product_catalog.read",
+			"product_catalog.list",
+		))
+		productCatalogHandler.RegisterCreate(newProductCatalogGroup(
+			"product_catalog.manage",
+			"product_catalog.create",
+		))
+		productCatalogHandler.RegisterLookup(newProductCatalogGroup(
+			"product_catalog.read",
+			"product_catalog.lookup",
+		))
+		productCatalogHandler.RegisterVersions(newProductCatalogGroup(
+			"product_catalog.read",
+			"product_catalog.versions",
+		))
+		productCatalogHandler.RegisterRestore(newProductCatalogGroup(
+			"product_catalog.manage",
+			"product_catalog.restore",
+		))
+		productCatalogHandler.RegisterShow(newProductCatalogGroup(
+			"product_catalog.read",
+			"product_catalog.show",
+		))
+		productCatalogHandler.RegisterUpdate(newProductCatalogGroup(
+			"product_catalog.manage",
+			"product_catalog.update",
+		))
+		productCatalogHandler.RegisterDelete(newProductCatalogGroup(
+			"product_catalog.manage",
+			"product_catalog.delete",
+		))
 	}
 
 	return &App{
