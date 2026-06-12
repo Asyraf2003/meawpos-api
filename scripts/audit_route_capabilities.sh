@@ -25,6 +25,7 @@ SEED_FILES=(
   "migrations/0007_seed_existing_protected_capabilities.up.sql"
   "migrations/0008_seed_capability_manage_permission.up.sql"
   "migrations/0010_seed_service_catalog_permissions_capabilities.up.sql"
+  "migrations/0013_seed_product_catalog_permissions_capabilities.up.sql"
 )
 SOURCE_FILES=(
   "internal/app/bootstrap/app.go"
@@ -33,6 +34,7 @@ SOURCE_FILES=(
   "internal/modules/auth/transport/http/account_role_handler.go"
   "internal/modules/capability/transport/http/capability_handler.go"
   "internal/modules/servicecatalog/transport/http/service_catalog_handler.go"
+  "internal/modules/productcatalog/transport/http/product_catalog_handler.go"
 )
 
 echo "== route capability audit =="
