@@ -22,6 +22,8 @@ audit:allow-oversize reason=evidence-report
 
 Date: 2026-06-13
 
+Current status update: ProductCatalog runtime smoke proof became locally proven on 2026-06-14. Use `docs/evidence/2026-06-14_productcatalog_runtime_smoke_proof.md` and `docs/evidence/0003_laravel_to_go_transition_progress_ledger.md` for current runtime smoke status and next-slice direction.
+
 ## FACT
 
 - The repository is a pure Go Echo and PostgreSQL API backend. No UI scope is active.
@@ -51,7 +53,6 @@ Date: 2026-06-13
 
 - Product inventory/stock API is not closed.
 - Product audit/outbox persistence is not closed.
-- Product runtime smoke proof through a real local HTTP server, auth token, and DB-backed ProductCatalog route is not proven.
 - Runtime localization/language switching is not implemented.
 - Extended Laravel ProductCatalog filters remain unexposed:
   - `sort_by`
@@ -73,13 +74,13 @@ Product inventory/stock API: NOT CLOSED.
 
 Product audit/outbox: NOT CLOSED.
 
-Product runtime smoke proof: NOT PROVEN.
+Product runtime smoke proof: LOCALLY PROVEN.
 
 Product full backend transition: PARTIAL.
 
 ProductCatalog catalog API should be treated separately from the wider Product/inventory area. Do not count UI as a ProductCatalog backend gap.
 
-Architecture cleanup is useful but not required before the next feature slice. The current repo is hexagonal enough for the ProductCatalog catalog API based on imports, package roles, route capability audit, and bootstrap wiring. The next improvement should prove the runtime path before larger refactors.
+Architecture cleanup is useful but not required before the next feature slice. The current repo is hexagonal enough for the ProductCatalog catalog API based on imports, package roles, route capability audit, bootstrap wiring, and the subsequent runtime smoke proof.
 
 Workflow/docs needed repair. Stale active ledger text still named ProductCatalog UI as a gap and said HTTP/runtime/capability work was not started. This review updates those active docs.
 
@@ -98,7 +99,7 @@ Workflow/docs needed repair. Stale active ledger text still named ProductCatalog
 | Auth middleware | Authn/authz middleware is centralized in `internal/transport/http/middleware`. | Yes | Middleware errors are normalized by shared error handler but still originate as plain Echo errors. | Leave until ADR 0012 completion. |
 | Capability control | ProductCatalog routes have manifest rows, seed rows, permission keys, and disabled-capability tests. | Yes | None for current catalog API. | Keep route capability audit mandatory. |
 | Router/server bootstrap | `internal/app/bootstrap/app.go` wires routes directly; ProductCatalog has a small helper for per-route capability groups. | Partial | Bootstrap is large and owns route grouping detail. | Draft router/server cleanup blueprint later; do not rename large folders without ADR/blueprint. |
-| Reporting/docs workflow | Ledger, archive README, API docs, and handoff README now reflect catalog API closeout and no UI scope. | Yes | Runtime smoke proof and ADR 0012 remain open. | Keep this report as current evidence and run final proof gates. |
+| Reporting/docs workflow | Ledger, archive README, API docs, runtime smoke evidence, and handoff README now reflect catalog API closeout and no UI scope. | Yes | ADR 0012 remains open. | Use the active ledger and 2026-06-14 runtime smoke evidence for current status. |
 
 ## PRODUCT STATUS
 
@@ -108,7 +109,7 @@ Product inventory/stock API: NOT CLOSED.
 
 Product audit/outbox: NOT CLOSED.
 
-Product runtime smoke proof: NOT PROVEN.
+Product runtime smoke proof: LOCALLY PROVEN.
 
 Product full backend transition: PARTIAL.
 
@@ -117,19 +118,18 @@ Product full backend transition: PARTIAL.
 Choose exactly one next slice:
 
 ```text
-ProductCatalog runtime smoke proof with local auth token and DB-backed HTTP route.
+Shared success envelope and ADR `0012` output contract centralization.
 ```
 
 Why this one now:
 
-- It validates the already-closed catalog API through the real runtime path.
-- It is smaller and less invasive than shared envelope or architecture cleanup.
-- It gives stronger proof before inventory, audit/outbox, or localization work builds on ProductCatalog.
+- It follows the now-proven runtime smoke path.
+- It closes the next cross-cutting API maturity gap without starting inventory early.
+- It prepares consistent response contracts before more Product or POS endpoints are added.
 
 Candidates not chosen:
 
-- Shared success envelope centralization: useful, but should not precede runtime proof that the current API actually works end to end.
-- Complete ADR 0012 across all API surfaces: important, but broader than ProductCatalog status validation.
+- ProductCatalog runtime smoke proof: completed locally on 2026-06-14.
 - Audit/outbox implementation: required for ProductCatalog full transition, but should follow runtime smoke proof or an accepted audit/outbox blueprint.
 - Product inventory/stock mutation API blueprint: valid future product-area work, but catalog runtime proof should come first.
 - Runtime localization/language/output contract blueprint: useful later; current API status clarity does not require it first.
@@ -237,4 +237,4 @@ make verify
 
 Execution channel: Terminal Codex.
 
-Create or accept a small ProductCatalog runtime smoke proof blueprint, then prove a protected DB-backed ProductCatalog HTTP route using a local auth token.
+Start the shared success envelope and ADR `0012` output contract centralization slice from a small blueprint.

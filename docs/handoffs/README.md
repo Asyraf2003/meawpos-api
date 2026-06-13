@@ -42,10 +42,11 @@ docs/archive/handoffs-closed/README.md
 
 ## Current
 
+- `2026-06-14-productcatalog-runtime-smoke-proof-closeout.md`: ProductCatalog runtime smoke proof closeout context and next ADR `0012` output-contract slice pointer.
 - `2026-06-08-servicecatalog-runtime-capability-implementation.md`: latest ServiceCatalog runtime/capability closeout context and next planning-only scope.
 - `2026-06-08-servicecatalog-runtime-capability-blueprint-accepted.md`: accepted blueprint 0027 context retained until the next scoped session prompt is prepared.
 
-ProductCatalog handoffs are not active in this folder. Completed ProductCatalog slice history is archived under `docs/archive/handoffs-closed/` and summarized by the active transition ledger.
+Superseded ProductCatalog implementation handoff history is archived under `docs/archive/handoffs-closed/` and summarized by the active transition ledger.
 
 ## Pending / Needs Follow-Up
 

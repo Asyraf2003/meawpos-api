@@ -41,7 +41,8 @@ Use this index before treating an evidence file as complete proof.
 | `0003_laravel_to_go_transition_progress_ledger.md` | Active ledger | Use as the current transition status, progress, gaps, and next valid active step source. |
 | `0004_adr_implementation_proof_index.md` | Active proof index | Use as the current map from accepted ADRs to implementation proof status and remaining ADR proof gaps. |
 | `0005_laravel_to_go_transition_history_2026_06_08.md` | Historical proof snapshot | Use for completed-work history that was moved out of the active ledger to reduce context load. |
-| `2026-06-13_api_architecture_product_status_review.md` | Active status review | Use for the current ProductCatalog catalog API, Product/inventory, architecture, docs/handoff cleanliness, and next-slice assessment. |
+| `2026-06-13_api_architecture_product_status_review.md` | Pre-smoke status review | Use for the ProductCatalog catalog API, Product/inventory, architecture, docs/handoff cleanliness, and next-slice assessment before runtime smoke proof. Runtime smoke status is superseded by `2026-06-14_productcatalog_runtime_smoke_proof.md` and the active ledger. |
+| `2026-06-14_productcatalog_runtime_smoke_proof.md` | Complete local runtime evidence | Use as proof that ProductCatalog runtime smoke is locally proven through local PostgreSQL, migrations, Echo server, manual auth token presence, protected ProductCatalog HTTP routes, DB-backed create/show, and reversible capability guard behavior. |
 | `2026-06-06-auth-runtime-local-dev.md` | Incomplete local runtime evidence | Use only for the DB connectivity facts explicitly recorded in the file. Do not use it as complete manual auth runtime proof. |
 
 Partial or incomplete evidence can support only the facts written inside that file.
