@@ -25,11 +25,6 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type responseEnvelope struct {
-	Success bool `json:"success"`
-	Data    any  `json:"data"`
-}
-
 type disableCapabilityRequest struct {
 	Reason string `json:"reason"`
 }

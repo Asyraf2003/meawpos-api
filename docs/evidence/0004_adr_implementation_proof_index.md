@@ -94,7 +94,7 @@ Issues: 0
 | `0009` | Debug auth lane strategy | Partial | manual login usecase/handler tests, manual account repository, debug accounts documented in ledger | `docs/evidence/2026-06-06-auth-runtime-local-dev.md` is incomplete for manual auth runtime proof |
 | `0010` | Authorization admin API minimum | Proven | account role assign/remove handlers/usecases/adapters/tests, protected admin routes, capability seed coverage, `make verify` pass | None for current admin authorization scope |
 | `0011` | Code discipline audit gates | Proven | audit scripts, file-size policy, hexagonal audit, route capability audit, gosec, `make verify` pass | Allowlisted oversized bootstrap/config files remain documented warnings |
-| `0012` | API output contract centralization | Partial | presentation DTO packages exist for system/capability/ProductCatalog; shared HTTP error envelope primitives and Echo error handler exist; shared success envelope primitives exist in `internal/transport/http/response`; ProductCatalog and ServiceCatalog success responses use the shared success helper; ProductCatalog mapped errors have stable public codes; ProductCatalog and disabled-capability error envelope tests pass; focused response/transport tests and `make verify` pass | Capability/Auth/System success response shape centralization remains incomplete; full response/error envelope coverage is not proven for every API surface |
+| `0012` | API output contract centralization | Partial | presentation DTO packages exist for system/capability/ProductCatalog; shared HTTP error envelope primitives and Echo error handler exist; shared success envelope primitives exist in `internal/transport/http/response`; ProductCatalog, ServiceCatalog, and Capability success responses use the shared success helper; Capability success tests prove canonical empty `meta`; ProductCatalog mapped errors have stable public codes; ProductCatalog and disabled-capability error envelope tests pass; focused response/transport tests and `make verify` pass | Auth/System output contract centralization remains deferred by owner decision; full response/error envelope coverage is not proven for every API surface |
 
 ## Current ADR Quality Assessment
 
@@ -117,5 +117,5 @@ Reason:
 ## Next Proof Improvements
 
 - Complete manual auth runtime evidence for ADR `0009`.
-- Complete remaining Capability/Auth/System response/error envelope coverage proof for ADR `0012` without changing public response shapes outside an accepted blueprint.
+- Complete remaining Auth/System response/error envelope coverage proof for ADR `0012` only after an accepted blueprint or explicit owner decision; this is deferred and must not block Product/Supplier/Faktur progress.
 - Keep this index updated when future ADRs are accepted or implemented.

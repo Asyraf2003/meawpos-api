@@ -20,7 +20,9 @@ along with gopos-api. If not, see <https://www.gnu.org/licenses/>.
 
 ## Status
 
-Accepted locally for implementation.
+Closed with local proof.
+
+Capability success responses now use the shared HTTP success envelope helper. This closes only the Capability success-envelope normalization slice. ADR `0012` remains partial because Auth/System output contract centralization is deferred by owner decision and must not block Product/Supplier/Faktur progress.
 
 ## Active Scope
 

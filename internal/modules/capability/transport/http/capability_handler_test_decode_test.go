@@ -25,6 +25,7 @@ import (
 type testEnvelope struct {
 	Success bool            `json:"success"`
 	Data    json.RawMessage `json:"data"`
+	Meta    map[string]any  `json:"meta"`
 }
 
 type capabilityResponseForTest struct {
@@ -40,6 +41,12 @@ func decodeEnvelope(t *testing.T, rec *httptest.ResponseRecorder) testEnvelope {
 	var envelope testEnvelope
 	if err := json.Unmarshal(rec.Body.Bytes(), &envelope); err != nil {
 		t.Fatalf("json.Unmarshal(envelope) error = %v", err)
+	}
+	if envelope.Meta == nil {
+		t.Fatal("meta is nil, want empty object")
+	}
+	if len(envelope.Meta) != 0 {
+		t.Fatalf("meta = %#v, want empty object", envelope.Meta)
 	}
 
 	return envelope

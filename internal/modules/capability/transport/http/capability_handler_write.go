@@ -21,6 +21,7 @@ import (
 	"strings"
 
 	capabilitypresenter "pos-go/internal/presentation/http/id/capability"
+	httpresponse "pos-go/internal/transport/http/response"
 
 	"github.com/labstack/echo/v4"
 )
@@ -40,10 +41,7 @@ func (h *CapabilityHandler) Enable(c echo.Context) error {
 		return capabilityHTTPError(err)
 	}
 
-	return c.JSON(http.StatusOK, responseEnvelope{
-		Success: true,
-		Data:    capabilitypresenter.FromDomain(capability),
-	})
+	return c.JSON(http.StatusOK, httpresponse.Success(capabilitypresenter.FromDomain(capability)))
 }
 
 func (h *CapabilityHandler) Disable(c echo.Context) error {
@@ -68,8 +66,5 @@ func (h *CapabilityHandler) Disable(c echo.Context) error {
 		return capabilityHTTPError(err)
 	}
 
-	return c.JSON(http.StatusOK, responseEnvelope{
-		Success: true,
-		Data:    capabilitypresenter.FromDomain(capability),
-	})
+	return c.JSON(http.StatusOK, httpresponse.Success(capabilitypresenter.FromDomain(capability)))
 }
