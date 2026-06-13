@@ -20,9 +20,9 @@ along with gopos-api. If not, see <https://www.gnu.org/licenses/>.
 
 ## Status
 
-Accepted locally for readiness analysis.
+Closed with local proof.
 
-This is a readiness and contract-stabilization slice. It must not implement Supplier, Faktur, inventory mutation, stock movement, audit/outbox, localization, extended filters, or architecture folder cleanup.
+This readiness and contract-stabilization slice is locally proven. Product API is accepted as the dependency boundary for Supplier and Faktur planning. This slice did not implement Supplier, Faktur, inventory mutation, stock movement, audit/outbox, localization, extended filters, or architecture folder cleanup.
 
 ## Active Scope
 
