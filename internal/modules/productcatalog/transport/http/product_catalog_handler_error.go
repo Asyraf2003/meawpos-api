@@ -18,11 +18,11 @@ package http
 
 import (
 	"errors"
+	stdhttp "net/http"
 
 	"pos-go/internal/modules/productcatalog/domain"
 	"pos-go/internal/modules/productcatalog/ports"
-
-	"github.com/labstack/echo/v4"
+	httpresponse "pos-go/internal/transport/http/response"
 )
 
 func mapProductCatalogError(err error) error {
@@ -32,11 +32,11 @@ func mapProductCatalogError(err error) error {
 
 	switch {
 	case errors.Is(err, ports.ErrProductNotFound):
-		return echo.NewHTTPError(404, "product not found")
+		return httpresponse.NewHTTPError(stdhttp.StatusNotFound, "product_not_found", "product not found")
 	case errors.Is(err, ports.ErrDuplicateProductCode):
-		return echo.NewHTTPError(409, "product code already exists")
+		return httpresponse.NewHTTPError(stdhttp.StatusConflict, "product_code_already_exists", "product code already exists")
 	case errors.Is(err, ports.ErrDuplicateProductIdentity):
-		return echo.NewHTTPError(409, "product identity already exists")
+		return httpresponse.NewHTTPError(stdhttp.StatusConflict, "product_identity_already_exists", "product identity already exists")
 	case errors.Is(err, domain.ErrProductIDRequired),
 		errors.Is(err, domain.ErrProductNameRequired),
 		errors.Is(err, domain.ErrProductBrandRequired),
@@ -47,8 +47,8 @@ func mapProductCatalogError(err error) error {
 		errors.Is(err, domain.ErrProductDeleteTimeRequired),
 		errors.Is(err, domain.ErrProductAlreadyDeleted),
 		errors.Is(err, domain.ErrProductNotDeleted):
-		return echo.NewHTTPError(400, err.Error())
+		return httpresponse.NewHTTPError(stdhttp.StatusBadRequest, "product_validation_failed", err.Error())
 	default:
-		return echo.NewHTTPError(500, "product catalog request failed")
+		return httpresponse.NewHTTPError(stdhttp.StatusInternalServerError, "product_catalog_request_failed", "product catalog request failed")
 	}
 }

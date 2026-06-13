@@ -22,6 +22,7 @@ import (
 	"strings"
 
 	httpmw "pos-go/internal/transport/http/middleware"
+	httpresponse "pos-go/internal/transport/http/response"
 
 	"github.com/labstack/echo/v4"
 )
@@ -49,7 +50,7 @@ func parseOptionalIntQuery(c echo.Context, name string) (int, error) {
 
 	value, err := strconv.Atoi(raw)
 	if err != nil {
-		return 0, echo.NewHTTPError(stdhttp.StatusBadRequest, name+" must be an integer")
+		return 0, httpresponse.NewHTTPError(stdhttp.StatusBadRequest, "invalid_query_parameter", name+" must be an integer")
 	}
 
 	return value, nil
@@ -61,7 +62,7 @@ func parseProductListStatus(raw string) (string, error) {
 	case "", "active", "deleted", "all":
 		return status, nil
 	default:
-		return "", echo.NewHTTPError(stdhttp.StatusBadRequest, "status must be active, deleted, or all")
+		return "", httpresponse.NewHTTPError(stdhttp.StatusBadRequest, "invalid_query_parameter", "status must be active, deleted, or all")
 	}
 }
 
@@ -73,7 +74,7 @@ func parseIncludeDeleted(c echo.Context) (bool, error) {
 
 	includeDeleted, err := strconv.ParseBool(raw)
 	if err != nil {
-		return false, echo.NewHTTPError(stdhttp.StatusBadRequest, "include_deleted must be a boolean")
+		return false, httpresponse.NewHTTPError(stdhttp.StatusBadRequest, "invalid_query_parameter", "include_deleted must be a boolean")
 	}
 
 	return includeDeleted, nil

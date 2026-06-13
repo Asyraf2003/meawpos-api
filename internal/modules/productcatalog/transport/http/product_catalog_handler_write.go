@@ -21,6 +21,7 @@ import (
 
 	productcatalogusecase "pos-go/internal/modules/productcatalog/usecase"
 	productcatalogid "pos-go/internal/presentation/http/id/productcatalog"
+	httpresponse "pos-go/internal/transport/http/response"
 
 	"github.com/labstack/echo/v4"
 )
@@ -28,7 +29,7 @@ import (
 func (h ProductCatalogHandler) Create(c echo.Context) error {
 	var req productUpsertRequest
 	if err := c.Bind(&req); err != nil {
-		return echo.NewHTTPError(stdhttp.StatusBadRequest, "invalid request body")
+		return httpresponse.NewHTTPError(stdhttp.StatusBadRequest, "invalid_request_body", "invalid request body")
 	}
 
 	result, err := h.create.Execute(c.Request().Context(), productcatalogusecase.CreateProductCommand{
@@ -52,7 +53,7 @@ func (h ProductCatalogHandler) Create(c echo.Context) error {
 func (h ProductCatalogHandler) Update(c echo.Context) error {
 	var req productUpsertRequest
 	if err := c.Bind(&req); err != nil {
-		return echo.NewHTTPError(stdhttp.StatusBadRequest, "invalid request body")
+		return httpresponse.NewHTTPError(stdhttp.StatusBadRequest, "invalid_request_body", "invalid request body")
 	}
 
 	result, err := h.update.Execute(c.Request().Context(), productcatalogusecase.UpdateProductCommand{
