@@ -68,6 +68,19 @@ func (r *fakeSupplierRepository) FindByNormalizedName(
 	return domain.Supplier{}, false, nil
 }
 
+func (r *fakeSupplierRepository) FindActiveByNormalizedName(
+	_ context.Context,
+	normalizedName domain.NormalizedName,
+) (domain.Supplier, bool, error) {
+	for _, supplier := range r.byID {
+		if supplier.NormalizedName() == normalizedName && supplier.IsActive() {
+			return supplier, true, nil
+		}
+	}
+
+	return domain.Supplier{}, false, nil
+}
+
 func (r *fakeSupplierRepository) List(
 	_ context.Context,
 	filter ports.ListSuppliersFilter,
