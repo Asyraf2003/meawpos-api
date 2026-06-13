@@ -160,3 +160,32 @@ The same session must create or update a handoff when durable work was done.
 ## Context Window Status
 
 Current ledger update context status: updated after ProductCatalog PostgreSQL persistence behavior and query-plan proof; next step is selecting the next accepted ProductCatalog slice.
+
+## 2026-06-13 ProductCatalog runtime/capability closeout
+
+FACT:
+ProductCatalog protected HTTP runtime, presenter, route registration, permission seed, capability seed, route capability manifest, and disabled-capability proof are locally complete.
+
+PROOF:
+- `go test ./internal/modules/productcatalog/transport/http/... ./internal/presentation/http/id/productcatalog/...` passed.
+- `go test ./internal/app/bootstrap/... ./internal/modules/productcatalog/transport/http/... ./internal/presentation/http/id/productcatalog/...` passed.
+- `go test ./internal/transport/http/middleware/... -run TestProtectedRoutesRejectDisabledCapabilityBeforeHandler` passed.
+- `bash scripts/audit_route_capabilities.sh` passed with 21 checked rows.
+- `bash scripts/db_migrate.sh` applied `0013_seed_product_catalog_permissions_capabilities.up.sql`.
+- `make verify` passed.
+
+DECISION:
+ProductCatalog runtime/capability slice is locally closed.
+
+GAP:
+ProductCatalog UI, inventory stock mutation, stock adjustment create/reverse, broad audit sink, and extended Laravel table filters remain out of scope.
+
+PROGRESS:
+- ProductCatalog persistence: 100%.
+- ProductCatalog runtime/capability: 100% locally closed.
+- Estimated ProductCatalog full transition: 78%.
+- Estimated Business Phase 1: 56%.
+- Estimated overall transition: 38%.
+
+NEXT:
+Select the next accepted slice before implementation.
