@@ -48,8 +48,10 @@ internal/
     transport/http/
   platform/
     postgres/
+  presentation/http/id/
   transport/http/
     middleware/
+    response/
 migrations/
 scripts/
 docs/
@@ -64,7 +66,9 @@ docs/
 - `internal/modules/<module>/ports`: module interfaces and boundary contracts.
 - `internal/modules/<module>/usecase`: orchestration and transaction intent.
 - `internal/modules/<module>/transport/http`: request/response mapping and use case calls.
+- `internal/presentation/http/id`: Indonesian/public HTTP DTO and presenter mapping.
 - `internal/transport/http/middleware`: cross-module HTTP middleware.
+- `internal/transport/http/response`: shared HTTP error envelope primitives and Echo error handler.
 - `internal/platform`: technical adapters such as PostgreSQL, tokens, state, clocks, IDs, providers, and crypto.
 - `migrations`: PostgreSQL schema changes.
 - `scripts`: repeatable proof and audit commands.

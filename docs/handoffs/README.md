@@ -45,9 +45,12 @@ docs/archive/handoffs-closed/README.md
 - `2026-06-08-servicecatalog-runtime-capability-implementation.md`: latest ServiceCatalog runtime/capability closeout context and next planning-only scope.
 - `2026-06-08-servicecatalog-runtime-capability-blueprint-accepted.md`: accepted blueprint 0027 context retained until the next scoped session prompt is prepared.
 
+ProductCatalog handoffs are not active in this folder. Completed ProductCatalog slice history is archived under `docs/archive/handoffs-closed/` and summarized by the active transition ledger.
+
 ## Pending / Needs Follow-Up
 
 - `2026-06-06-auth-runtime-local-dev.md`: auth runtime proof remains incomplete; keep visible until ADR `0009` runtime proof is closed or superseded.
+- `2026-06-09-cli-command-formatter-rules.md`: CLI formatter rule proof remains a workflow follow-up until its local audit proof is recorded or superseded.
 
 ## Archive Policy
 

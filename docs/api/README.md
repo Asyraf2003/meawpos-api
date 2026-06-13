@@ -25,6 +25,7 @@ This folder defines public HTTP API contract rules.
 ## Contents
 
 - `0050_echo_http_contract.md`: Echo transport rules, request/response ownership, envelope expectations, route behavior, and forbidden HTTP-layer shortcuts.
+- `product_catalog.md`: developer-facing ProductCatalog catalog API contract for the current pure backend API routes.
 
 ## Use This Folder When
 

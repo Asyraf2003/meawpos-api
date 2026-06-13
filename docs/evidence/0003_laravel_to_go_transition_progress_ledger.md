@@ -22,7 +22,7 @@ audit:allow-oversize reason=bootstrap-wiring
 
 ## Status
 
-Date updated: 2026-06-11
+Date updated: 2026-06-13
 
 Active blueprint:
 
@@ -41,7 +41,11 @@ docs/blueprints/0024_servicecatalog_domain_contract.md
 docs/blueprints/0025_servicecatalog_implementation_slice_1.md
 docs/blueprints/0026_servicecatalog_postgres_persistence_slice.md
 docs/blueprints/0027_servicecatalog_runtime_capability_slice.md
+docs/blueprints/0028_productcatalog_domain_contract.md
+docs/blueprints/0029_productcatalog_implementation_slice_1.md
 docs/blueprints/0030_productcatalog_postgres_persistence_slice.md
+docs/blueprints/0031_productcatalog_runtime_capability_slice.md
+docs/blueprints/0032_api_docs_error_envelope_slice.md
 ```
 
 Related evidence:
@@ -52,6 +56,7 @@ docs/evidence/0002_laravel_productcatalog_servicecatalog_inventory.md
 docs/evidence/2026-06-06-auth-runtime-local-dev.md
 docs/evidence/0004_adr_implementation_proof_index.md
 docs/evidence/0005_laravel_to_go_transition_history_2026_06_08.md
+docs/evidence/2026-06-13_api_architecture_product_status_review.md
 ```
 
 Related handoffs:
@@ -60,18 +65,6 @@ Related handoffs:
 docs/handoffs/2026-06-06-auth-runtime-local-dev.md
 docs/handoffs/2026-06-08-servicecatalog-runtime-capability-blueprint-accepted.md
 docs/handoffs/2026-06-08-servicecatalog-runtime-capability-implementation.md
-docs/handoffs/2026-06-09-productcatalog-domain-slice-1.md
-docs/handoffs/2026-06-10-productcatalog-listproducts-skeleton-progress.md
-docs/handoffs/2026-06-10-productcatalog-lookupproducts-skeleton-progress.md
-docs/handoffs/2026-06-10-productcatalog-listproductversions-skeleton-progress.md
-docs/handoffs/2026-06-10-productcatalog-listproductversions-behavior-progress.md
-docs/handoffs/2026-06-11-productcatalog-postgres-create-find-update-progress.md
-docs/handoffs/2026-06-11-productcatalog-postgres-reader-getbyid-progress.md
-docs/handoffs/2026-06-11-productcatalog-postgres-reader-list-progress.md
-docs/handoffs/2026-06-12-productcatalog-postgres-reader-lookup-progress.md
-docs/handoffs/2026-06-12-productcatalog-postgres-version-repository-progress.md
-docs/handoffs/2026-06-12-productcatalog-postgres-duplicate-checker-progress.md
-docs/handoffs/2026-06-12-productcatalog-postgres-persistence-closeout.md
 docs/archive/handoffs-closed/README.md
 ```
 
@@ -84,11 +77,11 @@ Capability-control foundation is closed with owner/local proof on 2026-06-08.
 The valid order is:
 
 1. Keep the progress ledger current.
-2. Start the first POS business-domain blueprint/domain contract.
+2. Select exactly one accepted slice before implementation.
 3. Repair or prove remaining runtime/security proof gaps as their own scopes.
 4. Complete missing Stage 0 inventory batches before domain implementation.
-5. Start `servicecatalog` only after an accepted domain contract and capability seed decision.
-6. Start `productcatalog` only after an accepted domain contract and capability seed decision.
+5. Do not re-open ProductCatalog catalog API, persistence, runtime/capability, API docs, or error envelope work unless a bug is found.
+6. Do not treat ProductCatalog catalog API closeout as Product/inventory area closeout.
 
 Protected POS CRUD implementation must wait for accepted domain contracts, POS PostgreSQL baseline decisions, authorization/capability mapping, transaction/audit decisions, and tests.
 
@@ -101,8 +94,8 @@ Protected POS CRUD implementation must wait for accepted domain contracts, POS P
 | Stage 2 | PostgreSQL target baseline for POS domains | Partial | 10% | ProductCatalog PostgreSQL migration 0011 has local DB apply proof; ProductCatalog PostgreSQL repository skeletons are remote-visible with compile-time port assertions; ProductRepository Create, FindByID, and Update behavior have focused local, integration, and aggregate `make verify` proof; ProductReader GetByID behavior has focused local, integration, and aggregate `make verify` proof; ProductReader List behavior has focused local, integration, and aggregate `make verify` proof; ProductReader Lookup behavior has focused integration, aggregate `make verify`, and connector proof; ProductVersionRepository Append/ListByProductID behavior has focused integration, aggregate `make verify`, and connector proof; ProductDuplicateChecker behavior has focused integration, aggregate `make verify`, and connector proof; ProductCatalog PostgreSQL EXPLAIN/query-plan proof passed for key read paths; ProductCatalog PostgreSQL EXPLAIN/query-plan proof passed for key read paths |
 | Stage 3 | API foundation and capability control | Closed | 100% | Auth/session foundation exists; capability contracts pass tests; PostgreSQL capability migration is applied; PostgreSQL adapter integration tests pass; runtime capability middleware tests pass; protected route seed migration exists; admin HTTP surface implementation and full `make verify` proof pass; route-to-capability audit script exists and is wired into `make verify`; route-level disabled protected endpoint proof passes for current protected route capability keys; final closeout proof passed on 2026-06-08 |
 | Stage 4 | Cross-cutting modules | Not started | 0% | No audit/language/notification/idempotency transition implementation proof yet |
-| Business Phase 1 | Service catalog and product catalog | Partial | 58% | ServiceCatalog domain/usecase, PostgreSQL persistence, and runtime/capability slice have local proof; ProductCatalog domain/usecase, PostgreSQL persistence, runtime/capability, developer API docs, and standardized error envelope slice have local focused and aggregate `make verify` proof; ProductCatalog UI, inventory stock mutation, stock adjustment create/reverse, broad audit sink, runtime language switch, and extended filters remain incomplete |
-| Overall Laravel-to-Go transition | POS API migration | Early foundation | 40% | Docs, auth debug lane, full verify gate, capability foundation, ServiceCatalog domain/usecase, PostgreSQL persistence, runtime/capability proof, ProductCatalog domain/usecase proof, ProductCatalog PostgreSQL persistence closeout proof, ProductCatalog runtime/capability closeout proof, and ProductCatalog API docs/error envelope proof exist; ProductCatalog UI, inventory behavior, audit sink, language switch, extended filters, and broader POS APIs remain incomplete |
+| Business Phase 1 | Service catalog and product catalog | Partial | 58% | ServiceCatalog domain/usecase, PostgreSQL persistence, and runtime/capability slice have local proof; ProductCatalog catalog API has local proof through domain/usecase, PostgreSQL persistence, protected runtime/capability routes, developer API docs, and standardized ProductCatalog error envelope coverage; Product inventory/stock mutation, stock adjustment create/reverse, ProductCatalog audit/outbox persistence, runtime language switch, extended filters, shared success envelope centralization, and DB-backed HTTP smoke proof remain incomplete |
+| Overall Laravel-to-Go transition | POS API migration | Early foundation | 40% | Docs, auth debug lane, full verify gate, capability foundation, ServiceCatalog domain/usecase, PostgreSQL persistence, runtime/capability proof, ProductCatalog domain/usecase proof, ProductCatalog PostgreSQL persistence closeout proof, ProductCatalog runtime/capability closeout proof, and ProductCatalog API docs/error envelope proof exist; Product/inventory behavior, audit/outbox, language switch, extended filters, runtime smoke proof, and broader POS APIs remain incomplete |
 
 ## Current State Summary
 - Capability-control foundation is closed with proof.
@@ -119,6 +112,8 @@ Protected POS CRUD implementation must wait for accepted domain contracts, POS P
 - ProductCatalog ListProducts contract, constructor/skeleton, reader error propagation, query forwarding, success mapping, and empty-list behavior are remote-visible through GitHub connector with focused `go test ./internal/modules/productcatalog/...` proof and aggregate `make verify` proof.
 - ProductCatalog LookupProducts contract, constructor/skeleton, reader error propagation, query forwarding, success mapping, and empty-list behavior are remote-visible through GitHub connector with focused `go test ./internal/modules/productcatalog/...` proof and aggregate `make verify` proof.
 - ProductCatalog ListProductVersions behavior is locally implemented with focused `go test ./internal/modules/productcatalog/...` proof and aggregate `make verify` proof; connector validation passed through GitHub connector.
+- ProductCatalog catalog API is locally closed for pure API scope through domain/usecase, PostgreSQL persistence, protected runtime/capability routes, developer API docs, and standardized ProductCatalog error envelope proof.
+- Active ProductCatalog handoffs have been archived under `docs/archive/handoffs-closed/`; no ProductCatalog handoff remains active under `docs/handoffs/`.
 
 ## Open Gaps
 - Full Laravel source inventory is incomplete for many business domains.
@@ -134,21 +129,23 @@ Protected POS CRUD implementation must wait for accepted domain contracts, POS P
 - ServiceCatalog domain contract is accepted.
 - ServiceCatalog implementation slice 1 plan is accepted and implemented with proof.
 - ProductCatalog domain, ports, CreateProduct, UpdateProduct, SoftDeleteProduct, RestoreProduct, GetProductDetail, ListProducts, LookupProducts, and ListProductVersions behavior are locally proven; connector validation passed for the latest behavior checkpoint.
-- ProductCatalog backend API path is locally proven through domain/usecase, PostgreSQL persistence, runtime/capability, developer API docs, and standardized error envelope slices. ProductCatalog UI, inventory stock mutation, stock adjustment create/reverse, broad audit sink, runtime language switch, extended Laravel filters, shared success envelope centralization, and end-to-end curl/auth/DB smoke proof remain incomplete.
+- ProductCatalog catalog API path is locally proven through domain/usecase, PostgreSQL persistence, runtime/capability, developer API docs, and standardized ProductCatalog error envelope slices. Product inventory/stock mutation, stock adjustment create/reverse, ProductCatalog audit/outbox persistence, runtime language switch, extended Laravel filters, shared success envelope centralization, and end-to-end curl/auth/DB smoke proof remain incomplete.
 - ServiceCatalog runtime/capability implementation is remote-visible through GitHub connector with local proof; focused handler and disabled-capability proof are remote-visible through GitHub connector with local proof; connector validation passed for the latest closeout proof files.
 - ProductCatalog domain contract blueprint `docs/blueprints/0028_productcatalog_domain_contract.md` is accepted locally with Option A duplicate policy and `make verify` proof; connector validation pending.
 - ProductCatalog implementation slice 1 blueprint `docs/blueprints/0029_productcatalog_implementation_slice_1.md` is accepted locally with `make verify` proof; connector validation pending.
 - ProductCatalog domain package, ports, CreateProduct, UpdateProduct, SoftDeleteProduct, RestoreProduct, GetProductDetail, ListProducts, LookupProducts, and ListProductVersions behavior are locally proven with focused `go test ./internal/modules/productcatalog/...` proof and aggregate `make verify` proof; connector validation passed for the latest behavior checkpoint.
 - ProductCatalog ListProducts query forwarding, success item mapping, and empty-list behavior are remote-visible through GitHub connector with focused `go test ./internal/modules/productcatalog/...` proof and aggregate `make verify` proof.
 - ProductCatalog implementation slice 1 is closed after ListProductVersions behavior connector validation.
-- ProductCatalog PostgreSQL persistence blueprint `docs/blueprints/0030_productcatalog_postgres_persistence_slice.md` is accepted. ProductCatalog PostgreSQL persistence blueprint includes performance and flexibility standards for CRUD, show, list, lookup, duplicate guard, and version-list query paths. ProductCatalog migration `0011_create_product_catalog_tables.up.sql` has local DB apply proof; ProductCatalog PostgreSQL repository skeletons are remote-visible with compile-time port assertions; ProductRepository Create, FindByID, Update, ProductReader GetByID, ProductReader List, ProductReader Lookup, ProductVersionRepository Append/ListByProductID, and ProductDuplicateChecker behavior are implemented with focused PostgreSQL integration proof and connector validation. EXPLAIN/query-plan proof passed for key ProductCatalog PostgreSQL read paths. Remaining HTTP/runtime/capability/UI work is not started yet.
+- ProductCatalog PostgreSQL persistence blueprint `docs/blueprints/0030_productcatalog_postgres_persistence_slice.md` is accepted. ProductCatalog PostgreSQL persistence blueprint includes performance and flexibility standards for CRUD, show, list, lookup, duplicate guard, and version-list query paths. ProductCatalog migration `0011_create_product_catalog_tables.up.sql` has local DB apply proof; ProductCatalog PostgreSQL repository skeletons are remote-visible with compile-time port assertions; ProductRepository Create, FindByID, Update, ProductReader GetByID, ProductReader List, ProductReader Lookup, ProductVersionRepository Append/ListByProductID, and ProductDuplicateChecker behavior are implemented with focused PostgreSQL integration proof and connector validation. EXPLAIN/query-plan proof passed for key ProductCatalog PostgreSQL read paths.
+- ProductCatalog protected runtime/capability blueprint `docs/blueprints/0031_productcatalog_runtime_capability_slice.md` and API docs/error envelope blueprint `docs/blueprints/0032_api_docs_error_envelope_slice.md` are locally implemented with proof.
 
 ## Next Valid Active Step
 
-Choose the next accepted ProductCatalog slice after ProductCatalog runtime/capability and API docs/error envelope closeout proof.
+ProductCatalog runtime smoke proof with local auth token and DB-backed HTTP route.
 
-- Do not start Echo/runtime, capability seed, inventory mutation, UI, or runtime HTTP work in this persistence slice.
-- Do not start a new runtime slice while repository proof is not reflected in repository facts.
+- Start from a small blueprint before implementation.
+- Prove at least one protected DB-backed ProductCatalog route through the real local HTTP server and local auth token.
+- Do not start inventory mutation, audit/outbox implementation, localization, shared success envelope centralization, or architecture folder renames in this smoke-proof slice.
 - Do not re-open ProductCatalog persistence, runtime/capability, API docs, or error envelope work unless a bug is found.
 
 ## Handoff Requirement
@@ -159,7 +156,7 @@ The same session must create or update a handoff when durable work was done.
 
 ## Context Window Status
 
-Current ledger update context status: updated after ProductCatalog API docs and standardized error envelope closeout proof; next step is archiving superseded ProductCatalog handoffs or selecting the next accepted ProductCatalog slice.
+Current ledger update context status: updated after ProductCatalog API architecture/status review. Superseded ProductCatalog handoffs are archived. The next valid slice is ProductCatalog runtime smoke proof with local auth token and DB-backed HTTP route.
 
 ## 2026-06-13 ProductCatalog runtime/capability closeout
 
@@ -178,7 +175,7 @@ DECISION:
 ProductCatalog runtime/capability slice is locally closed.
 
 GAP:
-ProductCatalog UI, inventory stock mutation, stock adjustment create/reverse, broad audit sink, and extended Laravel table filters remain out of scope.
+Inventory stock mutation, stock adjustment create/reverse, ProductCatalog audit/outbox persistence, runtime smoke proof, and extended Laravel table filters remain out of scope.
 
 PROGRESS:
 - ProductCatalog persistence: 100%.
@@ -266,8 +263,6 @@ make verify
 
 GAP:
 
-ProductCatalog UI is not implemented.
-
 Inventory stock mutation is not implemented.
 
 Stock adjustment create/reverse is not implemented.
@@ -321,16 +316,10 @@ Estimated overall Laravel-to-Go transition: 40%.
 
 NEXT:
 
-Archive superseded ProductCatalog progress handoffs after this ledger update is verified.
-
-Recommended next ProductCatalog slice candidates:
+Recommended next ProductCatalog slice:
 
 ```text
-1. ProductCatalog runtime smoke proof with local auth token and DB-backed HTTP route.
-2. Shared success envelope centralization.
-3. Audit/outbox implementation to replace ProductCatalog no-op audit recorder.
-4. Inventory stock projection/mutation blueprint.
-5. Runtime language/localization blueprint.
+ProductCatalog runtime smoke proof with local auth token and DB-backed HTTP route.
 ```
 
 Do not re-open ProductCatalog persistence, runtime/capability, API docs, or error envelope work unless a bug is found.

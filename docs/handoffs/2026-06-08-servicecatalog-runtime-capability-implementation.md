@@ -85,7 +85,7 @@ Local aggregate proof:
 
 - Connector validation passed for implementation visibility through GitHub; focused handler and ServiceCatalog-specific disabled-capability proof now pass locally.
 - Handler package now has focused local unit tests for query parsing, body validation, command mapping, envelope shape, and not-found mapping.
-- ProductCatalog remains unstarted and blocked by its own accepted domain contract and owner decisions.
+- ProductCatalog state has advanced since this ServiceCatalog handoff; use `docs/evidence/0003_laravel_to_go_transition_progress_ledger.md` for current ProductCatalog status.
 
 ## PROGRESS
 
