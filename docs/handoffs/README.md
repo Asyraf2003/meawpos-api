@@ -42,7 +42,7 @@ docs/archive/handoffs-closed/README.md
 
 ## Current
 
-- 2026-06-14-supplier-postgres-persistence-migration-only.md: Supplier PostgreSQL persistence migration-only checkpoint; next active step is repository adapter skeletons.
+- 2026-06-14-supplier-postgres-persistence-migration-only.md: Supplier PostgreSQL persistence checkpoint through SetActive behavior; next active step is List and Lookup behavior.
 - 2026-06-14-supplier-implementation-slice-1-closeout.md: Supplier domain/ports/usecase closeout context and proof summary.
 - `2026-06-14-productcatalog-runtime-smoke-proof-closeout.md`: ProductCatalog runtime smoke proof closeout context and next ADR `0012` output-contract slice pointer.
 - `2026-06-08-servicecatalog-runtime-capability-implementation.md`: latest ServiceCatalog runtime/capability closeout context and next planning-only scope.
