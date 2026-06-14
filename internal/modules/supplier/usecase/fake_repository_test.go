@@ -68,8 +68,6 @@ func (r *fakeSupplierRepository) FindByNormalizedName(
 	return domain.Supplier{}, false, nil
 }
 
-func (r *fakeSupplierRepository) List(
-	_ context.Context,
 	filter ports.ListSuppliersFilter,
 ) ([]domain.Supplier, error) {
 	r.listFilter = filter
@@ -81,8 +79,6 @@ func (r *fakeSupplierRepository) List(
 	return results, nil
 }
 
-func (r *fakeSupplierRepository) Lookup(
-	_ context.Context,
 	filter ports.LookupSuppliersFilter,
 ) ([]domain.Supplier, error) {
 	r.lookupFilter = filter
@@ -94,8 +90,6 @@ func (r *fakeSupplierRepository) Lookup(
 	return results, nil
 }
 
-func (r *fakeSupplierRepository) SetActive(
-	_ context.Context,
 	id domain.SupplierID,
 	active bool,
 ) (domain.Supplier, bool, error) {
@@ -114,22 +108,3 @@ func (r *fakeSupplierRepository) SetActive(
 	return supplier, true, nil
 }
 
-func mustSupplier(t *testing.T, id string, name string, active bool) domain.Supplier {
-	t.Helper()
-
-	supplier, err := domain.NewSupplier(
-		domain.SupplierID(id),
-		name,
-		domain.SupplierContact{Phone: "0812", Email: "owner@example.test"},
-		time.Date(2026, 6, 14, 10, 0, 0, 0, time.UTC),
-	)
-	if err != nil {
-		t.Fatalf("NewSupplier() error = %v", err)
-	}
-
-	if !active {
-		supplier.Deactivate(time.Date(2026, 6, 14, 11, 0, 0, 0, time.UTC))
-	}
-
-	return supplier
-}
