@@ -93,7 +93,7 @@ func (r *SupplierRepository) SetActive(
 		return domain.Supplier{}, false, err
 	}
 
-	return supplier, true, nil
+	return r.FindByID(ctx, id)
 }
 
 func supplierArgs(supplier domain.Supplier) []any {
