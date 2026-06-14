@@ -20,7 +20,7 @@ along with gopos-api. If not, see <https://www.gnu.org/licenses/>.
 
 ## Status
 
-Draft for owner acceptance.
+Accepted.
 
 ## Date
 
@@ -441,6 +441,6 @@ Hexagonal boundaries must remain enforced by make verify.
 
 ## ACCEPTANCE RULE
 
-This blueprint is not accepted until the owner explicitly accepts it.
+This blueprint is accepted by owner decision.
 
-Implementation must not start before acceptance.
+Implementation must follow the documented step order and start with migration-only work.
