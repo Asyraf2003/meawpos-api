@@ -216,16 +216,14 @@ Current Supplier PostgreSQL persistence status:
 - blueprint accepted;
 - migration-only step complete;
 - repository adapter skeletons locally implemented with compile-time port assertion;
-- Create, FindByID, FindByNormalizedName, FindActiveByNormalizedName, Update, and SetActive behavior implemented;
-- integration tests for create, direct lookup, Update, and SetActive behavior added;
+- Create, FindByID, FindByNormalizedName, FindActiveByNormalizedName, Update, SetActive, List, and Lookup behavior implemented;
+- integration tests for create, direct lookup, Update, SetActive, List, and Lookup behavior added;
 - targeted Supplier DB-backed integration proof passes with `.env` loaded;
-- query-plan proof not collected;
+- query-plan proof collected locally;
 - remote connector validation pending for final local changes.
 
 Remaining open gaps:
 
-- Supplier PostgreSQL repository List and Lookup behavior.
-- Supplier query-plan proof.
 - Supplier HTTP routes.
 - Supplier capability seed.
 - Faktur.
@@ -237,7 +235,7 @@ Remaining open gaps:
 
 Auth/System ADR 0012 output contract centralization remains deferred by owner decision.
 
-Next Valid Active Step: Supplier PostgreSQL repository List and Lookup behavior.
+Next Valid Active Step: Supplier PostgreSQL persistence connector validation and final closeout.
 
 ### Supplier PostgreSQL repository adapter skeleton checkpoint - 2026-06-14
 
@@ -267,16 +265,14 @@ Current Supplier PostgreSQL persistence status:
 - migration-only step complete;
 - repository adapter skeletons implemented;
 - compile-time port assertion exists;
-- Create, FindByID, FindByNormalizedName, FindActiveByNormalizedName, Update, and SetActive behavior implemented;
-- integration tests for create, direct lookup, Update, and SetActive behavior added;
+- Create, FindByID, FindByNormalizedName, FindActiveByNormalizedName, Update, SetActive, List, and Lookup behavior implemented;
+- integration tests for create, direct lookup, Update, SetActive, List, and Lookup behavior added;
 - targeted Supplier DB-backed integration proof passes with `.env` loaded;
-- query-plan proof is not collected;
+- query-plan proof collected locally;
 - remote connector validation pending for local changes.
 
 Remaining open gaps:
 
-- Supplier PostgreSQL repository List and Lookup behavior.
-- Supplier query-plan proof.
 - Supplier HTTP routes.
 - Supplier capability seed.
 - Faktur.
@@ -286,7 +282,7 @@ Remaining open gaps:
 - Extended filters.
 - Laravel Supplier MySQL/source parity.
 
-Next Valid Active Step: Supplier PostgreSQL repository List and Lookup behavior.
+Next Valid Active Step: Supplier PostgreSQL persistence connector validation and final closeout.
 
 ### Supplier PostgreSQL repository create and direct lookup checkpoint - 2026-06-14
 
@@ -333,15 +329,15 @@ Current Supplier PostgreSQL persistence status:
 - FindActiveByNormalizedName behavior implemented;
 - Update behavior implemented;
 - SetActive behavior implemented;
-- integration tests for create, direct lookup, Update, and SetActive behavior added;
+- List behavior implemented;
+- Lookup behavior implemented;
+- integration tests for create, direct lookup, Update, SetActive, List, and Lookup behavior added;
 - targeted Supplier DB-backed integration proof passes with `.env` loaded;
-- query-plan proof is not collected;
+- query-plan proof collected locally;
 - remote connector validation pending for local changes.
 
 Remaining open gaps:
 
-- Supplier PostgreSQL repository List and Lookup behavior.
-- Supplier query-plan proof.
 - Supplier HTTP routes.
 - Supplier capability seed.
 - Faktur.
@@ -351,7 +347,7 @@ Remaining open gaps:
 - Extended filters.
 - Laravel Supplier MySQL/source parity.
 
-Next Valid Active Step: Supplier PostgreSQL repository List and Lookup behavior.
+Next Valid Active Step: Supplier PostgreSQL persistence connector validation and final closeout.
 
 ### Supplier PostgreSQL repository Update checkpoint - 2026-06-14
 
@@ -398,14 +394,14 @@ Current Supplier PostgreSQL persistence status:
 - FindActiveByNormalizedName behavior implemented;
 - Update behavior implemented;
 - SetActive behavior implemented;
+- List behavior implemented;
+- Lookup behavior implemented;
 - targeted Supplier DB-backed integration proof passes;
-- query-plan proof is not collected;
+- query-plan proof collected locally;
 - remote connector validation pending for local changes.
 
 Remaining open gaps:
 
-- Supplier PostgreSQL repository List and Lookup behavior.
-- Supplier query-plan proof.
 - Supplier HTTP routes.
 - Supplier capability seed.
 - Faktur.
@@ -415,7 +411,7 @@ Remaining open gaps:
 - Extended filters.
 - Laravel Supplier MySQL/source parity.
 
-Next Valid Active Step: Supplier PostgreSQL repository List and Lookup behavior.
+Next Valid Active Step: Supplier PostgreSQL persistence connector validation and final closeout.
 
 ### Supplier PostgreSQL repository SetActive checkpoint - 2026-06-14
 
@@ -463,14 +459,14 @@ Current Supplier PostgreSQL persistence status:
 - FindActiveByNormalizedName behavior implemented;
 - Update behavior implemented;
 - SetActive behavior implemented;
+- List behavior implemented;
+- Lookup behavior implemented;
 - targeted Supplier DB-backed integration proof passes;
-- query-plan proof is not collected;
+- query-plan proof collected locally;
 - remote connector validation pending for local changes.
 
 Remaining open gaps:
 
-- Supplier PostgreSQL repository List and Lookup behavior.
-- Supplier query-plan proof.
 - Supplier HTTP routes.
 - Supplier capability seed.
 - Faktur.
@@ -480,15 +476,93 @@ Remaining open gaps:
 - Extended filters.
 - Laravel Supplier MySQL/source parity.
 
-Next Valid Active Step: Supplier PostgreSQL repository List and Lookup behavior.
+Next Valid Active Step: Supplier PostgreSQL persistence connector validation and final closeout.
+
+### Supplier PostgreSQL repository List/Lookup and query-plan checkpoint - 2026-06-14
+
+Supplier PostgreSQL repository List and Lookup behavior is locally implemented with targeted DB-backed integration and local query-plan proof.
+
+Files changed:
+
+```text
+internal/platform/postgres/supplier_repository_query.go
+internal/platform/postgres/supplier_repository_query_integration_test.go
+docs/handoffs/2026-06-14-supplier-postgres-persistence-migration-only.md
+docs/handoffs/README.md
+docs/evidence/0003_laravel_to_go_transition_progress_ledger.md
+```
+
+Local proof:
+
+```bash
+set -a
+source .env
+set +a
+go test -tags integration ./internal/platform/postgres/... -run Supplier -count=1 -v
+go test ./internal/modules/supplier/...
+go test ./internal/platform/postgres/... -run Supplier
+bash scripts/audit_hexagonal.sh
+make verify
+```
+
+Query-plan proof:
+
+```bash
+set -a
+source .env
+set +a
+psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -q
+```
+
+The local query-plan proof used `BEGIN`, inserted 300 synthetic Supplier rows, ran `ANALYZE suppliers`, collected `EXPLAIN (COSTS OFF)`, and ended with `ROLLBACK`.
+
+Summarized local result:
+
+- Supplier primary-key show/find-by-id used `suppliers_pkey`.
+- Supplier active list first page used `suppliers_active_name_idx`.
+- Supplier bounded lookup search used `suppliers_active_name_idx` with bounded `LIMIT`.
+- Supplier active-name duplicate guard used `suppliers_active_name_normalized_unique`.
+
+No timing or SLA claim is made from this proof.
+
+Current Supplier PostgreSQL persistence status:
+
+- blueprint accepted;
+- migration-only step complete;
+- repository adapter skeletons implemented;
+- Create behavior implemented;
+- FindByID behavior implemented;
+- FindByNormalizedName behavior implemented;
+- FindActiveByNormalizedName behavior implemented;
+- Update behavior implemented;
+- SetActive behavior implemented;
+- List behavior implemented;
+- Lookup behavior implemented;
+- targeted Supplier DB-backed integration proof passes;
+- query-plan proof collected locally;
+- remote connector validation pending for local changes.
+
+Remaining open gaps:
+
+- Supplier PostgreSQL persistence connector validation and final closeout.
+- Supplier HTTP routes.
+- Supplier capability seed.
+- Faktur.
+- Inventory/stock movement.
+- Audit/outbox.
+- Localization.
+- Extended filters.
+- Laravel Supplier MySQL/source parity.
+
+Next Valid Active Step: Supplier PostgreSQL persistence connector validation and final closeout.
 
 
 ## Next Valid Active Step
 
-Supplier PostgreSQL repository List and Lookup behavior.
+Supplier PostgreSQL persistence connector validation and final closeout.
 
 - Start from accepted blueprint `docs/blueprints/0039_supplier_postgres_persistence_slice.md`.
-- Keep the next active step limited to List and Lookup behavior plus focused repository proof.
+- Keep the next active step limited to connector validation and final closeout.
 - Do not start HTTP routes, capability seed, Faktur, inventory/stock movement, audit/outbox, localization, extended filters, or architecture folder cleanup.
 - Do not re-open ProductCatalog persistence, runtime/capability, API docs, error envelope, shared success envelope foundation, Capability envelope, Product API readiness, or runtime smoke proof work unless a bug is found.
 
@@ -500,7 +574,7 @@ The same session must create or update a handoff when durable work was done.
 
 ## Context Window Status
 
-Current ledger update context status: updated after Supplier PostgreSQL repository SetActive checkpoint. Auth/System output contract centralization is deferred by owner decision. The next valid step is Supplier PostgreSQL repository List and Lookup behavior.
+Current ledger update context status: updated after Supplier PostgreSQL repository List/Lookup and query-plan checkpoint. Auth/System output contract centralization is deferred by owner decision. The next valid step is Supplier PostgreSQL persistence connector validation and final closeout.
 
 ## 2026-06-13 ProductCatalog runtime/capability closeout
 
