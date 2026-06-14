@@ -23,83 +23,117 @@ import (
 	"testing"
 
 	"pos-go/internal/modules/supplier/domain"
+	"pos-go/internal/modules/supplier/ports"
 )
 
-func TestSupplierRepository_FindByIDMissing(t *testing.T) {
+func TestSupplierRepository_FindQueries(t *testing.T) {
 	ctx := context.Background()
 	pool, txCtx := mustOpenSupplierRepoTx(t, ctx)
 	repo := NewSupplierRepository(pool)
-
+	inactiveOnly := mustCreateSupplierQueryRow(t, txCtx, repo, "Cahaya Motor", false)
+	inactive := mustCreateSupplierQueryRow(t, txCtx, repo, "Terang Abadi", false)
+	active := mustCreateSupplierQueryRow(t, txCtx, repo, " terang  abadi ", true)
 	_, found, err := repo.FindByID(txCtx, domain.SupplierID("missing-supplier"))
-	if err != nil {
-		t.Fatalf("FindByID() error = %v", err)
+	if err != nil || found {
+		t.Fatalf("FindByID() = found %v err %v, want found false nil", found, err)
 	}
-	if found {
-		t.Fatal("FindByID() found = true, want false")
+	got, found, err := repo.FindByNormalizedName(txCtx, active.NormalizedName())
+	if err != nil || !found || got.ID() != active.ID() {
+		t.Fatalf("FindByNormalizedName() = id %q found %v err %v", got.ID(), found, err)
+	}
+	got, found, err = repo.FindActiveByNormalizedName(txCtx, inactive.NormalizedName())
+	if err != nil || !found || got.ID() != active.ID() {
+		t.Fatalf("FindActiveByNormalizedName() = id %q found %v err %v", got.ID(), found, err)
+	}
+	_, found, err = repo.FindActiveByNormalizedName(txCtx, inactiveOnly.NormalizedName())
+	if err != nil || found {
+		t.Fatalf("FindActiveByNormalizedName() inactive = found %v err %v, want false nil", found, err)
 	}
 }
 
-func TestSupplierRepository_FindByNormalizedName(t *testing.T) {
+func TestSupplierRepository_ListAndLookup(t *testing.T) {
 	ctx := context.Background()
 	pool, txCtx := mustOpenSupplierRepoTx(t, ctx)
 	repo := NewSupplierRepository(pool)
-	supplier := newSupplierRepositoryTestSupplier(t, "Sentosa Parts")
+	for _, row := range []struct {
+		name   string
+		active bool
+	}{{"Gamma Parts", true}, {"Beta Parts", false}, {"Omega Parts", true}, {"Delta Parts", false}, {"Alpha Parts", true}} {
+		mustCreateSupplierQueryRow(t, txCtx, repo, row.name, row.active)
+	}
+	assertSupplierNames(t, mustListSuppliers(t, txCtx, repo, ports.ListSuppliersFilter{
+		Status: ports.ListStatusActive, Page: 1, PerPage: 10,
+	}), "Alpha Parts", "Gamma Parts", "Omega Parts")
+	assertSupplierNames(t, mustListSuppliers(t, txCtx, repo, ports.ListSuppliersFilter{
+		Status: ports.ListStatusInactive, Page: 1, PerPage: 10,
+	}), "Beta Parts", "Delta Parts")
+	assertSupplierNames(t, mustListSuppliers(t, txCtx, repo, ports.ListSuppliersFilter{
+		Status: ports.ListStatusAll, Page: 1, PerPage: 10,
+	}), "Alpha Parts", "Beta Parts", "Delta Parts", "Gamma Parts", "Omega Parts")
+	assertSupplierNames(t, mustListSuppliers(t, txCtx, repo, ports.ListSuppliersFilter{
+		Status: ports.ListStatusAll, Page: 2, PerPage: 2,
+	}), "Delta Parts", "Gamma Parts")
+	assertSupplierNames(t, mustListSuppliers(t, txCtx, repo, ports.ListSuppliersFilter{
+		Query: "ta", Status: ports.ListStatusAll, Page: 1, PerPage: 10,
+	}), "Beta Parts", "Delta Parts")
+	assertSupplierNames(t, mustLookupSuppliers(t, txCtx, repo, ports.LookupSuppliersFilter{
+		Limit: 10, ActiveOnly: true,
+	}), "Alpha Parts", "Gamma Parts", "Omega Parts")
+	assertSupplierNames(t, mustLookupSuppliers(t, txCtx, repo, ports.LookupSuppliersFilter{
+		Limit: 10, ActiveOnly: false,
+	}), "Alpha Parts", "Beta Parts", "Delta Parts", "Gamma Parts", "Omega Parts")
+	assertSupplierNames(t, mustLookupSuppliers(t, txCtx, repo, ports.LookupSuppliersFilter{
+		Limit: 2, ActiveOnly: true,
+	}), "Alpha Parts", "Gamma Parts")
+	assertSupplierNames(t, mustLookupSuppliers(t, txCtx, repo, ports.LookupSuppliersFilter{
+		Query: "ta", Limit: 10, ActiveOnly: false,
+	}), "Beta Parts", "Delta Parts")
+}
 
-	if err := repo.Create(txCtx, supplier); err != nil {
+func mustCreateSupplierQueryRow(
+	t *testing.T, ctx context.Context, repo *SupplierRepository, name string, active bool,
+) domain.Supplier {
+	t.Helper()
+	supplier := newSupplierRepositoryTestSupplier(t, name)
+	if !active {
+		supplier.Deactivate(supplierRepositoryTestTime.Add(2))
+	}
+	if err := repo.Create(ctx, supplier); err != nil {
 		t.Fatalf("Create() error = %v", err)
 	}
-
-	got, found, err := repo.FindByNormalizedName(txCtx, domain.NormalizeName("sentosa parts"))
-	if err != nil {
-		t.Fatalf("FindByNormalizedName() error = %v", err)
-	}
-	if !found {
-		t.Fatal("FindByNormalizedName() found = false, want true")
-	}
-	assertSupplierFields(t, got, supplier)
+	return supplier
 }
 
-func TestSupplierRepository_FindActiveByNormalizedName(t *testing.T) {
-	ctx := context.Background()
-	pool, txCtx := mustOpenSupplierRepoTx(t, ctx)
-	repo := NewSupplierRepository(pool)
-	inactive := newInactiveSupplierRepositoryTestSupplier(t, "Terang Abadi")
-	active := newSupplierRepositoryTestSupplier(t, " terang  abadi ")
-
-	if err := repo.Create(txCtx, inactive); err != nil {
-		t.Fatalf("Create() inactive error = %v", err)
-	}
-	if err := repo.Create(txCtx, active); err != nil {
-		t.Fatalf("Create() active error = %v", err)
-	}
-
-	got, found, err := repo.FindActiveByNormalizedName(txCtx, active.NormalizedName())
+func mustListSuppliers(
+	t *testing.T, ctx context.Context, repo *SupplierRepository, filter ports.ListSuppliersFilter,
+) []domain.Supplier {
+	t.Helper()
+	rows, err := repo.List(ctx, filter)
 	if err != nil {
-		t.Fatalf("FindActiveByNormalizedName() error = %v", err)
+		t.Fatalf("List() error = %v", err)
 	}
-	if !found {
-		t.Fatal("FindActiveByNormalizedName() found = false, want true")
-	}
-	if got.ID() != active.ID() {
-		t.Fatalf("ID() = %q, want active %q", got.ID(), active.ID())
-	}
+	return rows
 }
 
-func TestSupplierRepository_FindActiveByNormalizedNameIgnoresInactive(t *testing.T) {
-	ctx := context.Background()
-	pool, txCtx := mustOpenSupplierRepoTx(t, ctx)
-	repo := NewSupplierRepository(pool)
-	inactive := newInactiveSupplierRepositoryTestSupplier(t, "Cahaya Motor")
-
-	if err := repo.Create(txCtx, inactive); err != nil {
-		t.Fatalf("Create() inactive error = %v", err)
-	}
-
-	_, found, err := repo.FindActiveByNormalizedName(txCtx, inactive.NormalizedName())
+func mustLookupSuppliers(
+	t *testing.T, ctx context.Context, repo *SupplierRepository, filter ports.LookupSuppliersFilter,
+) []domain.Supplier {
+	t.Helper()
+	rows, err := repo.Lookup(ctx, filter)
 	if err != nil {
-		t.Fatalf("FindActiveByNormalizedName() error = %v", err)
+		t.Fatalf("Lookup() error = %v", err)
 	}
-	if found {
-		t.Fatal("FindActiveByNormalizedName() found = true, want false")
+	return rows
+}
+
+func assertSupplierNames(t *testing.T, rows []domain.Supplier, names ...string) {
+	t.Helper()
+	if len(rows) != len(names) {
+		t.Fatalf("len(rows) = %d, want %d", len(rows), len(names))
+	}
+	for i, name := range names {
+		if rows[i].Name() != name {
+			t.Fatalf("rows[%d].Name() = %q, want %q", i, rows[i].Name(), name)
+		}
 	}
 }
