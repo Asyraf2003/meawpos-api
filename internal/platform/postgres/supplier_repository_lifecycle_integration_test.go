@@ -98,7 +98,7 @@ func TestSupplierRepository_SetActiveRejectsDuplicateActivation(t *testing.T) {
 	if err := repo.Create(txCtx, inactive); err != nil {
 		t.Fatalf("Create() inactive error = %v", err)
 	}
-	err := repo.SetActive(txCtx, inactive.ID(), true)
+	_, _, err := repo.SetActive(txCtx, inactive.ID(), true)
 	if !isSupplierActiveNameUniqueViolation(err) {
 		t.Fatalf("SetActive() error = %v, want active name unique violation", err)
 	}
