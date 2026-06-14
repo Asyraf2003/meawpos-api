@@ -37,3 +37,26 @@ func (r *SupplierRepository) SetActive(
 ) (domain.Supplier, bool, error) {
 	return domain.Supplier{}, false, errSupplierRepositoryNotImplemented
 }
+
+func supplierArgs(supplier domain.Supplier) []any {
+	return []any{
+		string(supplier.ID()),
+		supplier.Name(),
+		string(supplier.NormalizedName()),
+		supplierNullableText(supplier.Phone()),
+		supplierNullableText(supplier.Email()),
+		supplierNullableText(supplier.Address()),
+		supplierNullableText(supplier.Notes()),
+		supplier.IsActive(),
+		supplier.CreatedAt(),
+		supplier.UpdatedAt(),
+	}
+}
+
+func supplierNullableText(value string) any {
+	if value == "" {
+		return nil
+	}
+
+	return value
+}

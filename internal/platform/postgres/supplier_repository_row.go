@@ -101,33 +101,10 @@ func scanSupplier(row supplierScanner) (domain.Supplier, error) {
 	return supplier, nil
 }
 
-func supplierArgs(supplier domain.Supplier) []any {
-	return []any{
-		string(supplier.ID()),
-		supplier.Name(),
-		string(supplier.NormalizedName()),
-		supplierNullableText(supplier.Phone()),
-		supplierNullableText(supplier.Email()),
-		supplierNullableText(supplier.Address()),
-		supplierNullableText(supplier.Notes()),
-		supplier.IsActive(),
-		supplier.CreatedAt(),
-		supplier.UpdatedAt(),
-	}
-}
-
 func supplierStringValue(value sql.NullString) string {
 	if !value.Valid {
 		return ""
 	}
 
 	return value.String
-}
-
-func supplierNullableText(value string) any {
-	if value == "" {
-		return nil
-	}
-
-	return value
 }
