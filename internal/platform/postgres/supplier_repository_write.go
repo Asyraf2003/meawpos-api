@@ -54,11 +54,11 @@ func (r *SupplierRepository) Update(ctx context.Context, supplier domain.Supplie
 			address = $6,
 			notes = $7,
 			is_active = $8,
-			updated_at = $10
+			updated_at = $9
 		WHERE id = $1
 	`
 
-	_, err := r.exec(ctx, sql, supplierArgs(supplier)...)
+	_, err := r.exec(ctx, sql, supplierUpdateArgs(supplier)...)
 	return err
 }
 
@@ -91,4 +91,18 @@ func supplierNullableText(value string) any {
 	}
 
 	return value
+}
+
+func supplierUpdateArgs(supplier domain.Supplier) []any {
+	return []any{
+		string(supplier.ID()),
+		supplier.Name(),
+		string(supplier.NormalizedName()),
+		supplierNullableText(supplier.Phone()),
+		supplierNullableText(supplier.Email()),
+		supplierNullableText(supplier.Address()),
+		supplierNullableText(supplier.Notes()),
+		supplier.IsActive(),
+		supplier.UpdatedAt(),
+	}
 }
