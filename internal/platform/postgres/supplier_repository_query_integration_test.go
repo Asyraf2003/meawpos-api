@@ -61,33 +61,23 @@ func TestSupplierRepository_ListAndLookup(t *testing.T) {
 	}{{"Gamma Parts", true}, {"Beta Parts", false}, {"Omega Parts", true}, {"Delta Parts", false}, {"Alpha Parts", true}} {
 		mustCreateSupplierQueryRow(t, txCtx, repo, row.name, row.active)
 	}
-	assertSupplierNames(t, mustListSuppliers(t, txCtx, repo, ports.ListSuppliersFilter{
-		Status: ports.ListStatusActive, Page: 1, PerPage: 10,
-	}), "Alpha Parts", "Gamma Parts", "Omega Parts")
-	assertSupplierNames(t, mustListSuppliers(t, txCtx, repo, ports.ListSuppliersFilter{
-		Status: ports.ListStatusInactive, Page: 1, PerPage: 10,
-	}), "Beta Parts", "Delta Parts")
-	assertSupplierNames(t, mustListSuppliers(t, txCtx, repo, ports.ListSuppliersFilter{
-		Status: ports.ListStatusAll, Page: 1, PerPage: 10,
-	}), "Alpha Parts", "Beta Parts", "Delta Parts", "Gamma Parts", "Omega Parts")
-	assertSupplierNames(t, mustListSuppliers(t, txCtx, repo, ports.ListSuppliersFilter{
-		Status: ports.ListStatusAll, Page: 2, PerPage: 2,
-	}), "Delta Parts", "Gamma Parts")
-	assertSupplierNames(t, mustListSuppliers(t, txCtx, repo, ports.ListSuppliersFilter{
-		Query: "ta", Status: ports.ListStatusAll, Page: 1, PerPage: 10,
-	}), "Beta Parts", "Delta Parts")
-	assertSupplierNames(t, mustLookupSuppliers(t, txCtx, repo, ports.LookupSuppliersFilter{
-		Limit: 10, ActiveOnly: true,
-	}), "Alpha Parts", "Gamma Parts", "Omega Parts")
-	assertSupplierNames(t, mustLookupSuppliers(t, txCtx, repo, ports.LookupSuppliersFilter{
-		Limit: 10, ActiveOnly: false,
-	}), "Alpha Parts", "Beta Parts", "Delta Parts", "Gamma Parts", "Omega Parts")
-	assertSupplierNames(t, mustLookupSuppliers(t, txCtx, repo, ports.LookupSuppliersFilter{
-		Limit: 2, ActiveOnly: true,
-	}), "Alpha Parts", "Gamma Parts")
-	assertSupplierNames(t, mustLookupSuppliers(t, txCtx, repo, ports.LookupSuppliersFilter{
-		Query: "ta", Limit: 10, ActiveOnly: false,
-	}), "Beta Parts", "Delta Parts")
+	list := func(filter ports.ListSuppliersFilter, names ...string) {
+		rows, err := repo.List(txCtx, filter)
+		assertSupplierNames(t, rows, err, names...)
+	}
+	lookup := func(filter ports.LookupSuppliersFilter, names ...string) {
+		rows, err := repo.Lookup(txCtx, filter)
+		assertSupplierNames(t, rows, err, names...)
+	}
+	list(ports.ListSuppliersFilter{Status: ports.ListStatusActive, Page: 1, PerPage: 10}, "Alpha Parts", "Gamma Parts", "Omega Parts")
+	list(ports.ListSuppliersFilter{Status: ports.ListStatusInactive, Page: 1, PerPage: 10}, "Beta Parts", "Delta Parts")
+	list(ports.ListSuppliersFilter{Status: ports.ListStatusAll, Page: 1, PerPage: 10}, "Alpha Parts", "Beta Parts", "Delta Parts", "Gamma Parts", "Omega Parts")
+	list(ports.ListSuppliersFilter{Status: ports.ListStatusAll, Page: 2, PerPage: 2}, "Delta Parts", "Gamma Parts")
+	list(ports.ListSuppliersFilter{Query: "ta", Status: ports.ListStatusAll, Page: 1, PerPage: 10}, "Beta Parts", "Delta Parts")
+	lookup(ports.LookupSuppliersFilter{Limit: 10, ActiveOnly: true}, "Alpha Parts", "Gamma Parts", "Omega Parts")
+	lookup(ports.LookupSuppliersFilter{Limit: 10}, "Alpha Parts", "Beta Parts", "Delta Parts", "Gamma Parts", "Omega Parts")
+	lookup(ports.LookupSuppliersFilter{Limit: 2, ActiveOnly: true}, "Alpha Parts", "Gamma Parts")
+	lookup(ports.LookupSuppliersFilter{Query: "ta", Limit: 10}, "Beta Parts", "Delta Parts")
 }
 
 func mustCreateSupplierQueryRow(
@@ -104,30 +94,11 @@ func mustCreateSupplierQueryRow(
 	return supplier
 }
 
-func mustListSuppliers(
-	t *testing.T, ctx context.Context, repo *SupplierRepository, filter ports.ListSuppliersFilter,
-) []domain.Supplier {
+func assertSupplierNames(t *testing.T, rows []domain.Supplier, err error, names ...string) {
 	t.Helper()
-	rows, err := repo.List(ctx, filter)
 	if err != nil {
-		t.Fatalf("List() error = %v", err)
+		t.Fatalf("query error = %v", err)
 	}
-	return rows
-}
-
-func mustLookupSuppliers(
-	t *testing.T, ctx context.Context, repo *SupplierRepository, filter ports.LookupSuppliersFilter,
-) []domain.Supplier {
-	t.Helper()
-	rows, err := repo.Lookup(ctx, filter)
-	if err != nil {
-		t.Fatalf("Lookup() error = %v", err)
-	}
-	return rows
-}
-
-func assertSupplierNames(t *testing.T, rows []domain.Supplier, names ...string) {
-	t.Helper()
 	if len(rows) != len(names) {
 		t.Fatalf("len(rows) = %d, want %d", len(rows), len(names))
 	}
