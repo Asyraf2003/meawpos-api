@@ -44,7 +44,22 @@ func (r *SupplierRepository) Create(ctx context.Context, supplier domain.Supplie
 }
 
 func (r *SupplierRepository) Update(ctx context.Context, supplier domain.Supplier) error {
-	return errSupplierRepositoryNotImplemented
+	sql := `
+		UPDATE suppliers
+		SET
+			name = $2,
+			name_normalized = $3,
+			phone = $4,
+			email = $5,
+			address = $6,
+			notes = $7,
+			is_active = $8,
+			updated_at = $10
+		WHERE id = $1
+	`
+
+	_, err := r.exec(ctx, sql, supplierArgs(supplier)...)
+	return err
 }
 
 func (r *SupplierRepository) SetActive(
