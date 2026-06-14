@@ -20,7 +20,7 @@ along with gopos-api. If not, see <https://www.gnu.org/licenses/>.
 
 ## Active Scope
 
-Supplier PostgreSQL persistence slice, migration-only plus repository adapter skeleton checkpoint.
+Supplier PostgreSQL persistence slice, migration-only through repository Update checkpoint.
 
 ## Status
 
@@ -30,7 +30,7 @@ Migration-only step is locally implemented and applied.
 
 Repository adapter skeletons are locally implemented with compile-time port assertion.
 
-Repository Create, FindByID, FindByNormalizedName, FindActiveByNormalizedName, and Update behavior is locally implemented with compile, targeted DB-backed integration, and aggregate proof.
+Repository Create, FindByID, FindByNormalizedName, FindActiveByNormalizedName, and Update behavior are locally implemented with compile, targeted DB-backed integration, and aggregate proof.
 
 SetActive, List, and Lookup remain explicit placeholder behavior.
 
@@ -242,7 +242,7 @@ bash scripts/db_migrate.sh
 - Localization is not implemented.
 - Extended filters are not implemented.
 - Laravel Supplier MySQL/source parity remains unproven.
-- Remote connector validation for final local Supplier migration changes remains pending unless the files become visible through connector.
+- Remote connector validation for final local Supplier PostgreSQL changes remains pending unless the files become visible through connector.
 
 ## Next Valid Active Step
 
