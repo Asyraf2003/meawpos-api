@@ -54,9 +54,18 @@ if [[ ! -x "$APP_BIN" ]]; then
   exit 1
 fi
 
-port_open() {
-  timeout 1 bash -c "cat < /dev/null > /dev/tcp/127.0.0.1/${HTTP_PORT}" >/dev/null 2>&1
+port_pids() {
+  ss -ltnp 2>/dev/null \
+    | sed -n "s/.*:${HTTP_PORT} .*pid=\\([0-9]\\+\\).*/\\1/p" \
+    | sort -u
 }
+
+existing_pids="$(port_pids || true)"
+if [[ -n "$existing_pids" ]]; then
+  echo "== stopping existing API process on port ${HTTP_PORT} =="
+  echo "$existing_pids" | xargs -r kill -9
+  sleep 1
+fi
 
 started_server=false
 api_pid=""
@@ -70,36 +79,38 @@ cleanup() {
 }
 trap cleanup EXIT
 
-if port_open; then
-  echo "== using existing API server on port ${HTTP_PORT} =="
-else
-  echo "== starting temporary API server =="
-  echo "log: ${LOG_FILE}"
+echo "== starting temporary API server =="
+echo "port: ${HTTP_PORT}"
+echo "log: ${LOG_FILE}"
 
-  HTTP_PORT="$HTTP_PORT"   AUTH_DEBUG_ENABLED="$AUTH_DEBUG_ENABLED"   "$APP_BIN" > "$LOG_FILE" 2>&1 &
+HTTP_PORT="$HTTP_PORT" \
+AUTH_DEBUG_ENABLED="$AUTH_DEBUG_ENABLED" \
+"$APP_BIN" > "$LOG_FILE" 2>&1 &
 
-  api_pid="$!"
-  started_server=true
+api_pid="$!"
+started_server=true
 
-  for _ in $(seq 1 30); do
-    if curl -sS "${API_BASE_URL}/api/health" >/dev/null 2>&1; then
-      break
-    fi
+for _ in $(seq 1 30); do
+  if curl -sS "${API_BASE_URL}/api/health" >/dev/null 2>&1; then
+    break
+  fi
 
-    if ! kill -0 "$api_pid" >/dev/null 2>&1; then
-      echo "[FAIL] API server exited before becoming ready"
-      tail -n 120 "$LOG_FILE" || true
-      exit 1
-    fi
-
-    sleep 1
-  done
-
-  if ! curl -sS "${API_BASE_URL}/api/health" >/dev/null 2>&1; then
-    echo "[FAIL] API server did not become ready"
+  if ! kill -0 "$api_pid" >/dev/null 2>&1; then
+    echo "[FAIL] API server exited before becoming ready"
     tail -n 120 "$LOG_FILE" || true
     exit 1
   fi
+
+  sleep 1
+done
+
+if ! curl -sS "${API_BASE_URL}/api/health" >/dev/null 2>&1; then
+  echo "[FAIL] API server did not become ready"
+  tail -n 120 "$LOG_FILE" || true
+  exit 1
 fi
 
-HTTP_PORT="$HTTP_PORT" API_BASE_URL="$API_BASE_URL" AUTH_DEBUG_ENABLED="$AUTH_DEBUG_ENABLED" bash scripts/dev_api_smoke_admin.sh
+HTTP_PORT="$HTTP_PORT" \
+API_BASE_URL="$API_BASE_URL" \
+AUTH_DEBUG_ENABLED="$AUTH_DEBUG_ENABLED" \
+bash scripts/dev_api_smoke_admin.sh

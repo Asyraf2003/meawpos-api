@@ -51,7 +51,7 @@ ADMIN_PASSWORD="${AUTH_MANUAL_ADMIN_PASSWORD:-12345678}"
 
 if [[ "$AUTH_DEBUG_ENABLED" != "true" ]]; then
   echo "[WARN] AUTH_DEBUG_ENABLED is not true."
-  echo "[WARN] Manual login may be disabled."
+  echo "[WARN] Manual login route may be disabled."
 fi
 
 tmp_login_body="$(mktemp)"
@@ -59,14 +59,14 @@ tmp_request_body="$(mktemp)"
 tmp_login_payload="$(mktemp)"
 trap 'rm -f "$tmp_login_body" "$tmp_request_body" "$tmp_login_payload"' EXIT
 
-python3 - "$tmp_login_payload" "$ADMIN_EMAIL" "$ADMIN_PASSWORD" <<'PYJSON'
+python3 - "$tmp_login_payload" "$ADMIN_EMAIL" "$ADMIN_PASSWORD" <<'PY'
 import json
 import sys
 
 path, email, password = sys.argv[1], sys.argv[2], sys.argv[3]
 with open(path, "w", encoding="utf-8") as f:
     json.dump({"email": email, "password": password}, f)
-PYJSON
+PY
 
 echo "== admin api smoke =="
 echo "api: ${API_BASE_URL}"
@@ -74,7 +74,10 @@ echo
 
 echo "== health =="
 health_status="$(
-  curl -sS     -o "$tmp_request_body"     -w '%{http_code}'     "${API_BASE_URL}/api/health"
+  curl -sS \
+    -o "$tmp_request_body" \
+    -w '%{http_code}' \
+    "${API_BASE_URL}/api/health"
 )"
 echo "health status=${health_status}"
 if [[ "$health_status" -lt 200 || "$health_status" -ge 300 ]]; then
@@ -86,18 +89,36 @@ fi
 
 echo "== manual admin login =="
 login_status="$(
-  curl -sS     -o "$tmp_login_body"     -w '%{http_code}'     -X POST "${API_BASE_URL}/api/auth/manual/login"     -H 'Content-Type: application/json'     -d "{"email":"${ADMIN_EMAIL}","password":"${ADMIN_PASSWORD}"}"
+  curl -sS \
+    -o "$tmp_login_body" \
+    -w '%{http_code}' \
+    -X POST "${API_BASE_URL}/api/auth/manual/login" \
+    -H 'Content-Type: application/json' \
+    --data-binary "@${tmp_login_payload}"
 )"
 echo "manual_login status=${login_status}"
+
 if [[ "$login_status" != "200" ]]; then
   echo "[FAIL] manual admin login failed"
   cat "$tmp_login_body"
   echo
+  echo
+  echo "payload_debug:"
+  python3 - "$tmp_login_payload" <<'PY'
+import json
+import sys
+
+with open(sys.argv[1], "r", encoding="utf-8") as f:
+    payload = json.load(f)
+
+print("email_present=", bool(payload.get("email")), sep="")
+print("password_present=", bool(payload.get("password")), sep="")
+PY
   exit 1
 fi
 
 access_token="$(
-  python3 - "$tmp_login_body" <<'PYJSON'
+  python3 - "$tmp_login_body" <<'PY'
 import json
 import sys
 
@@ -109,7 +130,7 @@ if not token:
     raise SystemExit("[FAIL] access token not found in login response")
 
 print(token)
-PYJSON
+PY
 )"
 
 echo "access_token_present=true"
@@ -121,7 +142,12 @@ request_json() {
 
   local status
   status="$(
-    curl -sS       -o "$tmp_request_body"       -w '%{http_code}'       "${API_BASE_URL}${path}"       -H "Authorization: Bearer ${access_token}"       -H 'Accept: application/json'
+    curl -sS \
+      -o "$tmp_request_body" \
+      -w '%{http_code}' \
+      "${API_BASE_URL}${path}" \
+      -H "Authorization: Bearer ${access_token}" \
+      -H 'Accept: application/json'
   )"
 
   echo "${name} status=${status}"
