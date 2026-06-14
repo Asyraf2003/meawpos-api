@@ -61,4 +61,3 @@ type SupplierLookupResult struct {
 	Phone string
 	Email string
 }
-
