@@ -215,14 +215,15 @@ Current Supplier PostgreSQL persistence status:
 
 - blueprint accepted;
 - migration-only step complete;
-- repository adapter not started;
+- repository adapter skeletons locally implemented with compile-time port assertion;
 - integration tests not started;
+- repository behavior implementation not started;
 - query-plan proof not collected;
 - remote connector validation pending for final local changes.
 
 Remaining open gaps:
 
-- Supplier PostgreSQL repository adapter.
+- Supplier PostgreSQL repository behavior.
 - Supplier repository integration tests.
 - Supplier query-plan proof.
 - Supplier HTTP routes.
@@ -236,19 +237,69 @@ Remaining open gaps:
 
 Auth/System ADR 0012 output contract centralization remains deferred by owner decision.
 
-Next Valid Active Step: Supplier PostgreSQL repository adapter skeletons.
+Next Valid Active Step: Supplier PostgreSQL repository Create and FindByID behavior.
+
+### Supplier PostgreSQL repository adapter skeleton checkpoint - 2026-06-14
+
+Supplier PostgreSQL repository adapter skeletons are locally implemented.
+
+Files created:
+
+```text
+internal/platform/postgres/supplier_repository.go
+internal/platform/postgres/supplier_repository_row.go
+internal/platform/postgres/supplier_repository_write.go
+internal/platform/postgres/supplier_repository_query.go
+```
+
+Local proof:
+
+```bash
+go test ./internal/modules/supplier/...
+go test ./internal/platform/postgres/... -run Supplier
+bash scripts/audit_hexagonal.sh
+make verify
+```
+
+Current Supplier PostgreSQL persistence status:
+
+- blueprint accepted;
+- migration-only step complete;
+- repository adapter skeletons implemented;
+- compile-time port assertion exists;
+- repository behavior is still pending;
+- integration tests are not implemented;
+- query-plan proof is not collected;
+- remote connector validation pending for local changes.
+
+Remaining open gaps:
+
+- Supplier PostgreSQL repository Create and FindByID behavior.
+- Supplier PostgreSQL repository Update behavior.
+- Supplier PostgreSQL repository FindByNormalizedName and FindActiveByNormalizedName behavior.
+- Supplier PostgreSQL repository SetActive behavior.
+- Supplier PostgreSQL repository List and Lookup behavior.
+- Supplier repository integration tests.
+- Supplier query-plan proof.
+- Supplier HTTP routes.
+- Supplier capability seed.
+- Faktur.
+- Inventory/stock movement.
+- Audit/outbox.
+- Localization.
+- Extended filters.
+- Laravel Supplier MySQL/source parity.
+
+Next Valid Active Step: Supplier PostgreSQL repository Create and FindByID behavior.
 
 
 ## Next Valid Active Step
 
-Supplier domain contract blueprint.
+Supplier PostgreSQL repository Create and FindByID behavior.
 
-- Start from the Product API readiness closeout.
-- Treat Product ID as the downstream product reference key.
-- Define Supplier identity, lifecycle, duplicate policy, lookup/list/show/create/update/deactivate contract, and validation rules.
-- Do not implement Supplier code before the Supplier domain contract is accepted.
-- Do not start Faktur before Supplier unless an explicit owner decision changes the order.
-- Do not start inventory mutation, stock movement, audit/outbox implementation, localization, extended filters, or architecture folder renames in the Supplier contract slice.
+- Start from accepted blueprint `docs/blueprints/0039_supplier_postgres_persistence_slice.md`.
+- Keep the next active step limited to Create and FindByID behavior plus focused repository proof.
+- Do not start Update, SetActive, List, Lookup, HTTP routes, capability seed, Faktur, inventory/stock movement, audit/outbox, localization, extended filters, or architecture folder cleanup.
 - Do not re-open ProductCatalog persistence, runtime/capability, API docs, error envelope, shared success envelope foundation, Capability envelope, Product API readiness, or runtime smoke proof work unless a bug is found.
 
 ## Handoff Requirement
@@ -259,7 +310,7 @@ The same session must create or update a handoff when durable work was done.
 
 ## Context Window Status
 
-Current ledger update context status: updated after Supplier PostgreSQL migration-only checkpoint. Auth/System output contract centralization is deferred by owner decision. The next valid slice is Supplier domain contract blueprint.
+Current ledger update context status: updated after Supplier PostgreSQL repository adapter skeleton checkpoint. Auth/System output contract centralization is deferred by owner decision. The next valid step is Supplier PostgreSQL repository Create and FindByID behavior.
 
 ## 2026-06-13 ProductCatalog runtime/capability closeout
 

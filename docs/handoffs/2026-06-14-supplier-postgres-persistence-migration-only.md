@@ -16,11 +16,11 @@ You should have received a copy of the GNU Affero General Public License
 along with gopos-api. If not, see <https://www.gnu.org/licenses/>.
 -->
 
-# Supplier PostgreSQL Persistence Migration-Only Handoff
+# Supplier PostgreSQL Persistence Handoff
 
 ## Active Scope
 
-Supplier PostgreSQL persistence slice, migration-only checkpoint.
+Supplier PostgreSQL persistence slice, migration-only plus repository adapter skeleton checkpoint.
 
 ## Status
 
@@ -28,7 +28,9 @@ In progress.
 
 Migration-only step is locally implemented and applied.
 
-Repository adapter implementation has not started.
+Repository adapter skeletons are locally implemented with compile-time port assertion.
+
+Repository behavior implementation has not started; skeleton methods return explicit placeholder errors.
 
 ## Files Changed
 
@@ -36,6 +38,10 @@ Repository adapter implementation has not started.
 docs/blueprints/0039_supplier_postgres_persistence_slice.md
 migrations/0014_create_suppliers_table.up.sql
 migrations/0014_create_suppliers_table.down.sql
+internal/platform/postgres/supplier_repository.go
+internal/platform/postgres/supplier_repository_row.go
+internal/platform/postgres/supplier_repository_write.go
+internal/platform/postgres/supplier_repository_query.go
 docs/handoffs/2026-06-14-supplier-postgres-persistence-migration-only.md
 docs/handoffs/README.md
 docs/evidence/0003_laravel_to_go_transition_progress_ledger.md
@@ -67,6 +73,17 @@ docs/evidence/0003_laravel_to_go_transition_progress_ledger.md
   - `suppliers_active_name_idx`
   - `suppliers_name_normalized_idx`
   - `suppliers_updated_at_idx`
+- Repository adapter skeleton files created:
+  - `internal/platform/postgres/supplier_repository.go`
+  - `internal/platform/postgres/supplier_repository_row.go`
+  - `internal/platform/postgres/supplier_repository_write.go`
+  - `internal/platform/postgres/supplier_repository_query.go`
+- `SupplierRepository` stores the existing PostgreSQL pool dependency pattern.
+- `NewSupplierRepository` is the constructor.
+- Compile-time assertion verifies the adapter satisfies `ports.SupplierRepository`.
+- Query helpers follow the existing transaction-aware `TxFromContext` pattern.
+- Row mapping structure targets the `suppliers` table columns from migration `0014`.
+- Create, Update, SetActive, FindByID, FindByNormalizedName, FindActiveByNormalizedName, List, and Lookup are present as explicit placeholder behavior.
 
 The active normalized-name uniqueness rule uses a PostgreSQL partial unique index:
 
@@ -122,6 +139,18 @@ Visible result:
 [PASS] aggregate audit passed
 ```
 
+Supplier PostgreSQL skeleton compile proof:
+
+```bash
+go test ./internal/platform/postgres/... -run Supplier
+```
+
+Visible result:
+
+```text
+?    pos-go/internal/platform/postgres [no test files]
+```
+
 Migration proof:
 
 ```bash
@@ -148,6 +177,7 @@ COMMIT
 
 ```bash
 go test ./internal/modules/supplier/...
+go test ./internal/platform/postgres/... -run Supplier
 bash scripts/audit_hexagonal.sh
 make verify
 bash scripts/db_migrate.sh
@@ -155,7 +185,7 @@ bash scripts/db_migrate.sh
 
 ## Open Gaps
 
-- Supplier PostgreSQL repository adapter is not implemented.
+- Supplier PostgreSQL repository behavior is not implemented beyond compile-safe skeletons.
 - Supplier repository integration tests are not implemented.
 - Supplier query-plan proof is not collected.
 - Supplier HTTP runtime is not implemented.
@@ -171,18 +201,9 @@ bash scripts/db_migrate.sh
 
 ## Next Valid Active Step
 
-Supplier PostgreSQL repository adapter skeletons.
+Supplier PostgreSQL repository Create and FindByID behavior.
 
-Start with compile-safe skeletons only:
-
-```text
-internal/platform/postgres/supplier_repository.go
-internal/platform/postgres/supplier_repository_row.go
-internal/platform/postgres/supplier_repository_write.go
-internal/platform/postgres/supplier_repository_query.go
-```
-
-Do not implement all behavior in one jump.
+Keep the next step limited to Create and FindByID behavior plus the focused repository proof needed for that behavior.
 
 ## Scope Guard
 
@@ -208,23 +229,32 @@ Auth/System ADR 0012 output contract centralization remains deferred by owner de
 
 ## Estimated Scope Progress Percentage
 
-Supplier PostgreSQL persistence slice: 20%.
+Supplier PostgreSQL persistence slice: 30%.
 
 Reason:
 
 - blueprint accepted;
 - migration files created;
 - migration applied locally;
-- repository adapter not started;
+- repository adapter skeleton files created;
+- compile-time port assertion exists;
+- focused Supplier and PostgreSQL compile proof passed;
 - integration tests not started;
+- repository behavior still pending;
 - query-plan proof not collected.
 
 ## Estimated Context-Window Status
 
-Current context is sufficient to start repository adapter skeletons in the next session.
+Current context is sufficient to start Supplier PostgreSQL repository Create and FindByID behavior in the next session.
 
 Recommended next session target:
 
 ```text
-Owner/local terminal
+Terminal Codex
+```
+
+Recommended template source:
+
+```text
+docs/templates/0121_codex_session_prompts.md
 ```
