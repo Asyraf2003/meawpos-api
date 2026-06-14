@@ -220,7 +220,7 @@ Current Supplier PostgreSQL persistence status:
 - integration tests for create, direct lookup, Update, SetActive, List, and Lookup behavior added;
 - targeted Supplier DB-backed integration proof passes with `.env` loaded;
 - query-plan proof collected locally;
-- remote connector validation pending for final local changes.
+- connector validation passed through Web AI read-only inspection.
 
 Remaining open gaps:
 
@@ -269,7 +269,7 @@ Current Supplier PostgreSQL persistence status:
 - integration tests for create, direct lookup, Update, SetActive, List, and Lookup behavior added;
 - targeted Supplier DB-backed integration proof passes with `.env` loaded;
 - query-plan proof collected locally;
-- remote connector validation pending for local changes.
+- connector validation passed through Web AI read-only inspection.
 
 Remaining open gaps:
 
@@ -334,7 +334,7 @@ Current Supplier PostgreSQL persistence status:
 - integration tests for create, direct lookup, Update, SetActive, List, and Lookup behavior added;
 - targeted Supplier DB-backed integration proof passes with `.env` loaded;
 - query-plan proof collected locally;
-- remote connector validation pending for local changes.
+- connector validation passed through Web AI read-only inspection.
 
 Remaining open gaps:
 
@@ -398,7 +398,7 @@ Current Supplier PostgreSQL persistence status:
 - Lookup behavior implemented;
 - targeted Supplier DB-backed integration proof passes;
 - query-plan proof collected locally;
-- remote connector validation pending for local changes.
+- connector validation passed through Web AI read-only inspection.
 
 Remaining open gaps:
 
@@ -463,7 +463,7 @@ Current Supplier PostgreSQL persistence status:
 - Lookup behavior implemented;
 - targeted Supplier DB-backed integration proof passes;
 - query-plan proof collected locally;
-- remote connector validation pending for local changes.
+- connector validation passed through Web AI read-only inspection.
 
 Remaining open gaps:
 
@@ -540,11 +540,10 @@ Current Supplier PostgreSQL persistence status:
 - Lookup behavior implemented;
 - targeted Supplier DB-backed integration proof passes;
 - query-plan proof collected locally;
-- remote connector validation pending for local changes.
+- connector validation passed through Web AI read-only inspection.
 
 Remaining open gaps:
 
-- Supplier PostgreSQL persistence connector validation and final closeout.
 - Supplier HTTP routes.
 - Supplier capability seed.
 - Faktur.
@@ -557,13 +556,72 @@ Remaining open gaps:
 Next Valid Active Step: Supplier PostgreSQL persistence connector validation and final closeout.
 
 
+### Supplier PostgreSQL persistence closeout - 2026-06-14
+
+Supplier PostgreSQL persistence slice is closed with local proof and Web AI read-only connector validation.
+
+Closed behavior:
+
+- migration 0014 suppliers;
+- repository skeletons;
+- Create;
+- FindByID;
+- FindByNormalizedName;
+- FindActiveByNormalizedName;
+- Update;
+- SetActive;
+- List;
+- Lookup;
+- query-plan proof.
+
+Final local proof:
+
+```bash
+set -a
+source .env
+set +a
+go test -tags integration ./internal/platform/postgres/... -run Supplier -count=1 -v
+go test ./internal/modules/supplier/...
+go test ./internal/platform/postgres/... -run Supplier
+bash scripts/audit_hexagonal.sh
+make verify
+```
+
+Visible result:
+
+- Supplier PostgreSQL integration proof passed.
+- Supplier module proof passed.
+- PostgreSQL compile lane passed.
+- Hexagonal import audit passed.
+- Aggregate make verify passed.
+
+Connector validation:
+
+- Supplier repository List/Lookup implementation is remote-visible.
+- Supplier List/Lookup integration tests are remote-visible.
+- Supplier handoff, ledger, and handoff index are remote-visible.
+
+Remaining open gaps after this persistence closeout:
+
+- Supplier HTTP routes.
+- Supplier capability seed.
+- Faktur.
+- Inventory/stock movement.
+- Audit/outbox.
+- Localization.
+- Extended filters.
+- Laravel Supplier MySQL/source parity.
+
+Next Valid Active Step: Select the next accepted Supplier slice.
+
+
 ## Next Valid Active Step
 
-Supplier PostgreSQL persistence connector validation and final closeout.
+Select the next accepted Supplier slice.
 
-- Start from accepted blueprint `docs/blueprints/0039_supplier_postgres_persistence_slice.md`.
-- Keep the next active step limited to connector validation and final closeout.
-- Do not start HTTP routes, capability seed, Faktur, inventory/stock movement, audit/outbox, localization, extended filters, or architecture folder cleanup.
+- Supplier PostgreSQL persistence is closed.
+- Recommended planning target: Supplier HTTP runtime/capability blueprint.
+- Do not implement HTTP routes, capability seed, Faktur, inventory/stock movement, audit/outbox, localization, extended filters, or architecture cleanup before an accepted blueprint.
 - Do not re-open ProductCatalog persistence, runtime/capability, API docs, error envelope, shared success envelope foundation, Capability envelope, Product API readiness, or runtime smoke proof work unless a bug is found.
 
 ## Handoff Requirement
@@ -574,7 +632,7 @@ The same session must create or update a handoff when durable work was done.
 
 ## Context Window Status
 
-Current ledger update context status: updated after Supplier PostgreSQL repository List/Lookup and query-plan checkpoint. Auth/System output contract centralization is deferred by owner decision. The next valid step is Supplier PostgreSQL persistence connector validation and final closeout.
+Current ledger update context status: updated after Supplier PostgreSQL persistence closeout. Auth/System output contract centralization is deferred by owner decision. The next valid step is selecting the next accepted Supplier slice.
 
 ## 2026-06-13 ProductCatalog runtime/capability closeout
 
