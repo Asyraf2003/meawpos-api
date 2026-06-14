@@ -16,7 +16,7 @@
 
 ##@ Auth And Smoke
 
-.PHONY: smoke auth-login-admin auth-login-cashier auth-start
+.PHONY: smoke auth-login-admin auth-login-cashier auth-start api-smoke-admin api-dev-smoke-admin
 
 smoke: ## Call /api/health and unauthenticated /api/me
 	HTTP_PORT=$(HTTP_PORT) bash scripts/dev_smoke.sh
@@ -39,3 +39,10 @@ auth-start: build ## Start app, print Google auth URL, and open browser
 	printf 'API_PID=%s\n' "$$API_PID"; \
 	printf 'AUTH_URL=%s\n' "$$AUTH_URL"; \
 	xdg-open "$$AUTH_URL" || true
+
+
+api-smoke-admin: ## Login as admin and run authenticated API smoke checks against an existing server
+	HTTP_PORT=$(HTTP_PORT) bash scripts/dev_api_smoke_admin.sh
+
+api-dev-smoke-admin: db-dev-setup db-migrate build ## Setup DB, migrate, start temporary API, login admin, smoke protected API, then stop
+	HTTP_PORT=$(HTTP_PORT) AUTH_DEBUG_ENABLED=true bash scripts/dev_api_smoke_admin_once.sh

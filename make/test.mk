@@ -16,7 +16,7 @@
 
 ##@ Test
 
-.PHONY: test test-unit test-api test-db vet lint check verify ci screening
+.PHONY: test test-unit test-api test-db test-db-integration vet lint check verify ci screening
 
 test: ## Run all Go tests
 	$(GO_TEST) ./...
@@ -29,6 +29,9 @@ test-api: ## Run HTTP transport and presentation tests
 
 test-db: ## Run PostgreSQL adapter tests
 	$(GO_TEST) ./internal/platform/postgres/...
+
+test-db-integration: ## Load .env and run DB-backed PostgreSQL integration tests, defaulting to Supplier
+	@set -a; if [[ -f .env ]]; then source .env; fi; set +a; $(GO_TEST) -tags integration ./internal/platform/postgres/... -run "$${RUN:-Supplier}" -count=1 -v
 
 vet: ## Run go vet audit
 	bash scripts/audit_go_vet.sh
