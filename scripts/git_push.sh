@@ -18,51 +18,66 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-cd "$ROOT_DIR"
+COUNTER_FILE="$ROOT_DIR/.git/.auto_commit_counter"
 
-BRANCH="$(git rev-parse --abbrev-ref HEAD 2>/dev/null || true)"
-if [[ -z "$BRANCH" || "$BRANCH" == "HEAD" ]]; then
-  echo "[FAIL] unable to detect active git branch"
-  exit 1
+# Fungsi internal untuk eksekusi push per direktori
+push_repo() {
+    local target_dir="$1"
+    local repo_name="$2"
+    
+    cd "$target_dir"
+    
+    local branch
+    branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null || true)"
+    if [[ -z "$branch" || "$branch" == "HEAD" ]]; then
+        echo "[FAIL] [$repo_name] unable to detect active git branch"
+        exit 1
+    fi
+
+    # Ambil atau inisialisasi counter
+    local last_number
+    if [[ -f "$COUNTER_FILE" ]]; then
+        last_number="$(cat "$COUNTER_FILE")"
+    else
+        last_number="0"
+    fi
+
+    if ! [[ "$last_number" =~ ^[0-9]+$ ]]; then
+        last_number="0"
+    fi
+
+    local next_number=$((last_number + 1))
+    local msg="commit $next_number"
+
+    # Cek staging area
+    git add .
+
+    if git diff --cached --quiet; then
+        echo "[INFO] [$repo_name] no staged changes to commit. Skipping."
+        return 0
+    fi
+
+    echo "== git push [$repo_name] =="
+    echo "branch: $branch"
+    echo "message: $msg"
+    echo
+    git status --short
+    echo
+
+    git commit -m "$msg"
+    git push origin "$branch"
+    
+    echo "$next_number" > "$COUNTER_FILE"
+    echo "[PASS] [$repo_name] push completed"
+    echo
+}
+
+# 1. Jalankan untuk submodule docs terlebih dahulu jika foldernya ada
+if [[ -d "$ROOT_DIR/docs/.git" || -f "$ROOT_DIR/docs/.git" ]]; then
+    push_repo "$ROOT_DIR/docs" "submodule: docs"
 fi
 
-COUNTER_FILE=".git/.auto_commit_counter"
+# 2. Jalankan untuk root repo pos-go
+push_repo "$ROOT_DIR" "root: pos-go"
 
-if [[ -f "$COUNTER_FILE" ]]; then
-  LAST_NUMBER="$(cat "$COUNTER_FILE")"
-else
-  LAST_NUMBER="0"
-fi
-
-if ! [[ "$LAST_NUMBER" =~ ^[0-9]+$ ]]; then
-  echo "[FAIL] invalid auto commit counter: $LAST_NUMBER"
-  exit 1
-fi
-
-NEXT_NUMBER=$((LAST_NUMBER + 1))
-MSG="commit $NEXT_NUMBER"
-
-echo "== git push =="
-echo "branch: $BRANCH"
-echo "message: $MSG"
-echo
-
-echo "-- git status --"
-git status --short
-echo
-
-git add .
-
-if git diff --cached --quiet; then
-  echo "[FAIL] no staged changes to commit"
-  exit 1
-fi
-
-git commit -m "$MSG"
-git push origin "$BRANCH"
-
-echo "$NEXT_NUMBER" > "$COUNTER_FILE"
-
-echo
-echo "[PASS] git push completed"
-echo "[PASS] commit message: $MSG"
+echo "[PASS] All operations completed successfully."
