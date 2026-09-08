@@ -36,8 +36,14 @@ func (uc *PostCashSale) Execute(ctx context.Context, cmd PostCashSaleCommand) (P
 	if cmd.IdempotencyKey == "" {
 		return PostCashSaleResult{}, domain.ErrIdempotencyKeyRequired
 	}
+	if len([]rune(cmd.IdempotencyKey)) > domain.MaxIdempotencyKeyLength {
+		return PostCashSaleResult{}, domain.ErrIdempotencyKeyTooLong
+	}
 	if len(cmd.Items) == 0 {
 		return PostCashSaleResult{}, domain.ErrItemsRequired
+	}
+	if len(cmd.Items) > domain.MaxSaleItems {
+		return PostCashSaleResult{}, domain.ErrTooManyItems
 	}
 	if cmd.PaymentType != "cash" {
 		return PostCashSaleResult{}, domain.ErrUnsupportedPayment

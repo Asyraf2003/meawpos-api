@@ -36,7 +36,7 @@ func mapError(err error) error {
 	switch {
 	case errors.Is(err, catalogports.ErrItemNotFound):
 		return httpresponse.NewHTTPError(stdhttp.StatusNotFound, "catalog_item_not_found", "catalog item not found")
-	case errors.Is(err, catalogcore.ErrNameRequired), errors.Is(err, pricing.ErrPriceMustBePositive):
+	case errors.Is(err, catalogcore.ErrNameRequired), errors.Is(err, catalogcore.ErrNameTooLong), errors.Is(err, pricing.ErrPriceMustBePositive):
 		return httpresponse.NewHTTPError(stdhttp.StatusBadRequest, "catalog_item_validation_failed", err.Error())
 	default:
 		return err

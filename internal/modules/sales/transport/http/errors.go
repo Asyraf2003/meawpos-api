@@ -32,7 +32,7 @@ func mapError(err error) error {
 		return httpresponse.NewHTTPError(stdhttp.StatusBadRequest, "insufficient_cash_tender", err.Error())
 	case errors.Is(err, domain.ErrInvalidQuantity):
 		return httpresponse.NewHTTPError(stdhttp.StatusBadRequest, "invalid_quantity", err.Error())
-	case errors.Is(err, domain.ErrItemsRequired), errors.Is(err, domain.ErrUnsupportedPayment), errors.Is(err, domain.ErrIdempotencyKeyRequired), errors.Is(err, domain.ErrReversalReasonRequired):
+	case errors.Is(err, domain.ErrItemsRequired), errors.Is(err, domain.ErrTooManyItems), errors.Is(err, domain.ErrUnsupportedPayment), errors.Is(err, domain.ErrIdempotencyKeyRequired), errors.Is(err, domain.ErrIdempotencyKeyTooLong), errors.Is(err, domain.ErrReversalReasonRequired), errors.Is(err, domain.ErrReversalReasonTooLong):
 		return httpresponse.NewHTTPError(stdhttp.StatusBadRequest, "sale_validation_failed", err.Error())
 	default:
 		return err

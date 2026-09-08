@@ -16,7 +16,7 @@
 
 ##@ Test
 
-.PHONY: test test-unit test-api test-db test-db-integration test-r4-integration vet lint check verify ci screening
+.PHONY: test test-unit test-api test-db test-db-integration test-r4-integration test-security-integration vet lint check verify release-gate ci screening
 
 test: ## Run all Go tests
 	$(GO_TEST) ./...
@@ -36,6 +36,9 @@ test-db-integration: ## Load .env and run DB-backed PostgreSQL integration tests
 test-r4-integration: ## Run the focused PostgreSQL and HTTP walking-skeleton proof
 	@set -a; if [[ -f .env ]]; then source .env; fi; set +a; $(GO_TEST) -tags integration ./internal/platform/postgres/... ./internal/app/bootstrap -run "$${RUN:-RootAuthority|RootCreation|Catalog_|CashSale_|WalkingSkeletonHTTP}" -count=1 -v
 
+test-security-integration: ## Run mandatory PostgreSQL-backed security behavior proof
+	bash scripts/audit_security_integration.sh
+
 vet: ## Run go vet audit
 	bash scripts/audit_go_vet.sh
 
@@ -44,6 +47,8 @@ lint: vet ## Run static analysis currently wired as go vet
 check: audit-format vet audit-file-size audit-hex audit-ai-rules ## Run local doc and structure checks
 
 verify: audit-all ## Run the aggregate local quality gate
+
+release-gate: audit-all ## Run the complete reproducible release gate
 
 ci: verify ## Alias to verify
 

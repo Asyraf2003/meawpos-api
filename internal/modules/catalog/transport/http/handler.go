@@ -9,6 +9,7 @@ import (
 
 	catalogports "pos-go/internal/modules/catalog/ports"
 	catalogusecase "pos-go/internal/modules/catalog/usecase"
+	httprequest "pos-go/internal/transport/http/request"
 	httpresponse "pos-go/internal/transport/http/response"
 
 	"github.com/google/uuid"
@@ -43,8 +44,8 @@ type createRequest struct {
 
 func (h *Handler) Create(c echo.Context) error {
 	var req createRequest
-	if err := c.Bind(&req); err != nil {
-		return httpresponse.NewHTTPError(stdhttp.StatusBadRequest, "invalid_request_body", "invalid request body")
+	if err := httprequest.DecodeJSON(c, &req); err != nil {
+		return err
 	}
 	if req.PriceRupiah != nil && !h.pricingActive {
 		return httpresponse.NewHTTPError(stdhttp.StatusBadRequest, "catalog_pricing_inactive", "catalog pricing component is inactive")

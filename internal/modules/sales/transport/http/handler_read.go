@@ -8,6 +8,7 @@ import (
 
 	salesusecase "pos-go/internal/modules/sales/usecase"
 	httpmw "pos-go/internal/transport/http/middleware"
+	httprequest "pos-go/internal/transport/http/request"
 	httpresponse "pos-go/internal/transport/http/response"
 
 	"github.com/google/uuid"
@@ -30,8 +31,8 @@ func (h *Handler) Reverse(c echo.Context) error {
 		return httpresponse.NewHTTPError(stdhttp.StatusBadRequest, "invalid_sale_id", "invalid sale id")
 	}
 	var req reversalRequest
-	if err := c.Bind(&req); err != nil {
-		return httpresponse.NewHTTPError(stdhttp.StatusBadRequest, "invalid_request_body", "invalid request body")
+	if err := httprequest.DecodeJSON(c, &req); err != nil {
+		return err
 	}
 	actor, session, authority := requestAuthority(c)
 	_, err := h.reverse.Execute(c.Request().Context(), salesusecase.ReverseSaleCommand{RootID: c.Param("root_id"), SaleID: c.Param("sale_id"), ActorAccountID: actor, SessionID: session, RequestID: httpmw.RequestIDFromContext(c), AuthorityUsed: authority, Reason: req.Reason})

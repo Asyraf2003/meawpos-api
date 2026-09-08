@@ -9,8 +9,11 @@ import (
 	"time"
 )
 
+const MaxRootNameLength = 200
+
 var (
 	ErrRootNameRequired = errors.New("root name is required")
+	ErrRootNameTooLong  = errors.New("root name is too long")
 	ErrRootNotFound     = errors.New("root not found")
 )
 
@@ -26,6 +29,9 @@ func NewRoot(id, name, ownerAccountID string, now time.Time) (Root, error) {
 	name = strings.TrimSpace(name)
 	if name == "" {
 		return Root{}, ErrRootNameRequired
+	}
+	if len([]rune(name)) > MaxRootNameLength {
+		return Root{}, ErrRootNameTooLong
 	}
 	return Root{
 		ID: id, Name: name, PrimaryOwnerAccountID: ownerAccountID,

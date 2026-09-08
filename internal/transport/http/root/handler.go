@@ -10,6 +10,7 @@ import (
 	rootdomain "pos-go/internal/core/root/domain"
 	rootusecase "pos-go/internal/core/root/usecase"
 	httpmw "pos-go/internal/transport/http/middleware"
+	httprequest "pos-go/internal/transport/http/request"
 	httpresponse "pos-go/internal/transport/http/response"
 
 	"github.com/labstack/echo/v4"
@@ -46,8 +47,8 @@ type rootResponse struct {
 
 func (h *Handler) Create(c echo.Context) error {
 	var req createRequest
-	if err := c.Bind(&req); err != nil {
-		return httpresponse.NewHTTPError(http.StatusBadRequest, "invalid_request_body", "invalid request body")
+	if err := httprequest.DecodeJSON(c, &req); err != nil {
+		return err
 	}
 	principal, _ := httpmw.PrincipalFromContext(c.Request().Context())
 	root, err := h.create.Execute(c.Request().Context(), rootusecase.CreateRootCommand{

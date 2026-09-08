@@ -13,18 +13,24 @@ import (
 )
 
 const (
-	StatusPosted   = "POSTED"
-	StatusReversed = "REVERSED"
+	StatusPosted            = "POSTED"
+	StatusReversed          = "REVERSED"
+	MaxReversalReasonLength = 500
+	MaxSaleItems            = 100
+	MaxIdempotencyKeyLength = 200
 )
 
 var (
 	ErrItemsRequired          = errors.New("sale items are required")
+	ErrTooManyItems           = errors.New("too many sale items")
 	ErrInvalidQuantity        = errors.New("invalid quantity")
 	ErrSaleNotFound           = errors.New("sale not found")
 	ErrSaleAlreadyReversed    = errors.New("sale already reversed")
 	ErrReversalReasonRequired = errors.New("reversal reason is required")
+	ErrReversalReasonTooLong  = errors.New("reversal reason is too long")
 	ErrUnsupportedPayment     = errors.New("unsupported payment type")
 	ErrIdempotencyKeyRequired = errors.New("idempotency key is required")
+	ErrIdempotencyKeyTooLong  = errors.New("idempotency key is too long")
 	ErrIdempotencyConflict    = errors.New("idempotency conflict")
 )
 
@@ -55,6 +61,9 @@ func NormalizeReason(reason string) (string, error) {
 	reason = strings.TrimSpace(reason)
 	if reason == "" {
 		return "", ErrReversalReasonRequired
+	}
+	if len([]rune(reason)) > MaxReversalReasonLength {
+		return "", ErrReversalReasonTooLong
 	}
 	return reason, nil
 }

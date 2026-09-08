@@ -18,7 +18,7 @@ package bootstrap
 
 import (
 	"context"
-	"strings"
+	"os"
 	"testing"
 
 	"pos-go/internal/config"
@@ -102,14 +102,13 @@ func hasRoute(app *App, method, path string) bool {
 func testDatabaseURL(t *testing.T) string {
 	t.Helper()
 
-	cfg, err := pgxpool.ParseConfig("postgres://posgo_app:posgo_local_dev_123@127.0.0.1:5432/posgo_app_db?sslmode=disable")
+	databaseURL := os.Getenv("DATABASE_URL")
+	if databaseURL == "" {
+		databaseURL = "postgres://posgo_app:posgo_local_dev_123@127.0.0.1:5432/posgo_app_db?sslmode=disable"
+	}
+	cfg, err := pgxpool.ParseConfig(databaseURL)
 	if err != nil {
 		t.Fatalf("ParseConfig() error = %v", err)
 	}
-
-	if !strings.Contains(cfg.ConnString(), "posgo_app_db") {
-		t.Fatal("expected test database url to target posgo_app_db")
-	}
-
 	return cfg.ConnString()
 }

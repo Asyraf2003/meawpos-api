@@ -19,5 +19,8 @@ func mapError(err error) error {
 	if errors.Is(err, rootdomain.ErrRootNameRequired) {
 		return httpresponse.NewHTTPError(http.StatusBadRequest, "root_name_required", err.Error())
 	}
+	if errors.Is(err, rootdomain.ErrRootNameTooLong) {
+		return httpresponse.NewHTTPError(http.StatusBadRequest, "root_name_too_long", err.Error())
+	}
 	return err
 }

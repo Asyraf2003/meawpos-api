@@ -16,7 +16,7 @@
 
 ##@ Audit
 
-.PHONY: audit-ai-rules license-headers audit-license audit-license-headers audit-file-size audit-hex arch audit-route-capabilities security-gosec security audit-all
+.PHONY: audit-ai-rules license-headers audit-license audit-license-headers audit-file-size audit-hex arch audit-route-capabilities security-gosec security-vulnerabilities security-secrets security-integration security audit-all
 
 audit-ai-rules: ## Run AI rules audit
 	bash scripts/audit_ai_rules.sh
@@ -43,7 +43,16 @@ audit-route-capabilities: ## Run protected route capability coverage audit
 security-gosec: ## Run gosec security audit
 	bash scripts/audit_security_gosec.sh
 
-security: security-gosec ## Alias to security audit
+security-vulnerabilities: ## Run the Go known-vulnerability audit
+	bash scripts/audit_security_vulnerabilities.sh
+
+security-secrets: ## Scan parent/docs worktrees and histories for secrets
+	bash scripts/audit_security_secrets.sh
+
+security-integration: ## Run PostgreSQL-backed auth, ROOT, authority, and abuse proof
+	bash scripts/audit_security_integration.sh
+
+security: security-gosec security-vulnerabilities security-secrets security-integration ## Run all mandatory security gates
 
 audit-all: ## Run the aggregate audit script
 	bash scripts/audit_all.sh

@@ -33,13 +33,28 @@ SQLite support will be added through proven persistence boundaries. No parity cl
 
 Read [docs/README.md](docs/README.md), then follow its canonical read order. The documentation lives in a Git submodule and has a separate change/proof surface from this parent repository.
 
-R4's PostgreSQL walking skeleton is implemented and proven. The exact next scope is R5's reproducible security and release gate; R6 SQLite conformance and broader capability expansion remain later.
+R4's PostgreSQL walking skeleton and R5's reproducible security/release gate are implemented and proven. R6 SQLite conformance is the exact next scope but has not started; broader capability expansion remains later.
 
 ## Current Runtime
 
 The default business composition is `catalog.core,catalog.pricing,sales,payment.cash`. Set `BUSINESS_COMPONENTS` to an explicit comma-separated set, or `none`, at startup. Missing dependencies and unknown component names fail startup; trusted ROOT, authorization, money, transaction, audit, and idempotency responsibilities are not business toggles.
 
 The new foundation API is ROOT-scoped under `/api/roots/{root_id}/...`. Existing ProductCatalog, ServiceCatalog, Supplier, and operation-capability behavior remains a separate compatibility surface.
+
+## Release Gate
+
+After configuring and migrating the local PostgreSQL target, run:
+
+```text
+make release-gate
+```
+
+This single gate runs the existing repository checks plus pinned gosec,
+govulncheck, Gitleaks worktree/history scans, and the PostgreSQL-backed
+authentication, authorization, ROOT-isolation, operation-authority, and API
+abuse suite. An uncached scanner run and vulnerability check require network
+access. `DATABASE_URL` may be exported or loaded from `.env`; missing or
+unmigrated PostgreSQL is a gate failure rather than a skipped security proof.
 
 ## License
 

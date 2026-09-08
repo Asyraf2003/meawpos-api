@@ -20,18 +20,15 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
-GOSEC_BIN="${GOSEC_BIN:-/home/asyraf/go/bin/gosec}"
-
-if [[ ! -x "$GOSEC_BIN" ]]; then
-  echo "[FAIL] gosec binary not found or not executable: $GOSEC_BIN"
-  exit 1
-fi
+# shellcheck disable=SC1091
+source scripts/config/security_tools.env
+export GOTOOLCHAIN=local
 
 echo "== security audit: gosec =="
-echo "binary: $GOSEC_BIN"
+echo "tool: ${GOSEC_MODULE}@${GOSEC_VERSION}"
 echo
 
-"$GOSEC_BIN" ./...
+go run "${GOSEC_MODULE}@${GOSEC_VERSION}" -quiet ./...
 
 echo
 echo "[PASS] gosec audit passed"

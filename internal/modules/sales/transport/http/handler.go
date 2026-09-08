@@ -10,6 +10,7 @@ import (
 	"pos-go/internal/modules/sales/domain"
 	salesusecase "pos-go/internal/modules/sales/usecase"
 	httpmw "pos-go/internal/transport/http/middleware"
+	httprequest "pos-go/internal/transport/http/request"
 	httpresponse "pos-go/internal/transport/http/response"
 
 	"github.com/google/uuid"
@@ -61,8 +62,8 @@ func requestAuthority(c echo.Context) (string, string, string) {
 
 func (h *Handler) Create(c echo.Context) error {
 	var req createRequest
-	if err := c.Bind(&req); err != nil {
-		return httpresponse.NewHTTPError(stdhttp.StatusBadRequest, "invalid_request_body", "invalid request body")
+	if err := httprequest.DecodeJSON(c, &req); err != nil {
+		return err
 	}
 	for _, item := range req.Items {
 		if uuid.Validate(item.CatalogItemID) != nil {
