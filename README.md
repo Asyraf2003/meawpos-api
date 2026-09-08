@@ -55,6 +55,9 @@ authentication, authorization, ROOT-isolation, operation-authority, and API
 abuse suite. An uncached scanner run and vulnerability check require network
 access. `DATABASE_URL` may be exported or loaded from `.env`; missing or
 unmigrated PostgreSQL is a gate failure rather than a skipped security proof.
+Use a disposable test database: integration tests create and clean up fixtures.
+The parent repository and initialized `docs` submodule must have complete Git
+histories; shallow checkouts fail the secret gate.
 
 ## License
 

@@ -19,7 +19,7 @@ if [[ -z "${DATABASE_URL:-}" ]]; then
 fi
 
 export GOCACHE="${GOCACHE:-/tmp/go-build-cache}"
-proof='RootAuthority|RootCreation|SessionStatusChecker|SessionRevoker|WalkingSkeletonHTTP'
+proof='RootAuthority|RootCreation|SessionStatusChecker|SessionRevoker|Catalog_|CashSale_|WalkingSkeletonHTTP'
 
 echo "== security audit: PostgreSQL-backed behavior and API abuse =="
 echo "tests: $proof"

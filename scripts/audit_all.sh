@@ -22,6 +22,13 @@ cd "$ROOT_DIR"
 
 export GOCACHE="${GOCACHE:-/tmp/go-build-cache}"
 
+if [[ -z "${DATABASE_URL:-}" && -f .env ]]; then
+  set -a
+  # shellcheck disable=SC1091
+  source .env
+  set +a
+fi
+
 passed_steps=()
 
 run_step() {

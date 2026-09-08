@@ -17,6 +17,17 @@ echo "== security audit: secrets =="
 echo "tool: $tool"
 echo
 
+if [[ ! -e "$ROOT_DIR/docs/.git" ]]; then
+	echo "[FAIL] initialized docs submodule is required for secret scanning"
+	exit 1
+fi
+for repository in "$ROOT_DIR" "$ROOT_DIR/docs"; do
+	if [[ "$(git -C "$repository" rev-parse --is-shallow-repository)" != false ]]; then
+		echo "[FAIL] complete Git history is required: $repository"
+		exit 1
+	fi
+done
+
 sentinel_dir="$(mktemp -d /tmp/pos-go-gitleaks-sentinel.XXXXXX)"
 trap 'rm -rf "$sentinel_dir"' EXIT
 printf 'credential = "%s%s"\n' 'ghp_' 'Q7mZ2pL9xR4vN8cT5kW3sH6jF1bD0yUaE2qG' > "$sentinel_dir/sentinel.txt"
@@ -34,10 +45,8 @@ echo "[PASS] Gitleaks detection sentinel"
 go run "$tool" dir --no-banner --no-color --redact --gitleaks-ignore-path "$ignore_file" "$ROOT_DIR"
 go run "$tool" git --no-banner --no-color --redact --gitleaks-ignore-path "$ignore_file" "$ROOT_DIR"
 
-if git -C docs rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-	go run "$tool" dir --no-banner --no-color --redact "$ROOT_DIR/docs"
-	go run "$tool" git --no-banner --no-color --redact "$ROOT_DIR/docs"
-fi
+go run "$tool" dir --no-banner --no-color --redact "$ROOT_DIR/docs"
+go run "$tool" git --no-banner --no-color --redact "$ROOT_DIR/docs"
 
 echo
 echo "[PASS] secret audit passed"
