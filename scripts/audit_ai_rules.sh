@@ -1,175 +1,69 @@
 #!/usr/bin/env bash
 # Copyright (C) 2026 Asyraf Mubarak
-#
-# This file is part of gopos-api.
-#
-# gopos-api is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Affero General Public License as published by
-# the Free Software Foundation, version 3 only.
-#
-# gopos-api is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU Affero General Public License for more details.
-#
-# You should have received a copy of the GNU Affero General Public License
-# along with gopos-api. If not, see <https://www.gnu.org/licenses/>.
 
 set -euo pipefail
 
-ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-cd "$ROOT_DIR"
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$REPO_ROOT"
 
 required_files=(
+  "AGENTS.md"
+  "README.md"
   "docs/README.md"
   "docs/AGENTS.md"
-  "docs/0001_index.md"
+  "docs/0000_index.md"
+  "docs/0001_north_star.md"
   "docs/0002_decision_policy.md"
-  "docs/0003_session_start_protocol.md"
-  "docs/core/0010_scope_and_facts.md"
-  "docs/core/0011_blueprint_first.md"
-  "docs/core/0012_step_by_step_execution.md"
-  "docs/core/0013_proof_and_progress.md"
-  "docs/architecture/0020_hexagonal_go_api.md"
-  "docs/architecture/0021_package_boundaries.md"
-  "docs/architecture/0022_api_capability_control.md"
-  "docs/architecture/0023_public_contracts.md"
-  "docs/architecture/0024_current_repo_layout.md"
-  "docs/domain/0030_domain_contracts.md"
-  "docs/db/0040_postgresql_policy.md"
-  "docs/api/0050_echo_http_contract.md"
-  "docs/testing/0060_test_and_quality_gates.md"
-  "docs/workflow/0070_docs_go_workflow.md"
-  "docs/workflow/0071_handoff_protocol.md"
-  "docs/workflow/0072_transition_progress_ledger_protocol.md"
-  "docs/security/0080_security_baseline.md"
-  "docs/scripts/0090_makefile_and_scripts.md"
-  "docs/style/0100_go_style.md"
-  "docs/templates/0110_domain_scope_packet.md"
-  "docs/templates/0120_prompt_authoring_rules.md"
-  "docs/templates/0121_codex_session_prompts.md"
-  "docs/templates/0122_web_ai_session_prompts.md"
-  "docs/templates/0123_analysis_and_review_prompts.md"
-  "docs/templates/0124_testing_and_proof_prompts.md"
-  "docs/templates/0125_data_capture_and_evidence_prompts.md"
-  "docs/templates/0126_resume_after_pause_prompts.md"
-  "docs/adr/0001-foundation-raw-go-echo-postgres-hexagonal.md"
-  "docs/evidence/0003_laravel_to_go_transition_progress_ledger.md"
-  "scripts/audit_format.sh"
-  "scripts/audit_go_vet.sh"
-  "scripts/audit_hexagonal.sh"
+  "docs/0003_document_authority_register.md"
+  "docs/architecture/0005_foundation_redesign_baseline.md"
+  "docs/transition/0000_master_execution_workflow.md"
+  "docs/transition/0002_foundation_redesign_roadmap.md"
+  "docs/engineering/AGENTS.md"
+  "docs/engineering/0001_index.md"
+  "docs/engineering/blueprints/0040_documentation_architecture_baseline_reconciliation.md"
+  "docs/legal/0001_repository_license_presentation.md"
   "LICENSE"
-  "NOTICE"
-  "scripts/apply_license_headers.sh"
-  "scripts/audit_license_headers.sh"
-)
-
-required_readme_dirs=(
-  "docs"
 )
 
 check_file() {
   local path="$1"
-  if [[ ! -f "$path" ]]; then
-    echo "[FAIL] missing file: $path"
-    exit 1
-  fi
+  [[ -f "$path" ]] || { echo "[FAIL] missing file: $path"; exit 1; }
   echo "[OK] file exists: $path"
 }
 
 check_contains() {
   local path="$1"
-  local needle="$2"
-  if ! grep -Fq "$needle" "$path"; then
-    echo "[FAIL] missing text in $path :: $needle"
-    exit 1
-  fi
-  echo "[OK] text found in $path :: $needle"
+  local text="$2"
+  rg -Fq "$text" "$path" || { echo "[FAIL] missing text in $path: $text"; exit 1; }
+  echo "[OK] text found in $path: $text"
 }
 
-echo "== file existence =="
-for f in "${required_files[@]}"; do
-  check_file "$f"
+echo "== canonical file existence =="
+for path in "${required_files[@]}"; do
+  check_file "$path"
 done
 
 echo
-echo "== folder readmes =="
-for d in "${required_readme_dirs[@]}"; do
-  check_file "$d/README.md"
-done
-
-while IFS= read -r d; do
-  check_file "${d%/}/README.md"
-done < <(fd . docs -t d)
+echo "== documentation folder entrypoints =="
+while IFS= read -r directory; do
+  check_file "${directory%/}/README.md"
+done < <(fd --type d . docs)
 
 echo
-echo "== content checks =="
-check_contains "docs/README.md" "First Read Order"
-check_contains "docs/AGENTS.md" "canonical AI_RULES package"
-check_contains "docs/0001_index.md" "Mandatory Read Order"
-check_contains "docs/0001_index.md" "Constitution Summary"
-check_contains "docs/0002_decision_policy.md" "Mandatory Decision Sequence"
-check_contains "docs/0002_decision_policy.md" "GAP Rule"
-check_contains "docs/0002_decision_policy.md" "Decision And Data Request Rule"
-check_contains "docs/0003_session_start_protocol.md" "Mandatory Opening Flow"
-check_contains "docs/core/0011_blueprint_first.md" "Implementation Gate"
-check_contains "docs/core/0012_step_by_step_execution.md" "An active step must have"
-check_contains "docs/core/0013_proof_and_progress.md" "Accepted Proof"
-check_contains "docs/architecture/0021_package_boundaries.md" "One Folder One Package"
-check_contains "docs/architecture/0024_current_repo_layout.md" "Protected Contracts"
-check_contains "docs/workflow/0070_docs_go_workflow.md" 'Every folder under `docs/` should have a `README.md`'
-check_contains "docs/scripts/0090_makefile_and_scripts.md" "Required Make Targets"
-check_contains "docs/style/0100_go_style.md" "Forbidden Patterns"
-check_contains "docs/templates/0120_prompt_authoring_rules.md" "Web AI Source Rules"
-check_contains "docs/templates/0120_prompt_authoring_rules.md" "Working Style Rule"
-check_contains "docs/templates/0122_web_ai_session_prompts.md" "GitHub connector access is read-only by default."
-check_contains "docs/templates/0122_web_ai_session_prompts.md" "PROOF THE TERMINAL AGENT MUST RUN"
-check_contains "docs/templates/0123_analysis_and_review_prompts.md" "2-3 owner decision options with tradeoffs"
-check_contains "docs/templates/0125_data_capture_and_evidence_prompts.md" "smallest specific missing source batch"
-check_contains "docs/templates/0120_prompt_authoring_rules.md" "Treat \"write docs/...\", \"update docs/...\", \"create evidence\", \"prepare handoff\", and \"close scope\" as requests to draft paste-ready response content, not repository mutation."
-check_contains "docs/README.md" "Web AI connector access is read-only by default"
-check_contains "docs/workflow/0071_handoff_protocol.md" "Automatic Handoff Triggers"
-check_contains "docs/workflow/0072_transition_progress_ledger_protocol.md" "Progress may increase only from proof."
-check_contains "docs/templates/0122_web_ai_session_prompts.md" "Progress Write Gate"
-check_contains "docs/workflow/0072_transition_progress_ledger_protocol.md" "Progress Update Gate"
-check_contains "docs/templates/0122_web_ai_session_prompts.md" "locally implemented with proof; connector validation pending"
-check_contains "docs/templates/0122_web_ai_session_prompts.md" "Local proof and remote connector proof are not conflated"
-check_contains "docs/templates/0122_web_ai_session_prompts.md" "Git mutation instructions are absent unless the owner explicitly requested Git operations"
-check_contains "docs/templates/0123_cli_command_formatter_rules.md" "CLI Command Formatter Rules"
-check_contains "docs/templates/0123_cli_command_formatter_rules.md" 'Do not use `set -euo pipefail`'
-check_contains "docs/templates/0123_cli_command_formatter_rules.md" 'Convert `grep` commands to `rg`'
-check_contains "docs/templates/0123_cli_command_formatter_rules.md" 'Convert `find` commands to `fd`'
-check_contains "docs/templates/0123_cli_command_formatter_rules.md" "Do not prepend this unless explicitly needed"
-check_contains "docs/AGENTS.md" "docs/templates/0123_cli_command_formatter_rules.md"
-check_contains "docs/0003_session_start_protocol.md" "docs/templates/0123_cli_command_formatter_rules.md"
-check_contains "docs/templates/0122_web_ai_session_prompts.md" "docs/templates/0123_cli_command_formatter_rules.md"
-check_contains "docs/templates/0122_web_ai_session_prompts.md" "NEXT does not skip required progress ledger or handoff updates"
-check_contains "docs/templates/0122_web_ai_session_prompts.md" "Web AI file update requests require COMMAND PLAN FOR OWNER / LOCAL TERMINAL"
-check_contains "docs/templates/0122_web_ai_session_prompts.md" "Paste-ready text must not replace the command plan"
-check_contains "docs/templates/0122_web_ai_session_prompts.md" "PROGRESS and CONTEXT WINDOW STATUS are present for non-trivial work"
-check_contains "docs/workflow/0071_handoff_protocol.md" "Do not let paste-ready handoff text replace a required owner/local command plan"
-check_contains "docs/templates/0120_prompt_authoring_rules.md" "Web AI file update requests require COMMAND PLAN FOR OWNER / LOCAL TERMINAL"
-check_contains "docs/README.md" "Progress Write Gate"
-check_contains "docs/README.md" "locally implemented with proof; connector validation pending"
-check_contains "docs/AGENTS.md" "Before NEXT, apply the Progress Write Gate"
-check_contains "docs/AGENTS.md" "Local proof and remote connector proof must not be conflated"
-check_contains "docs/0003_session_start_protocol.md" "Before naming NEXT, apply the Progress Write Gate"
-check_contains "docs/0003_session_start_protocol.md" "durable proof changes progress"
-check_contains "docs/evidence/0003_laravel_to_go_transition_progress_ledger.md" "Overall Laravel-to-Go transition"
-check_contains "docs/README.md" "Documentation Cascade Rule"
-check_contains "docs/AGENTS.md" "context-window status"
-check_contains "scripts/audit_hexagonal.sh" "hexagonal import audit"
-check_contains "scripts/audit_format.sh" "format audit"
-check_contains "scripts/audit_go_vet.sh" "go vet audit"
+echo "== canonical direction markers =="
+check_contains "docs/README.md" "Canonical Read Order"
+check_contains "docs/README.md" "No runtime refactor is authorized"
+check_contains "docs/AGENTS.md" "Current owner direction and the North Star"
+check_contains "docs/0003_document_authority_register.md" "HISTORICAL EVIDENCE"
+check_contains "docs/architecture/0005_foundation_redesign_baseline.md" "NEW PROPOSAL: Financial Mutation Boundary"
+check_contains "docs/architecture/0005_foundation_redesign_baseline.md" "SQLite     = first-class portability/local/offline-standalone target"
+check_contains "docs/transition/0002_foundation_redesign_roadmap.md" "KEEP"
+check_contains "docs/transition/0002_foundation_redesign_roadmap.md" "Stop before source refactoring."
+check_contains "docs/engineering/domain/0030_domain_contracts.md" "There is no universal CRUD requirement."
+check_contains "docs/engineering/architecture/0022_api_capability_control.md" "business capability activation"
+check_contains "docs/legal/0001_repository_license_presentation.md" 'canonical `LICENSE` file'
 check_contains "LICENSE" "GNU AFFERO GENERAL PUBLIC LICENSE"
 check_contains "LICENSE" "END OF TERMS AND CONDITIONS"
-check_contains "NOTICE" "GNU Affero General Public License v3.0 only"
-check_contains "scripts/apply_license_headers.sh" "apply license headers"
-check_contains "scripts/audit_license_headers.sh" "license header audit"
-check_contains "make/audit.mk" "audit-license-headers"
-check_contains "scripts/audit_all.sh" "license header audit"
-check_contains "scripts/audit_file_size.sh" "skipping_license_header"
-check_contains "docs/adr/0001-foundation-raw-go-echo-postgres-hexagonal.md" "## Decision"
 
 echo
-echo "[PASS] AI rules audit passed"
+echo "[PASS] canonical AI/documentation rules audit passed"

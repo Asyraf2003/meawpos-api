@@ -1,145 +1,44 @@
-# pos-go API
+# MiawPOS API
 
-Go API service for POS backend development.
+MiawPOS API is an open-source, AGPL-licensed, self-host-first, API-only point-of-sale and business foundation written in Go with Echo.
 
-## Requirements
+The project is designed to remain lightweight and locally usable while preserving strict financial correctness, security, authorization, transaction integrity, and audit truth. Business capabilities may be composed where their real dependencies allow it; the trusted truth boundary is not an ordinary feature toggle.
 
-- Go
-- PostgreSQL
-- `psql`
-- Bash
-- Make
+GlassPOS is design DNA and historical reference lineage. It is not the active product name and its SaaS, PAYG, Laravel, or fixed-domain assumptions do not define future MiawPOS architecture.
 
-## Local environment
-
-Create local env from the tracked example:
-
-```bash
-cp .env.example .env
-```
-
-`.env` is local-only and must not be committed.
-
-Default local database values from `.env.example`:
-
-```env
-DATABASE_URL=postgres://posgo_app:posgo_local_dev_123@127.0.0.1:5432/posgo_app_db?sslmode=disable
-```
-
-## Local PostgreSQL setup
-
-Start PostgreSQL first.
-
-On systems using systemd:
-
-```bash
-systemctl status postgresql
-```
-
-Then create/update the local app role and database from `DATABASE_URL`:
-
-```bash
-make db-dev-setup
-```
-
-If your PostgreSQL admin user is not `postgres`, override it:
-
-```bash
-POSTGRES_ADMIN_USER=<admin_user> make db-dev-setup
-```
-
-## Migrations
-
-Apply pending migrations:
-
-```bash
-make db-migrate
-```
-
-Show migration status:
-
-```bash
-make db-status
-```
-
-## Run API
-
-```bash
-make run
-```
-
-The Makefile default port is `8081`.
-
-To override:
-
-```bash
-HTTP_PORT=8080 make run
-```
-
-## Common local flow
-
-```bash
-cp .env.example .env
-make db-dev-setup
-make db-migrate
-make run
-```
-
-## Auth debug mode
-
-Manual auth login is intended for local/build/testing only.
-
-Enable it in `.env` when needed:
-
-```env
-AUTH_DEBUG_ENABLED=true
-```
-
-Then run:
-
-```bash
-make run
-```
-
-## Developer commands
-
-Run the full local development flow:
-
-```bash
-make dev
-```
-
-This runs:
-
-```bash
-make db-dev-setup
-make db-migrate
-make run
-```
-
-Smoke-test a running local API:
-
-```bash
-make smoke
-```
-
-Manual auth login helpers:
-
-```bash
-make auth-login-admin
-make auth-login-cashier
-```
-
-These commands call `POST /api/auth/manual/login`, print the HTTP response, extract the bearer token, then call `GET /api/me` with that token.
-
-Manual auth requires:
-
-```env
-AUTH_DEBUG_ENABLED=true
-```
-
-Health check path:
+## Current Architecture Direction
 
 ```text
-/api/health
+PostgreSQL = primary/default server persistence
+SQLite     = first-class portability/local/offline-standalone target
+MySQL      = not an active target
 ```
+
+The first walking skeleton is intentionally narrow:
+
+```text
+minimal catalog
+-> sale
+-> cash payment
+-> financial trust boundary
+-> exact financial calculation
+-> transactional persistence
+-> audit/history truth
+-> API response/readback
+```
+
+SQLite support will be added through proven persistence boundaries. No parity claim exists yet.
+
+## Start Here
+
+Read [docs/README.md](docs/README.md), then follow its canonical read order. The documentation lives in a Git submodule and has a separate change/proof surface from this parent repository.
+
+The next implementation scope is not a source refactor. It is a read-first classification of the current Go runtime before a redesign blueprint is accepted.
+
+## Current Runtime
+
+The repository currently contains Go/Echo/PostgreSQL implementation history for authentication, authorization, capability control, ProductCatalog, ServiceCatalog, and Supplier-related work. Those facts are preserved for the later runtime audit; they are not promises that the same boundaries or domains remain mandatory.
+
+## License
+
+MiawPOS API is licensed under GNU Affero General Public License v3.0 only. See [LICENSE](LICENSE). Third-party notices and attribution remain governed by their applicable terms.

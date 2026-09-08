@@ -16,17 +16,18 @@
 
 ##@ Audit
 
-.PHONY: audit-ai-rules license-headers audit-license-headers audit-file-size audit-hex arch audit-route-capabilities security-gosec security audit-all
+.PHONY: audit-ai-rules license-headers audit-license audit-license-headers audit-file-size audit-hex arch audit-route-capabilities security-gosec security audit-all
 
 audit-ai-rules: ## Run AI rules audit
 	bash scripts/audit_ai_rules.sh
 
-license-headers: ## Apply license headers to supported source files
+license-headers: ## Compatibility no-op; root LICENSE is canonical
 	bash scripts/apply_license_headers.sh
-	fd -e go . -x gofmt -w
 
-audit-license-headers: ## Run license header audit
+audit-license: ## Validate root license presentation
 	bash scripts/audit_license_headers.sh
+
+audit-license-headers: audit-license ## Compatibility alias for the root license audit
 
 audit-file-size: ## Run file size audit
 	bash scripts/audit_file_size.sh
