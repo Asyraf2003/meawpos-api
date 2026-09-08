@@ -16,13 +16,13 @@
 
 ##@ Test
 
-.PHONY: test test-unit test-api test-db test-db-integration vet lint check verify ci screening
+.PHONY: test test-unit test-api test-db test-db-integration test-r4-integration vet lint check verify ci screening
 
 test: ## Run all Go tests
 	$(GO_TEST) ./...
 
 test-unit: ## Run module-focused tests
-	$(GO_TEST) ./internal/modules/... ./internal/platform/state/... ./internal/platform/token/... ./internal/config
+	$(GO_TEST) ./internal/core/... ./internal/modules/... ./internal/platform/state/... ./internal/platform/token/... ./internal/config
 
 test-api: ## Run HTTP transport and presentation tests
 	$(GO_TEST) ./internal/modules/*/transport/http ./internal/transport/http/... ./internal/presentation/http/...
@@ -32,6 +32,9 @@ test-db: ## Run PostgreSQL adapter tests
 
 test-db-integration: ## Load .env and run DB-backed PostgreSQL integration tests, defaulting to Supplier
 	@set -a; if [[ -f .env ]]; then source .env; fi; set +a; $(GO_TEST) -tags integration ./internal/platform/postgres/... -run "$${RUN:-Supplier}" -count=1 -v
+
+test-r4-integration: ## Run the focused PostgreSQL and HTTP walking-skeleton proof
+	@set -a; if [[ -f .env ]]; then source .env; fi; set +a; $(GO_TEST) -tags integration ./internal/platform/postgres/... ./internal/app/bootstrap -run "$${RUN:-RootAuthority|RootCreation|Catalog_|CashSale_|WalkingSkeletonHTTP}" -count=1 -v
 
 vet: ## Run go vet audit
 	bash scripts/audit_go_vet.sh

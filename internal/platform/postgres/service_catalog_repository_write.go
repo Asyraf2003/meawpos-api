@@ -46,11 +46,12 @@ func (r *ServiceCatalogRepository) Update(ctx context.Context, item domain.Servi
 			normalized_name = $3,
 			default_price_rupiah = $4,
 			is_active = $5,
-			updated_at = $7
+			updated_at = $6
 		WHERE id = $1
 	`
 
-	_, err := r.exec(ctx, sql, serviceCatalogItemArgs(item)...)
+	args := serviceCatalogItemArgs(item)
+	_, err := r.exec(ctx, sql, args[0], args[1], args[2], args[3], args[4], args[6])
 	return err
 }
 

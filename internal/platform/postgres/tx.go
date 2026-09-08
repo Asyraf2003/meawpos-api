@@ -19,7 +19,7 @@ package postgres
 import (
 	"context"
 
-	"pos-go/internal/modules/auth/ports"
+	coretransaction "pos-go/internal/core/transaction"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -67,4 +67,4 @@ func TxFromContext(ctx context.Context) (pgx.Tx, bool) {
 	return tx, ok
 }
 
-var _ ports.Transactor = (*Transactor)(nil)
+var _ coretransaction.Transactor = (*Transactor)(nil)

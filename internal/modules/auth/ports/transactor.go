@@ -16,8 +16,6 @@
 
 package ports
 
-import "context"
+import coretransaction "pos-go/internal/core/transaction"
 
-type Transactor interface {
-	RunInTx(ctx context.Context, fn func(context.Context) error) error
-}
+type Transactor = coretransaction.Transactor

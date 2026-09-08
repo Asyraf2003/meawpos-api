@@ -68,9 +68,11 @@ func TestPrincipalResolver_Resolve(t *testing.T) {
 		"auth.session.logout",
 		"auth.session.refresh",
 		"payment.create",
+		"product_catalog.read",
 		"profile.self.read",
 		"sale.order.create",
 		"sale.order.read",
+		"service_catalog.read",
 	}
 	if !reflect.DeepEqual(principal.Permissions, wantPermissions) {
 		t.Fatalf("permissions = %#v, want %#v", principal.Permissions, wantPermissions)

@@ -22,12 +22,18 @@ import (
 	"time"
 
 	"pos-go/internal/config"
+	"pos-go/internal/core/authorization"
+	rootusecase "pos-go/internal/core/root/usecase"
 	authhttp "pos-go/internal/modules/auth/transport/http"
 	authusecase "pos-go/internal/modules/auth/usecase"
 	capabilityhttp "pos-go/internal/modules/capability/transport/http"
 	capabilityusecase "pos-go/internal/modules/capability/usecase"
+	cataloghttp "pos-go/internal/modules/catalog/transport/http"
+	catalogusecase "pos-go/internal/modules/catalog/usecase"
 	productcataloghttp "pos-go/internal/modules/productcatalog/transport/http"
 	productcatalogusecase "pos-go/internal/modules/productcatalog/usecase"
+	saleshttp "pos-go/internal/modules/sales/transport/http"
+	salesusecase "pos-go/internal/modules/sales/usecase"
 	servicecatalogdomain "pos-go/internal/modules/servicecatalog/domain"
 	servicecataloghttp "pos-go/internal/modules/servicecatalog/transport/http"
 	servicecatalogusecase "pos-go/internal/modules/servicecatalog/usecase"
@@ -38,6 +44,7 @@ import (
 	jwtissuer "pos-go/internal/platform/token/jwt"
 	httpmw "pos-go/internal/transport/http/middleware"
 	httpresponse "pos-go/internal/transport/http/response"
+	roothhttp "pos-go/internal/transport/http/root"
 
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -54,6 +61,11 @@ func newServiceCatalogItemID() (servicecatalogdomain.ServiceCatalogItemID, error
 }
 
 func New(ctx context.Context, cfg config.Config) (*App, error) {
+	components, err := newComponentSet(cfg.Components.Business)
+	if err != nil {
+		return nil, err
+	}
+
 	pool, err := postgres.NewPool(ctx, cfg.DatabaseURL)
 	if err != nil {
 		return nil, err
@@ -178,6 +190,51 @@ func New(ctx context.Context, cfg config.Config) (*App, error) {
 			restoreProductUsecase,
 			listProductVersionsUsecase,
 		)
+
+		rootStore := postgres.NewRootStore(pool)
+		auditWriter := postgres.NewAuditWriter(pool)
+		rootHandler := roothhttp.NewHandler(
+			rootusecase.NewCreateRoot(rootStore, auditWriter, transactor, uuid.NewString, time.Now),
+			rootusecase.NewListRoots(rootStore),
+		)
+		rootGroup := api.Group("")
+		rootGroup.Use(httpmw.RequireAuth(tokenVerifier, principalResolver, sessionStatusChecker))
+		rootHandler.Register(rootGroup)
+
+		rootAuthorityResolver := postgres.NewRootAuthorityResolver(pool)
+		newRootGroup := func(requiredPermissions ...string) *echo.Group {
+			group := api.Group("/roots/:root_id")
+			group.Use(httpmw.RequireAuth(tokenVerifier, principalResolver, sessionStatusChecker))
+			group.Use(httpmw.RequireRootAuthority(rootAuthorityResolver, requiredPermissions...))
+			return group
+		}
+
+		catalogStore := postgres.NewCatalogStore(pool)
+		if components["catalog.core"] {
+			catalogHandler := cataloghttp.NewHandler(
+				catalogusecase.NewCreateItem(catalogStore, transactor, uuid.NewString, time.Now),
+				catalogusecase.NewGetItem(catalogStore),
+				components["catalog.pricing"],
+			)
+			catalogHandler.RegisterCreate(newRootGroup(authorization.PermissionCatalogItemCreate))
+			catalogHandler.RegisterRead(newRootGroup(authorization.PermissionCatalogItemRead))
+		}
+
+		if components["sales"] {
+			salesStore := postgres.NewSalesStore(pool)
+			postCashSale := salesusecase.NewPostCashSale(
+				salesStore, salesStore, salesStore, salesStore,
+				auditWriter, transactor, uuid.NewString, time.Now,
+			)
+			salesHandler := saleshttp.NewHandler(
+				postCashSale,
+				salesusecase.NewGetSale(salesStore),
+				salesusecase.NewReverseSale(salesStore, auditWriter, transactor, uuid.NewString, time.Now),
+			)
+			salesHandler.RegisterCreate(newRootGroup(authorization.PermissionSaleOrderCreate, authorization.PermissionPaymentCreate))
+			salesHandler.RegisterRead(newRootGroup(authorization.PermissionSaleOrderRead))
+			salesHandler.RegisterReverse(newRootGroup(authorization.PermissionSaleOrderReverse, authorization.PermissionPaymentRefund))
+		}
 
 		authGroup := api.Group("/auth")
 

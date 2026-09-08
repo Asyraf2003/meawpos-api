@@ -25,6 +25,11 @@ import (
 
 const requestIDKey = "request_id"
 
+func RequestIDFromContext(c echo.Context) string {
+	requestID, _ := c.Get(requestIDKey).(string)
+	return requestID
+}
+
 func RequestID(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		requestID := c.Request().Header.Get(echo.HeaderXRequestID)

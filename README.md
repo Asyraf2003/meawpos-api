@@ -33,11 +33,13 @@ SQLite support will be added through proven persistence boundaries. No parity cl
 
 Read [docs/README.md](docs/README.md), then follow its canonical read order. The documentation lives in a Git submodule and has a separate change/proof surface from this parent repository.
 
-The next implementation scope is not a source refactor. It is a read-first classification of the current Go runtime before a redesign blueprint is accepted.
+R4's PostgreSQL walking skeleton is implemented and proven. The exact next scope is R5's reproducible security and release gate; R6 SQLite conformance and broader capability expansion remain later.
 
 ## Current Runtime
 
-The repository currently contains Go/Echo/PostgreSQL implementation history for authentication, authorization, capability control, ProductCatalog, ServiceCatalog, and Supplier-related work. Those facts are preserved for the later runtime audit; they are not promises that the same boundaries or domains remain mandatory.
+The default business composition is `catalog.core,catalog.pricing,sales,payment.cash`. Set `BUSINESS_COMPONENTS` to an explicit comma-separated set, or `none`, at startup. Missing dependencies and unknown component names fail startup; trusted ROOT, authorization, money, transaction, audit, and idempotency responsibilities are not business toggles.
+
+The new foundation API is ROOT-scoped under `/api/roots/{root_id}/...`. Existing ProductCatalog, ServiceCatalog, Supplier, and operation-capability behavior remains a separate compatibility surface.
 
 ## License
 

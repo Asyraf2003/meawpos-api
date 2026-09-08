@@ -1,0 +1,3 @@
+DROP TABLE IF EXISTS sale_reversals;
+DROP TABLE IF EXISTS sale_lines;
+DROP TABLE IF EXISTS sales;

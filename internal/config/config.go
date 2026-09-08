@@ -32,6 +32,11 @@ type Config struct {
 	HTTPPort    string
 	DatabaseURL string
 	Auth        AuthConfig
+	Components  ComponentConfig
+}
+
+type ComponentConfig struct {
+	Business []string
 }
 
 type AuthConfig struct {
@@ -112,6 +117,7 @@ func Load() (Config, error) {
 			StateTTL:   time.Duration(authStateTTLMinutes) * time.Minute,
 			SessionTTL: time.Duration(authSessionTTLHours) * time.Hour,
 		},
+		Components: ComponentConfig{Business: getBusinessComponents()},
 	}
 
 	if cfg.DatabaseURL == "" {
@@ -119,6 +125,24 @@ func Load() (Config, error) {
 	}
 
 	return cfg, nil
+}
+
+func getBusinessComponents() []string {
+	value := strings.TrimSpace(os.Getenv("BUSINESS_COMPONENTS"))
+	if value == "" {
+		return []string{"catalog.core", "catalog.pricing", "sales", "payment.cash"}
+	}
+	if strings.EqualFold(value, "none") {
+		return []string{}
+	}
+	parts := strings.Split(value, ",")
+	result := make([]string, 0, len(parts))
+	for _, part := range parts {
+		if component := strings.TrimSpace(part); component != "" {
+			result = append(result, component)
+		}
+	}
+	return result
 }
 
 func (c Config) HTTPAddr() string {

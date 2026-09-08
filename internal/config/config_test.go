@@ -59,8 +59,33 @@ func TestLoad_InvalidDebugBool(t *testing.T) {
 	}
 }
 
+func TestLoad_DefaultsWalkingSkeletonComponents(t *testing.T) {
+	t.Setenv("DATABASE_URL", "postgres://example")
+	t.Setenv("BUSINESS_COMPONENTS", "")
+	cfg, err := Load()
+	if err != nil {
+		t.Fatalf("Load() error = %v", err)
+	}
+	if len(cfg.Components.Business) != 4 {
+		t.Fatalf("components = %v", cfg.Components.Business)
+	}
+}
+
+func TestLoad_AllowsNoBusinessComponents(t *testing.T) {
+	t.Setenv("DATABASE_URL", "postgres://example")
+	t.Setenv("BUSINESS_COMPONENTS", "none")
+	cfg, err := Load()
+	if err != nil {
+		t.Fatalf("Load() error = %v", err)
+	}
+	if len(cfg.Components.Business) != 0 {
+		t.Fatalf("components = %v", cfg.Components.Business)
+	}
+}
+
 func TestMain(m *testing.M) {
 	_ = os.Unsetenv("AUTH_DEBUG_ENABLED")
 	_ = os.Unsetenv("DATABASE_URL")
+	_ = os.Unsetenv("BUSINESS_COMPONENTS")
 	os.Exit(m.Run())
 }
