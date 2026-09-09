@@ -33,7 +33,7 @@ SQLite support will be added through proven persistence boundaries. No parity cl
 
 Read [docs/README.md](docs/README.md), then follow its canonical read order. The documentation lives in a Git submodule and has a separate change/proof surface from this parent repository.
 
-R4's PostgreSQL walking skeleton and R5's reproducible security/release gate are implemented and proven. The corrected R6 Google login/session client slice is locally proven; see the [session proof checkpoint](docs/evidence/0008_r6_login_session_client_slice.md). Owner visual acceptance is pending before commit/push, and ROOT remains outside this scope. Full R6, production release, and physical-tablet proof remain outstanding. R7 SQLite conformance remains planned after R6; broader capability expansion remains later.
+R4's PostgreSQL walking skeleton and R5's reproducible security/release gate are implemented and proven. The corrected R6 Google login/session client slice is implemented, locally proven, committed, and pushed; see the [session proof checkpoint](docs/evidence/0008_r6_login_session_client_slice.md). The public sibling `miawpos-ui` repository keeps `docs` as a symlink into the private canonical documentation surface rather than vendoring private docs. ROOT is the next R6 sequence position but requires its own explicit bounded scope. Full R6, real Google production-environment proof, deployed HTTPS/static-host proof, and physical-tablet proof remain outstanding. R7 SQLite conformance remains planned after R6; broader capability expansion remains later.
 
 ## Current Runtime
 
