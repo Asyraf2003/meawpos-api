@@ -25,7 +25,7 @@ import (
 )
 
 func TestRefreshToken_RejectsEmptyRefreshToken(t *testing.T) {
-	usecase := NewRefreshToken(&fakeRefreshSessionRepository{}, &fakeTokenIssuer{}, 24*time.Hour)
+	usecase := NewRefreshToken(&fakeRefreshSessionRepository{}, &fakeTokenIssuer{})
 
 	_, err := usecase.Execute(context.Background(), RefreshTokenInput{})
 	if err == nil {
@@ -42,7 +42,7 @@ func TestRefreshToken_RejectsExpiredRefreshToken(t *testing.T) {
 		},
 	}
 
-	usecase := NewRefreshToken(repo, &fakeTokenIssuer{}, 24*time.Hour)
+	usecase := NewRefreshToken(repo, &fakeTokenIssuer{})
 
 	_, err := usecase.Execute(context.Background(), RefreshTokenInput{
 		RefreshToken: "old-refresh-token",

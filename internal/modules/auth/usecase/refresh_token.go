@@ -28,9 +28,8 @@ import (
 var ErrInvalidRefreshToken = errors.New("invalid refresh token")
 
 type RefreshToken struct {
-	repo       ports.RefreshSessionRepository
-	tokens     ports.TokenIssuer
-	sessionTTL time.Duration
+	repo   ports.RefreshSessionRepository
+	tokens ports.TokenIssuer
 }
 
 type RefreshTokenInput struct {
@@ -49,12 +48,10 @@ type RefreshTokenOutput struct {
 func NewRefreshToken(
 	repo ports.RefreshSessionRepository,
 	tokens ports.TokenIssuer,
-	sessionTTL time.Duration,
 ) *RefreshToken {
 	return &RefreshToken{
-		repo:       repo,
-		tokens:     tokens,
-		sessionTTL: sessionTTL,
+		repo:   repo,
+		tokens: tokens,
 	}
 }
 
@@ -84,7 +81,7 @@ func (u *RefreshToken) Execute(ctx context.Context, in RefreshTokenInput) (Refre
 		return RefreshTokenOutput{}, err
 	}
 
-	newRefreshExp := now.Add(u.sessionTTL)
+	newRefreshExp := session.ExpiresAt
 	newRefreshTokenHash := sha256Hex(newRefreshToken)
 
 	accessToken, accessExp, err := u.tokens.IssueAccessToken(ctx, ports.AccessTokenRequest{

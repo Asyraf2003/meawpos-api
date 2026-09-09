@@ -19,6 +19,7 @@ package bootstrap
 
 import (
 	"context"
+	"strings"
 	"time"
 
 	"pos-go/internal/config"
@@ -237,6 +238,7 @@ func New(ctx context.Context, cfg config.Config) (*App, error) {
 		}
 
 		authGroup := api.Group("/auth")
+		browserCookieSecure := !strings.EqualFold(strings.TrimSpace(cfg.AppEnv), "local")
 
 		if cfg.Auth.Google.IsConfigured() {
 			oidcProvider, err := googleoidc.NewOIDC(ctx, googleoidc.OIDCConfig{
@@ -279,15 +281,18 @@ func New(ctx context.Context, cfg config.Config) (*App, error) {
 			)
 			manualLoginHandler := authhttp.NewManualLoginHandler(manualLoginUsecase)
 			manualLoginHandler.Register(authGroup)
+			browserManualLoginHandler := authhttp.NewBrowserManualLoginHandler(manualLoginUsecase, browserCookieSecure)
+			browserManualLoginHandler.Register(authGroup)
 		}
 
 		refreshUsecase := authusecase.NewRefreshToken(
 			refreshRepo,
 			tokenIssuer,
-			cfg.Auth.SessionTTL,
 		)
 		refreshHandler := authhttp.NewRefreshHandler(refreshUsecase)
 		refreshHandler.Register(authGroup)
+		browserRefreshHandler := authhttp.NewBrowserRefreshHandler(refreshUsecase, browserCookieSecure)
+		browserRefreshHandler.Register(authGroup)
 
 		meHandler := systemhttp.NewMeHandler()
 
@@ -311,6 +316,8 @@ func New(ctx context.Context, cfg config.Config) (*App, error) {
 		logoutUsecase := authusecase.NewLogoutCurrentSession(sessionRevoker)
 		logoutHandler := authhttp.NewLogoutHandler(logoutUsecase)
 		logoutHandler.Register(logoutGroup)
+		browserLogoutHandler := authhttp.NewBrowserLogoutHandler(logoutUsecase, browserCookieSecure)
+		browserLogoutHandler.Register(logoutGroup)
 
 		assignAccountRoleUsecase := authusecase.NewAssignAccountRole(roleAssigner)
 		removeAccountRoleUsecase := authusecase.NewRemoveAccountRole(roleRemover)
