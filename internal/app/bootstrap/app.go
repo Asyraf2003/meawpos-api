@@ -268,6 +268,15 @@ func New(ctx context.Context, cfg config.Config) (*App, error) {
 				cfg.Auth.Google.RedirectURL,
 			)
 			googleHandler.Register(authGroup)
+			browserGoogleHandler, err := authhttp.NewBrowserGoogleHandler(
+				authhttp.NewGoogleFlowAdapter(googleFlow), cfg.Auth.Google.RedirectURL,
+				browserCookieSecure, cfg.Auth.StateTTL,
+			)
+			if err != nil {
+				pool.Close()
+				return nil, err
+			}
+			browserGoogleHandler.Register(authGroup)
 		}
 
 		if cfg.Auth.Debug.Enabled {

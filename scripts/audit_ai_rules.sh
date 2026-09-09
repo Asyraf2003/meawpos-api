@@ -28,6 +28,7 @@ required_files=(
   "docs/engineering/blueprints/0042_r6_human_end_to_end_client_foundation.md"
   "docs/evidence/0004_r4_postgresql_walking_skeleton_implementation.md"
   "docs/evidence/0005_r5_reproducible_security_release_gate.md"
+  "docs/evidence/0008_r6_login_session_client_slice.md"
   "docs/handoffs/2026-09-09_r6_implementation_handoff.md"
   "docs/legal/0001_repository_license_presentation.md"
   "LICENSE"
@@ -60,7 +61,7 @@ done < <(fd --type d . docs)
 echo
 echo "== canonical direction markers =="
 check_contains "docs/README.md" "Canonical Read Order"
-check_contains "docs/README.md" "R6 IMPLEMENTATION AUTHORIZED; LOGIN VERTICAL SLICE EXACT NEXT"
+check_contains "docs/README.md" "R6 GOOGLE BROWSER LOGIN LOCALLY PROVEN; OWNER VISUAL ACCEPTANCE PENDING"
 check_contains "docs/README.md" "handoffs/2026-09-09_r6_implementation_handoff.md"
 check_contains "docs/README.md" "engineering/blueprints/0041_r5_reproducible_security_release_gate.md"
 check_contains "docs/README.md" "evidence/0005_r5_reproducible_security_release_gate.md"
@@ -68,10 +69,12 @@ check_contains "docs/AGENTS.md" "Current owner direction and the North Star"
 check_contains "docs/0003_document_authority_register.md" "HISTORICAL EVIDENCE"
 check_contains "docs/architecture/0005_foundation_redesign_baseline.md" "Financial Mutation Boundary"
 check_contains "docs/architecture/0005_foundation_redesign_baseline.md" "migrations evolve additively"
-check_contains "docs/transition/0002_foundation_redesign_roadmap.md" 'Status: `IMPLEMENTATION AUTHORIZED; LOGIN/SESSION VERTICAL SLICE EXACT NEXT`'
+check_contains "docs/transition/0002_foundation_redesign_roadmap.md" 'Status: `IN PROGRESS; GOOGLE BROWSER LOGIN LOCALLY PROVEN; OWNER VISUAL ACCEPTANCE PENDING`'
 check_contains "docs/transition/0002_foundation_redesign_roadmap.md" 'Status: `PLANNED AFTER R6; NOT STARTED`'
 check_contains "docs/transition/0002_foundation_redesign_roadmap.md" "bounded meawpos-api fixed-ceiling refresh + browser auth transport"
-check_contains "docs/transition/0003_phase_execution_ledger.md" "R6 IMPLEMENTATION AUTHORIZED; LOGIN VERTICAL SLICE EXACT NEXT"
+check_contains "docs/transition/0003_phase_execution_ledger.md" "R6 GOOGLE BROWSER LOGIN LOCALLY PROVEN; OWNER VISUAL ACCEPTANCE PENDING"
+check_contains "docs/transition/0003_phase_execution_ledger.md" "../evidence/0008_r6_login_session_client_slice.md"
+check_contains "docs/evidence/0008_r6_login_session_client_slice.md" "LOCALLY IMPLEMENTED AND PROVEN; FULL R6 NOT CLOSED"
 check_contains "docs/transition/0003_phase_execution_ledger.md" "ACCEPTED: DEFER FROM R6"
 check_contains "docs/handoffs/2026-09-09_r6_implementation_handoff.md" "CANONICAL IMPLEMENTATION HANDOFF; R6 IMPLEMENTATION AUTHORIZED"
 check_contains "docs/engineering/domain/0030_domain_contracts.md" "There is no universal CRUD requirement."
