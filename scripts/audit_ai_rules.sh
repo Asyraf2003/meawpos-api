@@ -67,7 +67,7 @@ check_contains "docs/README.md" "evidence/0005_r5_reproducible_security_release_
 check_contains "docs/AGENTS.md" "Current owner direction and the North Star"
 check_contains "docs/0003_document_authority_register.md" "HISTORICAL EVIDENCE"
 check_contains "docs/architecture/0005_foundation_redesign_baseline.md" "Financial Mutation Boundary"
-check_contains "docs/architecture/0005_foundation_redesign_baseline.md" "R4 uses additive PostgreSQL migrations only"
+check_contains "docs/architecture/0005_foundation_redesign_baseline.md" "migrations evolve additively"
 check_contains "docs/transition/0002_foundation_redesign_roadmap.md" 'Status: `IMPLEMENTATION AUTHORIZED; LOGIN/SESSION VERTICAL SLICE EXACT NEXT`'
 check_contains "docs/transition/0002_foundation_redesign_roadmap.md" 'Status: `PLANNED AFTER R6; NOT STARTED`'
 check_contains "docs/transition/0002_foundation_redesign_roadmap.md" "bounded meawpos-api fixed-ceiling refresh + browser auth transport"
