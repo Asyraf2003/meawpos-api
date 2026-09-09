@@ -41,7 +41,7 @@ func newBrowserSessionCookie(secure bool) browserSessionCookie {
 }
 
 func (c browserSessionCookie) Set(ctx echo.Context, refreshToken string) {
-	ctx.SetCookie(&http.Cookie{
+	ctx.SetCookie(&http.Cookie{ // #nosec G124 -- Secure is runtime-configured: true outside local, false only for accepted local HTTP development.
 		Name:     browserSessionCookieName,
 		Value:    refreshToken,
 		Path:     browserSessionCookiePath,
@@ -66,7 +66,7 @@ func (c browserSessionCookie) Read(ctx echo.Context) (string, error) {
 }
 
 func (c browserSessionCookie) Clear(ctx echo.Context) {
-	ctx.SetCookie(&http.Cookie{
+	ctx.SetCookie(&http.Cookie{ // #nosec G124 -- Secure mirrors the session cookie so deletion works in both production HTTPS and accepted local HTTP development.
 		Name:     browserSessionCookieName,
 		Value:    "",
 		Path:     browserSessionCookiePath,
