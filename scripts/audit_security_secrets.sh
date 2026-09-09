@@ -11,7 +11,8 @@ cd "$ROOT_DIR"
 source scripts/config/security_tools.env
 export GOTOOLCHAIN=local
 tool="${GITLEAKS_MODULE}@${GITLEAKS_VERSION}"
-ignore_file="$ROOT_DIR/.gitleaksignore"
+parent_ignore_file="$ROOT_DIR/.gitleaksignore"
+docs_ignore_file="$ROOT_DIR/docs/.gitleaksignore"
 
 echo "== security audit: secrets =="
 echo "tool: $tool"
@@ -24,6 +25,12 @@ fi
 for repository in "$ROOT_DIR" "$ROOT_DIR/docs"; do
 	if [[ "$(git -C "$repository" rev-parse --is-shallow-repository)" != false ]]; then
 		echo "[FAIL] complete Git history is required: $repository"
+		exit 1
+	fi
+done
+for ignore_file in "$parent_ignore_file" "$docs_ignore_file"; do
+	if [[ ! -f "$ignore_file" ]]; then
+		echo "[FAIL] repository-local Gitleaks ignore file is required: $ignore_file"
 		exit 1
 	fi
 done
@@ -42,11 +49,11 @@ if [[ $sentinel_status -eq 0 || "$sentinel_output" != *"leaks found"* ]]; then
 fi
 echo "[PASS] Gitleaks detection sentinel"
 
-go run "$tool" dir --no-banner --no-color --redact --gitleaks-ignore-path "$ignore_file" "$ROOT_DIR"
-go run "$tool" git --no-banner --no-color --redact --gitleaks-ignore-path "$ignore_file" "$ROOT_DIR"
+go run "$tool" dir --no-banner --no-color --redact --gitleaks-ignore-path "$parent_ignore_file" "$ROOT_DIR"
+go run "$tool" git --no-banner --no-color --redact --gitleaks-ignore-path "$parent_ignore_file" "$ROOT_DIR"
 
-go run "$tool" dir --no-banner --no-color --redact "$ROOT_DIR/docs"
-go run "$tool" git --no-banner --no-color --redact "$ROOT_DIR/docs"
+go run "$tool" dir --no-banner --no-color --redact --gitleaks-ignore-path "$docs_ignore_file" "$ROOT_DIR/docs"
+go run "$tool" git --no-banner --no-color --redact --gitleaks-ignore-path "$docs_ignore_file" "$ROOT_DIR/docs"
 
 echo
 echo "[PASS] secret audit passed"
