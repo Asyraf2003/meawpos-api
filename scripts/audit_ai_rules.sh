@@ -26,10 +26,12 @@ required_files=(
   "docs/engineering/blueprints/0040_first_walking_skeleton_contract.md"
   "docs/engineering/blueprints/0041_r5_reproducible_security_release_gate.md"
   "docs/engineering/blueprints/0042_r6_human_end_to_end_client_foundation.md"
+  "docs/engineering/blueprints/0043_r7_sqlite_conformance_slice.md"
   "docs/evidence/0004_r4_postgresql_walking_skeleton_implementation.md"
   "docs/evidence/0005_r5_reproducible_security_release_gate.md"
   "docs/evidence/0008_r6_login_session_client_slice.md"
-  "docs/handoffs/2026-09-09_r6_implementation_handoff.md"
+  "docs/evidence/0007_r7_sqlite_conformance_preparation_audit.md"
+  "docs/handoffs/2026-09-11_r7_sqlite_conformance_execution.md"
   "docs/legal/0001_repository_license_presentation.md"
   "LICENSE"
 )
@@ -61,22 +63,23 @@ done < <(fd --type d . docs)
 echo
 echo "== canonical direction markers =="
 check_contains "docs/README.md" "Canonical Read Order"
-check_contains "docs/README.md" "R6 GOOGLE BROWSER LOGIN LOCALLY PROVEN; OWNER VISUAL ACCEPTANCE PENDING"
-check_contains "docs/README.md" "handoffs/2026-09-09_r6_implementation_handoff.md"
+check_contains "docs/README.md" "R6 LOCAL IMPLEMENTATION/BROWSER/PC ACCEPTANCE COMPLETE; FULL R6 OPEN ON EXTERNAL DEVICE/RELEASE EVIDENCE"
+check_contains "docs/README.md" "R7 ACTIVE IMPLEMENTATION; SQLITE CONFORMANCE DECISIONS #1-#7 ACCEPTED"
+check_contains "docs/README.md" "handoffs/2026-09-11_r7_sqlite_conformance_execution.md"
 check_contains "docs/README.md" "engineering/blueprints/0041_r5_reproducible_security_release_gate.md"
 check_contains "docs/README.md" "evidence/0005_r5_reproducible_security_release_gate.md"
 check_contains "docs/AGENTS.md" "Current owner direction and the North Star"
 check_contains "docs/0003_document_authority_register.md" "HISTORICAL EVIDENCE"
 check_contains "docs/architecture/0005_foundation_redesign_baseline.md" "Financial Mutation Boundary"
 check_contains "docs/architecture/0005_foundation_redesign_baseline.md" "migrations evolve additively"
-check_contains "docs/transition/0002_foundation_redesign_roadmap.md" 'Status: `IN PROGRESS; GOOGLE BROWSER LOGIN LOCALLY PROVEN; OWNER VISUAL ACCEPTANCE PENDING`'
-check_contains "docs/transition/0002_foundation_redesign_roadmap.md" 'Status: `PLANNED AFTER R6; NOT STARTED`'
-check_contains "docs/transition/0002_foundation_redesign_roadmap.md" "bounded meawpos-api fixed-ceiling refresh + browser auth transport"
-check_contains "docs/transition/0003_phase_execution_ledger.md" "R6 GOOGLE BROWSER LOGIN LOCALLY PROVEN; OWNER VISUAL ACCEPTANCE PENDING"
-check_contains "docs/transition/0003_phase_execution_ledger.md" "../evidence/0008_r6_login_session_client_slice.md"
-check_contains "docs/evidence/0008_r6_login_session_client_slice.md" "LOCALLY IMPLEMENTED AND PROVEN; FULL R6 NOT CLOSED"
+check_contains "docs/transition/0002_foundation_redesign_roadmap.md" 'Status: `LOCALLY COMPLETE; EXTERNAL CLOSURE EVIDENCE PENDING`'
+check_contains "docs/transition/0002_foundation_redesign_roadmap.md" 'Status: `ACTIVE IMPLEMENTATION; BLUEPRINT DECISIONS #1-#7 ACCEPTED`'
+check_contains "docs/transition/0002_foundation_redesign_roadmap.md" "2026-09-11_r7_sqlite_conformance_execution.md"
+check_contains "docs/transition/0003_phase_execution_ledger.md" "R7 ACTIVE IMPLEMENTATION; BLUEPRINT 0043 DECISIONS #1-#7 ACCEPTED"
+check_contains "docs/transition/0003_phase_execution_ledger.md" "ACTIVE_HANDOFF: handoffs/2026-09-11_r7_sqlite_conformance_execution.md"
+check_contains "docs/engineering/blueprints/0043_r7_sqlite_conformance_slice.md" 'ACTIVE IMPLEMENTATION; DECISIONS #1-#7 ACCEPTED'
+check_contains "docs/handoffs/2026-09-11_r7_sqlite_conformance_execution.md" 'ACTIVE BOUNDED IMPLEMENTATION HANDOFF'
 check_contains "docs/transition/0003_phase_execution_ledger.md" "ACCEPTED: DEFER FROM R6"
-check_contains "docs/handoffs/2026-09-09_r6_implementation_handoff.md" "CANONICAL IMPLEMENTATION HANDOFF; R6 IMPLEMENTATION AUTHORIZED"
 check_contains "docs/engineering/domain/0030_domain_contracts.md" "There is no universal CRUD requirement."
 check_contains "docs/engineering/architecture/0022_api_capability_control.md" "Business component activation"
 check_contains "docs/engineering/security/0080_security_baseline.md" "make release-gate"

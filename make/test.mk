@@ -16,7 +16,7 @@
 
 ##@ Test
 
-.PHONY: test test-unit test-api test-db test-db-integration test-r4-integration test-security-integration vet lint check verify release-gate ci screening
+.PHONY: test test-unit test-api test-db test-db-integration test-r4-integration test-r7-sqlite test-r7-postgres test-r7-conformance test-security-integration vet lint check verify release-gate ci screening
 
 test: ## Run all Go tests
 	$(GO_TEST) ./...
@@ -35,6 +35,14 @@ test-db-integration: ## Load .env and run DB-backed PostgreSQL integration tests
 
 test-r4-integration: ## Run the focused PostgreSQL and HTTP walking-skeleton proof
 	@set -a; if [[ -f .env ]]; then source .env; fi; set +a; $(GO_TEST) -tags integration ./internal/platform/postgres/... ./internal/app/bootstrap -run "$${RUN:-RootAuthority|RootCreation|Catalog_|CashSale_|WalkingSkeletonHTTP}" -count=1 -v
+
+test-r7-sqlite: ## Run the SQLite catalog conformance runner
+	$(GO_TEST) ./internal/platform/sqlite -run CatalogConformance -count=1 -v
+
+test-r7-postgres: ## Run the mandatory PostgreSQL catalog conformance runner
+	@set -a; if [[ -f .env ]]; then source .env; fi; set +a; $(GO_TEST) -tags integration ./internal/platform/postgres -run CatalogConformance -count=1 -v
+
+test-r7-conformance: test-r7-sqlite test-r7-postgres ## Run both R7 catalog conformance runners
 
 test-security-integration: ## Run mandatory PostgreSQL-backed security behavior proof
 	bash scripts/audit_security_integration.sh

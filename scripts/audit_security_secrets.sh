@@ -49,11 +49,16 @@ if [[ $sentinel_status -eq 0 || "$sentinel_output" != *"leaks found"* ]]; then
 fi
 echo "[PASS] Gitleaks detection sentinel"
 
-go run "$tool" dir --no-banner --no-color --redact --gitleaks-ignore-path "$parent_ignore_file" "$ROOT_DIR"
-go run "$tool" git --no-banner --no-color --redact --gitleaks-ignore-path "$parent_ignore_file" "$ROOT_DIR"
+combined_ignore_file="$sentinel_dir/.gitleaksignore"
+cp "$parent_ignore_file" "$combined_ignore_file"
+printf '\n' >> "$combined_ignore_file"
+cat "$docs_ignore_file" >> "$combined_ignore_file"
 
-go run "$tool" dir --no-banner --no-color --redact --gitleaks-ignore-path "$docs_ignore_file" "$ROOT_DIR/docs"
-go run "$tool" git --no-banner --no-color --redact --gitleaks-ignore-path "$docs_ignore_file" "$ROOT_DIR/docs"
+go run "$tool" dir --no-banner --no-color --redact --gitleaks-ignore-path .gitleaksignore .
+go run "$tool" git --no-banner --no-color --redact --gitleaks-ignore-path .gitleaksignore .
+
+go run "$tool" dir --no-banner --no-color --redact --gitleaks-ignore-path "$combined_ignore_file" docs
+go run "$tool" git --no-banner --no-color --redact --gitleaks-ignore-path "$combined_ignore_file" docs
 
 echo
 echo "[PASS] secret audit passed"

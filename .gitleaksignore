@@ -2,3 +2,10 @@
 9712f5cc9d2e0c0750436c590eddb9d204c273b7:internal/platform/token/jwt/verifier_test.go:generic-api-key:13
 # Historical committed .env credential; retained only because public history is not rewritten.
 66163921aa269c9e35ca18d08bb7f16264b665f7:.env:generic-api-key:7
+# Local ignored .env credential; exact worktree fingerprint only.
+.env:generic-api-key:7
+# Current docs evidence commit hashes are prose-only false positives; exact worktree fingerprints only.
+docs/evidence/0009_r6_root_cash_client_chain.md:generic-api-key:11
+docs/evidence/0010_r6_browser_proof_readiness_repair.md:generic-api-key:7
+evidence/0009_r6_root_cash_client_chain.md:generic-api-key:11
+evidence/0010_r6_browser_proof_readiness_repair.md:generic-api-key:7
