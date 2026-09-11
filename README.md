@@ -27,13 +27,13 @@ minimal catalog
 -> API response/readback
 ```
 
-SQLite support will be added through proven persistence boundaries. No parity claim exists yet.
+SQLite support is declared only per proven persistence slice. R7 proves ROOT-scoped `catalog.core + catalog.pricing` create/read conformance; no whole-application parity claim exists.
 
 ## Start Here
 
 Read [docs/README.md](docs/README.md), then follow its canonical read order. The documentation lives in a Git submodule and has a separate change/proof surface from this parent repository.
 
-R4's PostgreSQL walking skeleton and R5's reproducible security/release gate are implemented and proven. R6's Google/session -> ROOT -> catalog/pricing -> Cash -> authoritative readback/full-reversal human chain, presentation refinement, keyboard-first workflow, and PC-available accessibility acceptance are locally proven; R6 remains open only for representative physical-tablet and concrete production/static-host/final-release evidence. R7 is closed: SQLite is proven only for ROOT-scoped catalog.core + catalog.pricing create/read persistence/application conformance, while PostgreSQL remains primary/default. See the [R7 proof](docs/evidence/0012_r7_sqlite_catalog_conformance_implementation.md). R8 capability expansion is the next decision scope, but no capability or runtime implementation is authorized yet.
+R4's PostgreSQL walking skeleton and R5's reproducible security/release gate are implemented and proven. R6's Google/session -> ROOT -> catalog/pricing -> Cash -> authoritative readback/full-reversal human chain, presentation refinement, keyboard-first workflow, and PC-available accessibility acceptance are locally proven; R6 remains open only for representative physical-tablet and concrete production/static-host/final-release evidence. R7 is closed: SQLite is proven only for ROOT-scoped catalog.core + catalog.pricing create/read persistence/application conformance, while PostgreSQL remains primary/default. See the [R7 proof](docs/evidence/0012_r7_sqlite_catalog_conformance_implementation.md). R8 is now active product/domain discovery for F&B Small Counter v1. The exact first capability is not yet accepted and runtime implementation is still unauthorized; `catalog.category` is only the leading hypothesis. Cloudflare-inspired login presentation and account-level Google `Last used` remain a separate future UI/auth-session branch.
 
 ## Current Runtime
 
